@@ -97,21 +97,42 @@ public class Drive {
 	}*/
 
 	public static double Approach(double goal, double current, double dt){
-		 dDt = dt;
-		dGoal = goal;
-		dCurrent = current;
-		double difference = goal - current;
+		double differenceX = goalX - CurrentX;
+		double differenceY = goalY - CurrentY;
+		if (differenceX >= RateOfChange){
+			if (differenceX > 0){
+				CurrentX -= RateOfChange;
+			} else {
+				CurrentX += RateOfChange;
+			}
+		}
 
-		if(difference > dt){
-			return current + dt;
+		if (differenceY >= RateOfChange){
+			if (differenceY > 0){
+				currentY-=RateOfChange;
+			} else {
+				CurrentY += RateOfChange;
+			}
 		}
-		else if(difference < -dt){
-			return current - dt;
-		}		
-		else{
-			return current;
-		}
+		RobotMap.R1.set(ControlMode.PercentOutput, currentX - CurrentY);
+		RobotMap.L1.set(ControlMode.PercentOutput, currentX + CurrentY);
 	}
+	
+		// 	 dDt = dt;
+	// 	dGoal = goal;
+	// 	dCurrent = current;
+	// 	double difference = goal - current;
+
+	// 	if(difference > dt){
+	// 		return current + dt;
+	// 	}
+	// 	else if(difference < -dt){
+	// 		return current - dt;
+	// 	}		
+	// 	else{
+	// 		return current;
+	// 	}
+	// }
 	public static double getMetersPerSecToFtPerSec(double meters){
 		return ftPerSec(meters)/60;
 	}
@@ -133,13 +154,15 @@ public class Drive {
 			//high gear
 			setShifters(true);
 			//side is forward for some reason
-			RobotMap.R1.set(ControlMode.PercentOutput, side - forward);
-			RobotMap.L1.set(ControlMode.PercentOutput, side + forward);
+			//RobotMap.R1.set(ControlMode.PercentOutput, side - forward);
+			//RobotMap.L1.set(ControlMode.PercentOutput, side + forward);
+			Approach(side,forward);
 		} else {
-			RobotMap.R1.set(ControlMode.PercentOutput, side - forward);
-			RobotMap.L1.set(ControlMode.PercentOutput, side + forward);
+			//RobotMap.R1.set(ControlMode.PercentOutput, side - forward);
+			//RobotMap.L1.set(ControlMode.PercentOutput, side + forward);
 			//low gear
 			setShifters(false);
+			Approach(side, forward);
 			navxReset = false;
 		}
 		
