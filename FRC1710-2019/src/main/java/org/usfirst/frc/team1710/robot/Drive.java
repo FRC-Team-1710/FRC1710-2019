@@ -22,9 +22,11 @@ public class Drive {
 	static boolean navxReset = false;
 	static double setPoint;
 	static double lastAngle, angleIntegral, output;
-	public static double dDt;
-	public static double dGoal;
-	public static double dCurrent;
+	public static double goalX;
+	public static double goalY;
+	public static double CurrentX=0;
+	public static double CurrentY=0;
+
 
 	public static void initializeDrive () {
 		RobotMap.R1 = new TalonSRX (Constants.rightLeaderid);
@@ -93,29 +95,34 @@ public class Drive {
 			setShifters(true);
 		}else if( getLeftVelocity() < lowThreshold) {
 			setShifters(false);
+
+
 		}
 	}*/
 
-	public static double Approach(double goal, double current, double dt){
+	public static void Approach(){
+		goalX = ControllerMap.getForwardPower();
+		goalY = ControllerMap.getTurnPower();
 		double differenceX = goalX - CurrentX;
 		double differenceY = goalY - CurrentY;
-		if (differenceX >= RateOfChange){
+			System.out.println("x"+ Double.toString(differenceX) + " y" + Double.toString(differenceY));
+		if (differenceX >= Constants.RateOfChange){
 			if (differenceX > 0){
-				CurrentX -= RateOfChange;
+				CurrentX -= Constants.RateOfChange;
 			} else {
-				CurrentX += RateOfChange;
+				CurrentX += Constants.RateOfChange;
 			}
 		}
 
-		if (differenceY >= RateOfChange){
+		if (differenceY >= Constants.RateOfChange){
 			if (differenceY > 0){
-				currentY-=RateOfChange;
+				CurrentY -= Constants.RateOfChange;
 			} else {
-				CurrentY += RateOfChange;
+				CurrentY += Constants.RateOfChange;
 			}
 		}
-		RobotMap.R1.set(ControlMode.PercentOutput, currentX - CurrentY);
-		RobotMap.L1.set(ControlMode.PercentOutput, currentX + CurrentY);
+		// RobotMap.R1.set(ControlMode.PercentOutput, CurrentX - CurrentY);
+		// RobotMap.L1.set(ControlMode.PercentOutput, CurrentX + CurrentY);
 	}
 	
 		// 	 dDt = dt;
@@ -156,13 +163,13 @@ public class Drive {
 			//side is forward for some reason
 			//RobotMap.R1.set(ControlMode.PercentOutput, side - forward);
 			//RobotMap.L1.set(ControlMode.PercentOutput, side + forward);
-			Approach(side,forward);
+			Approach();
 		} else {
 			//RobotMap.R1.set(ControlMode.PercentOutput, side - forward);
 			//RobotMap.L1.set(ControlMode.PercentOutput, side + forward);
 			//low gear
 			setShifters(false);
-			Approach(side, forward);
+			Approach();
 			navxReset = false;
 		}
 		

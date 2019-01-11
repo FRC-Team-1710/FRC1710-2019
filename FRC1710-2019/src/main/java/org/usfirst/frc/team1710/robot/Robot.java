@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
 		RobotMap.navx.reset();
 		RobotMap.R1.setSelectedSensorPosition(0, 0, 0);
 		RobotMap.L1.setSelectedSensorPosition(0, 0, 0);
-		RobotMap.wrist.setSelectedSensorPosition(0, 0, 0);
+		//RobotMap.wrist.setSelectedSensorPosition(0, 0, 0);
 		
 		SmartDashboard.putNumber("cube amount", Constants.defaultCubeAmount);
 		SmartDashboard.putNumber("Starting position", Constants.defaultStartPos);
@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
 		RobotMap.L1.configClosedloopRamp(0, 0);
 		Constants.inAuto = false;
 		
-		RobotMap.wrist.setSelectedSensorPosition(0, 0, 0);
+		//RobotMap.wrist.setSelectedSensorPosition(0, 0, 0);
 		RobotMap.R1.setSelectedSensorPosition(0, 0, 0);
 		RobotMap.L1.setSelectedSensorPosition(0, 0, 0);
     	RobotMap.R1.setSensorPhase(false);

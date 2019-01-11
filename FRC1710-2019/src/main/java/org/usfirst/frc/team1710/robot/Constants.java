@@ -46,7 +46,11 @@ public class Constants {
 	
 	public static double kpTurn = 0.01;
 	
+	public static double RateOfChange = .005;
+	
 	public static int ticksPerInch = 217;
+
+
 	
 	//constants for Vision
 	public static double kpAim = .03;
