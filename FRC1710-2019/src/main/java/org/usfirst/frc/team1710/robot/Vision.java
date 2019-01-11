@@ -39,7 +39,7 @@ public class Vision {
 		tableTwo = table.getTable("limelight");
 		ledEntry = tableTwo.getEntry("ledMode");
 		ledEntry.forceSetNumber(0);
-		ledEntry.forceSetNumber(1);
+		ledEntry.forceSetNumber(3);
 	}
 	/**
 	 * 
@@ -66,11 +66,12 @@ public class Vision {
 		double txValue = txEntry.getDouble(0);
 		return txValue;
 	}
+	
 	/**
 	 * Checks the ty value which is the amount of targets available
 	 * @return true if there are 1 or more targets that it can see
 	 */
-	public static boolean areCubesAvailable() {
+	public static boolean seeTargetTape() {
 		if(getTvValue() >= 1) {
 			return true;
 		}else {
@@ -81,55 +82,59 @@ public class Vision {
 	 * checks to see if the cube is close enough to the intake to be intaked
 	 * @return the Ty value if its less than the ty intake constant but greater than 1
 	 */
-	public static boolean areCubesIntakable() {
-		return Math.abs(getTyValue()) < Constants.tyIntake && Math.abs(getTxValue()) < Constants.txIntake;
-	}
+	// public static boolean areCubesIntakable() {
+	// 	return Math.abs(getTyValue()) < Constants.tyIntake && Math.abs(getTxValue()) < Constants.txIntake;
+	// }
 	/**
-	 * Spins the robot to the right until it sees a cube, then it will go towards the cube and intakes it automatically
+	 * Spins the robot to the right until it sees a target, then it will go towards the cube and intakes it automatically
 	 */
-	public static void cubeTrackRight() {
-		SmartDashboard.putBoolean("is cube intakeable", areCubesIntakable());
-		if(areCubesAvailable() == false) {
-			if(Intake.isCubeInIntake() == false) {
-				Drive.leftDrive(-Constants.seekingSpeed);
-				Drive.rightDrive(-Constants.seekingSpeed);
-			} else {
-				Drive.stopDriving();
+	public static void targetTrack() { 
+		//SmartDashboard.putBoolean("is cube intakeable", areCubesIntakable());
+		if(seeTargetTape() == true) {
+			if(getTxValue() < 0) { //We are left of target, turn right.
+				Drive.leftDrive(ControlMode.PercentOutput, getTxValue*kpAim);
+				Drive.rightDrive(ControlMode.PercentOutput, getTxValue()*kpAim*-1);
+			} else { //we are right of target turn left.
+				Drive.leftDrive(ControlMode.PercentOutput, getTxValue()*kpAim*-1);
+				Drive.rightDrive(ControlMode.PercentOutput, getTxValue()*kpAim);	
 			}
-		} else {
-			if(areCubesIntakable() == true && Intake.getUltraSonic() > Constants.ultraSonicInIntakeVision) {
-				Intake.intake(Constants.cubeIntakeSpeed, 0);
-				Drive.arcadeDrive(0,-.3,false);
-			} else {
-				Drive.arcadeDrive(-Constants.kpAim * getTxValue(), Constants.kpDistance * getTyValue(), false );
-				Intake.intake(0, 0);
-				intakeCount = 0;
-			}
+		} else
+			Drive.stopDriving();
 		}
+		// } else {
+		// 	if(areCubesIntakable() == true && Intake.getUltraSonic() > Constants.ultraSonicInIntakeVision) {
+		// 		Intake.intake(Constants.cubeIntakeSpeed, 0);
+		// 		Drive.arcadeDrive(0,-.3,false);
+		// 	} else {
+		// 		Drive.arcadeDrive(-Constants.kpAim * getTxValue(), Constants.kpDistance * getTyValue(), false );
+		// 		Intake.intake(0, 0);
+		// 		intakeCount = 0;
+		// 	}
+		// }
 	}
 	
 	/**
 	 * Spins the robot to the left until it sees a cube, then it will go towards the cube and intakes it automatically
 	 */
-	public static void cubeTrackLeft() {
-		SmartDashboard.putBoolean("is cube intakeable", areCubesIntakable());
-		if(areCubesAvailable() == false) {
-			if(Intake.isCubeInIntake() == false) {
-				Drive.leftDrive(Constants.seekingSpeed);
-				Drive.rightDrive(Constants.seekingSpeed);
-			} else {
-				Drive.stopDriving();
-			}
-		} else {
-			if(areCubesIntakable() == true && Intake.getUltraSonic() > Constants.ultraSonicInIntakeVision) {
-				Intake.intake(Constants.cubeIntakeSpeed, 0);
-				Drive.arcadeDrive(0,-.3,false);
-			} else {
-				Drive.arcadeDrive(-Constants.kpAim * getTxValue(), Constants.kpDistance * getTyValue(), false );
-				Intake.intake(0, 0);
-				intakeCount = 0;
-			}
-		}
-	}
+	// public static void cubeTrackLeft() {
+	// 	SmartDashboard.putBoolean("is cube intakeable", areCubesIntakable());
+	// 	if(areCubesAvailable() == false) {
+	// 		if(Intake.isCubeInIntake() == false) {
+	// 			Drive.leftDrive(Constants.seekingSpeed);
+	// 			Drive.rightDrive(Constants.seekingSpeed);
+	// 		} else {
+	// 			Drive.stopDriving();
+	// 		}
+	// 	} else {
+	// 		if(areCubesIntakable() == true && Intake.getUltraSonic() > Constants.ultraSonicInIntakeVision) {
+	// 			Intake.intake(Constants.cubeIntakeSpeed, 0);
+	// 			Drive.arcadeDrive(0,-.3,false);
+	// 		} else {
+	// 			Drive.arcadeDrive(-Constants.kpAim * getTxValue(), Constants.kpDistance * getTyValue(), false );
+	// 			Intake.intake(0, 0);
+	// 			intakeCount = 0;
+	// 		}
+	// 	}
+	// }
 	
 }

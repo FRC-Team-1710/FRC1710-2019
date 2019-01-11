@@ -52,7 +52,6 @@ public class Constants {
 	public static double kpAim = .03;
 	public static double kpDistance= 0.1;
 	public static double seekingSpeed = .3;
-	public static double cubeIntakeSpeed = 1;
 	public static double tyIntake = 5.5;
 	public static double txIntake = 10;
 	public static double autoTrackTimeout = 45;
