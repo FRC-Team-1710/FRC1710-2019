@@ -102,18 +102,21 @@ public class Robot extends IterativeRobot {
 		} else {
 			RobotMap.compressor.setClosedLoopControl(false);
 		}
-			
-		SmartDashboard.putNumber("Left Drive", Drive.getLeftPosition());
-		SmartDashboard.putNumber("Right Drive", Drive.getRightPosition());
-		//SmartDashboard.putNumber("Robot Velocity", Drive.getLeftVelocity());
-		SmartDashboard.putNumber("Robot Heading", Drive.getNavxAngle());
-		SmartDashboard.putNumber("Controller Pov", RobotMap.driveStick.getPOV());
-		SmartDashboard.putNumber("Robot Velocity", Drive.getFBVelocity());
-		SmartDashboard.putNumber("Robot Velocity", Drive.getLRVelocity());
-		Drive.autoShift(Drive.getLeftVelocity(), Constants.shiftLowThreshold, Constants.shiftHighThreshold);
 
+
+		if(RobotMap.driveStick.getRawButton(1)==true){
+			int visionToggle = 1;
+			visionToggle = visionToggle * (-1);
+			if(visionToggle < 0){
+				Vision.targetTrack();
+			}
+			}
+		}	
+		
+		//Drive.autoShift(Drive.getLeftVelocity(), Constants.shiftLowThreshold, Constants.shiftHighThreshold);
+		
 	
-	}
+	
 	
 	
 	@Override

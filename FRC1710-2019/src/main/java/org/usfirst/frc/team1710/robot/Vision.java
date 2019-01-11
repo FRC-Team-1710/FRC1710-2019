@@ -92,11 +92,11 @@ public class Vision {
 		//SmartDashboard.putBoolean("is cube intakeable", areCubesIntakable());
 		if(seeTargetTape() == true) {
 			if(getTxValue() < 0) { //We are left of target, turn right.
-				Drive.leftDrive(ControlMode.PercentOutput, getTxValue*kpAim);
-				Drive.rightDrive(ControlMode.PercentOutput, getTxValue()*kpAim*-1);
+				Drive.leftDrive(getTxValue()*Constants.kpAim);
+				Drive.rightDrive(getTxValue()*Constants.kpAim*-1);
 			} else { //we are right of target turn left.
-				Drive.leftDrive(ControlMode.PercentOutput, getTxValue()*kpAim*-1);
-				Drive.rightDrive(ControlMode.PercentOutput, getTxValue()*kpAim);	
+				Drive.leftDrive(getTxValue()*Constants.kpAim*-1);
+				Drive.rightDrive(getTxValue()*Constants.kpAim);	
 			}
 		} else
 			Drive.stopDriving();
@@ -137,4 +137,3 @@ public class Vision {
 	// 	}
 	// }
 	
-}

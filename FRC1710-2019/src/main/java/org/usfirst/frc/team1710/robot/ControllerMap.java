@@ -8,9 +8,14 @@ public class ControllerMap {
 		RobotMap.mechStick = new Joystick (1);
 	}
 	//buttons 
-	public static boolean bottomLift() {
+	/*public static boolean bottomLift() {
 		return RobotMap.mechStick.getRawButton(7) || RobotMap.driveStick.getRawButton(1);
+	}*/
+	
+	public static boolean toggleVision() {
+		return RobotMap.driveStick.getRawButton(1);
 	}
+
 	public static boolean liftAtSwitchHeight() {
 		return RobotMap.mechStick.getRawButton(8) || RobotMap.driveStick.getRawButton(2);
 	}
