@@ -5,45 +5,45 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-/*this is code to control the pistons on the claw:
-DoubleSolenoid exampleDouble = new DoubleSolenoid(1, 2);
+//this is code to control the pistons on the claw
 
-exampleDouble.set(DoubleSolenoid.Value.kOff);
-exampleDouble.set(DoubleSolenoid.Value.kForward);
-exampleDouble.set(DoubleSolenoid.Value.kReverse);
-*/
 
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 public class ClawControl {
+
+    public static DoubleSolenoid LPiston, RPiston;
+    public static Joystick driveStick = new Joystick(0);
+
+    public ClawControl() {
+        LPiston = new DoubleSolenoid(1, 2/*REPLACE THESE NUMBERS WITH ROBORIO ASSIGNED VALUES*/);
+        RPiston = new DoubleSolenoid(1,2/*SAME THING AS ABOVE!*/);
+    }
 
     DoubleSolenoid piston = new DoubleSolenoid(1, 2);
 
     //Identifies the button that activates the pistons
-    public static DoubleSolenoid pistonIntake() {
-        return Drive.drivestick.getRawButton(4);
+    public static void pistonIntake() {
+        // return Drive.driveStick.getRawButton(4);
+        LPiston.set(DoubleSolenoid.Value.kReverse);
+        RPiston.set(DoubleSolenoid.Value.kReverse);
     }
 
     //Identifies the button that deactivates the pistons
-    public static DoubleSolenoid pistonOuttake() {
-        return Drive.drivestick.getRawButton(5);
+    public static void pistonOuttake() {
+        // return Drive.driveStick.getRawButton(5);
+        LPiston.set(DoubleSolenoid.Value.kForward);
+        RPiston.set(DoubleSolenoid.Value.kForward);
     }
 
-    //Neutralizes the pistons ????? Not entirely sure what this should do
-    public void pistonNeutral() {
-        piston.set(DoubleSolenoid.Value.kOff);
-    }
-
-    //Activates the pistons
-    public void pistonActivate() {
-        piston.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    //Deactivates the pistons
-    public void pistonDeactivate() {
-        piston.set(DoubleSolenoid.Value.kForward);
+    public static void pistonNeutral() {
+        // return Drvie.driveStick.getRawButton(randomButton);
+        LPiston.set(DoubleSolenoid.Value.kOff);
+        RPiston.set(DoubleSolenoid.Value.kOff);
     }
 
 }

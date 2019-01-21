@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
 
   public void robotInit() {
     Drive.initializeDrive();
+    Ballmech.initializeBallMech();
+    
   
     autonomousCommand = new TestDrive();
     
@@ -69,6 +71,9 @@ public class Robot extends TimedRobot {
    CurrentPool.currentPool();
    System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
    System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
+   Ballmech.runBallMech();
+   Ballmech.undoBallMech();
+   Ballmech.problemBallMech();
 
   }
 
