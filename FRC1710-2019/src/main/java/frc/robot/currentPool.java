@@ -13,7 +13,7 @@ import com.revrobotics.CANSparkMax;
 /**
  * Add your docs here.
  */
-public class currentPool {
+public class CurrentPool {
     static List<Pair<CANSparkMax, Integer>> priority = new ArrayList<Pair<CANSparkMax, Integer>>();
 
     static private int getPriorityCount(int prorityVal) {
