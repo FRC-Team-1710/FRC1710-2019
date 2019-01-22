@@ -96,13 +96,13 @@ public class Drive {
       
      L1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
      L2 = new CANSparkMax(2, MotorType.kBrushless);
-    R1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
+     R1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
      R2 = new CANSparkMax(4, MotorType.kBrushless);
      R2.follow(R1);
      L2.follow(L1);
      Drive.navx = new AHRS(SPI.Port.kMXP);
-        R1.setIdleMode(IdleMode.kBrake);
-        L1.setIdleMode(IdleMode.kBrake);
+     R1.setIdleMode(IdleMode.kBrake);
+     L1.setIdleMode(IdleMode.kBrake);
     }
      
     
@@ -112,18 +112,11 @@ public class Drive {
    
    
    public static void arcadeDrive(double side, double forward){
-        //if(shift ==true){
-           
-
-            //high gear
-            //setShifters(true);
-            R1.set(side - forward);
-            L1.set(side + forward);
-            
        
-        
-        // }
-        }
+        R1.set(side - forward);
+        L1.set(side + forward);
+          
+    }
        
 }
 
