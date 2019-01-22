@@ -68,10 +68,10 @@ public class CurrentPool {
 
      }else{
          //reset current limits
-        Drive.R1.setSmartCurrentLimit((Integer) null);
-        Drive.R2.setSmartCurrentLimit((Integer) null);
-        Drive.L1.setSmartCurrentLimit((Integer) null);
-        Drive.L2.setSmartCurrentLimit((Integer) null);
+        Drive.R1.setSmartCurrentLimit(100);
+        Drive.R2.setSmartCurrentLimit(100);
+        Drive.L1.setSmartCurrentLimit(100);
+        Drive.L2.setSmartCurrentLimit(100);
      }
         
         
@@ -79,9 +79,9 @@ public class CurrentPool {
 
        
     
-        System.out.println("R1: " + Drive.R1.getOutputCurrent());
-        System.out.println("R2: " + Drive.R2.getOutputCurrent());
-        System.out.println("L1: " + Drive.L1.getOutputCurrent());
-        System.out.println("L2: " + Drive.L2.getOutputCurrent());
+        //System.out.println("R1: " + Drive.R1.getOutputCurrent());
+        //System.out.println("R2: " + Drive.R2.getOutputCurrent());
+        //System.out.println("L1: " + Drive.L1.getOutputCurrent());
+        //System.out.println("L2: " + Drive.L2.getOutputCurrent());
     }
 }
