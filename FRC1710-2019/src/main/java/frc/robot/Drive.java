@@ -18,19 +18,18 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive {
-   
     public static CANEncoder enR1, enR2, enL1, enL2;
     static double lastAngle, angleIntegral, output;
     public static AHRS navx;
     public static CANSparkMax R1,R2, L1, L2;
-    public static Joystick driveStick = new Joystick(0);
-    //driveStick = new Joystick(0);
+    public static Joystick driveStick;
+
+    public int result;
 
     public static double getTurnPower() {
 		return -driveStick.getRawAxis(4);
 	}
 	public static double getForwardPower() {
-		 
         return driveStick.getRawAxis(1);
     }
     public static double getLeftPosition() {
@@ -87,37 +86,33 @@ public class Drive {
 		SmartDashboard.putNumber("Auto Drive Angle", currentAngle);
 	}
 
-    
-    
-    
-    
+    public static double getDriveLeftTrigger() {
+        return driveStick.getRawAxis(2);
+    }
+
+    public static double getDriveRightTrigger() {
+        return driveStick.getRawAxis(3);
+    }
 
     public static void initializeDrive(){
-      
-     L1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
-     L2 = new CANSparkMax(2, MotorType.kBrushless);
-     R1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
-     R2 = new CANSparkMax(4, MotorType.kBrushless);
-     R2.follow(R1);
-     L2.follow(L1);
-     Drive.navx = new AHRS(SPI.Port.kMXP);
-     R1.setIdleMode(IdleMode.kBrake);
-     L1.setIdleMode(IdleMode.kBrake);
+        L1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
+        L2 = new CANSparkMax(2, MotorType.kBrushless);
+        R1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
+        R2 = new CANSparkMax(4, MotorType.kBrushless);
+        R1.setIdleMode(IdleMode.kBrake);
+        L1.setIdleMode(IdleMode.kBrake);
+        R2.follow(R1);
+        L2.follow(L1);
+
+        Drive.navx = new AHRS(SPI.Port.kMXP);
+
+        driveStick = new Joystick(0);
     }
-     
-    
-    
-  
-    
-   
    
    public static void arcadeDrive(double side, double forward){
-       
         R1.set(side - forward);
         L1.set(side + forward);
-          
     }
-       
 }
 
 

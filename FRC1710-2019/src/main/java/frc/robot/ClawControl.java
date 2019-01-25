@@ -11,7 +11,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 import edu.wpi.first.wpilibj.Joystick;
 
 public class ClawControl {
@@ -20,28 +19,25 @@ public class ClawControl {
     public static Joystick driveStick = new Joystick(0);
 
     public ClawControl() {
-        LPiston = new DoubleSolenoid(1, 2/*REPLACE THESE NUMBERS WITH ROBORIO ASSIGNED VALUES*/);
-        RPiston = new DoubleSolenoid(1,2/*SAME THING AS ABOVE!*/);
+        LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
+        RPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
     }
 
     DoubleSolenoid piston = new DoubleSolenoid(1, 2);
 
     //Identifies the button that activates the pistons
     public static void pistonIntake() {
-        // return Drive.driveStick.getRawButton(4);
         LPiston.set(DoubleSolenoid.Value.kReverse);
         RPiston.set(DoubleSolenoid.Value.kReverse);
     }
 
     //Identifies the button that deactivates the pistons
     public static void pistonOuttake() {
-        // return Drive.driveStick.getRawButton(5);
         LPiston.set(DoubleSolenoid.Value.kForward);
         RPiston.set(DoubleSolenoid.Value.kForward);
     }
 
     public static void pistonNeutral() {
-        // return Drvie.driveStick.getRawButton(randomButton);
         LPiston.set(DoubleSolenoid.Value.kOff);
         RPiston.set(DoubleSolenoid.Value.kOff);
     }

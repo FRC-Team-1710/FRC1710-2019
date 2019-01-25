@@ -7,37 +7,42 @@ import frc.robot.Drive;
 public class Ballmech {
 
     //Declares LBelt and RBelt as types of CANSparkMAX
-    public static CANSparkMax LBelt, RBelt;
+    public static CANSparkMax LeadBelt, FollowBelt;
+
+    private static final double INTAKE_POWER = 0.5;
+    private static final double OUTTAKE_POWER = -0.75;
+    private static final double STOP = 0.0;
+    private static final int LEFT_ID = 5; //Replace with current id
+    private static final int RIGHT_ID = 6; //Replace with current id
 
     //intializes LBelt and RBelt
     public static void initializeBallMech() {
-        LBelt = new CANSparkMax(5, MotorType.kBrushless);
-        RBelt = new CANSparkMax(6, MotorType.kBrushless);
+        LeadBelt = new CANSparkMax(LEFT_ID, MotorType.kBrushless);
+        FollowBelt = new CANSparkMax(RIGHT_ID, MotorType.kBrushless);
+        FollowBelt.follow(LeadBelt, true);
     }
     
-   
-    //code for when the belt intakes the ball
-    public static void runBallMech() {
-        if (Drive.driveStick.getRawAxis(2)>0) {
-            LBelt.set(-.5);
-            RBelt.set(.5);
-        } 
-    }
-    
-    //code for when the belt outtakes the ball
-    public static void undoBallMech() {
-        if (Drive.driveStick.getRawAxis(3)>0) {
-            LBelt.set(.5);
-            RBelt.set(-.5);
-        }
+    //Determines what functions to use when triggers are used
+    public static void ballMechTeleop() {
+        if (Drive.getDriveLeftTrigger() > 0 && Drive.getDriveRightTrigger() > 0) { neutralizeBall(); }
+        else if (Drive.getDriveLeftTrigger() > 0) { intakeBall(); }
+        else if (Drive.getDriveRightTrigger() > 0) { outtakeBall(); }
+        else { neutralizeBall(); }
     }
 
-    //code for when the driver accidentally uses both the intake and outtake at the same time (null action)
-    public static void problemBallMech() {
-        if (Drive.driveStick.getRawAxis(2)>0 && Drive.driveStick.getRawAxis(3)>0) {
-            LBelt.set(0);
-            RBelt.set(0);
-        }
+    //Intializes the intake function and determines speed percentages/inversions
+    public static void intakeBall() {
+        LeadBelt.set(INTAKE_POWER);
+    }
+
+    //Initializes the outtake function and determines speed percentages/inversions
+    public static void outtakeBall() {
+        LeadBelt.set(OUTTAKE_POWER);
+    }
+
+    //Initializes the neutralize function for if the driver accidentally uses both triggers at the same time
+    public static void neutralizeBall() {
+        LeadBelt.set(STOP);
     }
 
 }
