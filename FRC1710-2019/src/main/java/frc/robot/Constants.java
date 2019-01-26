@@ -28,5 +28,5 @@ public class Constants {
     public static int ticksPerInch = 217;
 
     //drive to position slow down rate
-    public static double slowDownPercent = 0.1;
+    public static double slowDownPercent = 0.13;
 }

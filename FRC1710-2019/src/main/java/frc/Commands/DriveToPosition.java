@@ -25,8 +25,8 @@ public class DriveToPosition extends Command {
 
   public DriveToPosition(int encGoal, double speed, boolean isInHighGear, double heading, boolean endBehavior, boolean direction) {
     _speed = speed;
-    _encGoal = encGoal * Constants.ticksPerInch;
-    _isInHighGear = isInHighGear;
+    _encGoal = (int) (encGoal);// * Constants.ticksPerInch;
+    _isInHighGear = false;//isInHighGear;
     _heading = heading;
     _endBehavior = endBehavior;
     _direction = direction;
@@ -36,7 +36,7 @@ public class DriveToPosition extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-      Drive.R1.getEncoder();
+     	Drive.R1.getEncoder();
     	Drive.L1.getEncoder();
     	
     	//Drive.setShifters(_isInHighGear);
@@ -45,10 +45,10 @@ public class DriveToPosition extends Command {
     	_startingPosition = (Drive.getRightPosition() + Drive.getLeftPosition())/2;
     	if(!RobotMath.isInRange(Drive.getNavxAngle(), _heading, 20)) {
     		_shouldFixHeading = true;
-            _totalTicks = _encGoal + _startingPosition;	
+            _totalTicks = _encGoal;// + _startingPosition;	
     	} else {
     		_shouldFixHeading = false;
-            _totalTicks = _encGoal + _startingPosition;	
+            _totalTicks = _encGoal;// + _startingPosition;	
     	}
     	_goalDist = Math.abs(_encGoal);
     	driveTime.start();
@@ -64,9 +64,9 @@ public class DriveToPosition extends Command {
 
     	if(_endBehavior == true) {
     		if(_direction == true) {
-    	    	Drive.straightDriveTele(-1 * _speed, _heading, _isInHighGear);
+    	    	Drive.straightDriveTele(-1 * _speed, _heading);
     		} else {
-    	    	Drive.straightDriveTele(_speed, _heading, _isInHighGear);
+    	    	Drive.straightDriveTele(_speed, _heading);
     		}
     	} else {
         	if(_encGoal < 0) {
@@ -101,7 +101,7 @@ public class DriveToPosition extends Command {
         	
         		if(!RobotMath.isInRange(Drive.getNavxAngle(), _heading, 20)) {
         			//turns in place until heading is close to prevent giant over corrections that eat the drive distance
-                	Drive.straightDriveTele(0 ,_heading, _isInHighGear);
+                	Drive.straightDriveTele(0 ,_heading);
                 	_fixingHeading = true;
         		} else {
         			if(!_newStart && _shouldFixHeading) {
@@ -110,13 +110,13 @@ public class DriveToPosition extends Command {
         	            _newStart = true;
         			} else {
                     	_fixingHeading = false;
-                    	Drive.straightDriveTele(_output, _heading, _isInHighGear);
+                    	Drive.straightDriveTele(_output, _heading);
         			}
         		}
         	} else {
         		
             	_fixingHeading = false;
-            	Drive.straightDriveTele(_output, _heading, _isInHighGear);
+            	Drive.straightDriveTele(_output, _heading);
         	}
        	}
   }
@@ -124,12 +124,19 @@ public class DriveToPosition extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+	
+
+		return (_currentTicks >= (_totalTicks));
+	
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+	driveTime.stop();
+
+	System.out.println("End pos: " + _currentTicks);
+	Drive.stopDriving();
   }
 
   // Called when another command which requires one or more of the same
