@@ -24,8 +24,6 @@ public class Drive {
     public static CANSparkMax R1,R2, L1, L2;
     public static Joystick driveStick;
 
-    public int result;
-
     public static double getTurnPower() {
 		return -driveStick.getRawAxis(4);
 	}

@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+// Visit http://first.wpi.edu/FRC/roborio/beta/docs/java/edu/wpi/first/wpilibj/Timer.html for timer docs 
+
 package frc.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
