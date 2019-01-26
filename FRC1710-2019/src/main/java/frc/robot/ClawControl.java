@@ -10,13 +10,23 @@
 
 package frc.robot;
 
+import java.beans.Encoder;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 
 public class ClawControl {
 
     public static DoubleSolenoid LPiston, RPiston;
     public static Joystick driveStick = new Joystick(0);
+    public static double ReversePower = .2;
+    public static double TimerDelay = 1;
+
 
     public ClawControl() {
         LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
@@ -40,6 +50,18 @@ public class ClawControl {
     public static void pistonNeutral() {
         LPiston.set(DoubleSolenoid.Value.kOff);
         RPiston.set(DoubleSolenoid.Value.kOff);
+    }
+
+    public static void placeHatch() {
+        //need to add vision 
+       if  (Drive.driveStick.getRawButtonPressed(2)==true){
+           pistonOuttake();
+           Timer.delay(TimerDelay);
+           pistonIntake();
+           Drive.leftDrive(ReversePower);
+           Drive.rightDrive(-ReversePower);   
+       }
+     
     }
 
 }
