@@ -12,6 +12,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.CommandGroups.TestDrive;
@@ -19,16 +20,30 @@ import frc.CommandGroups.TestDrive;
 public class Robot extends TimedRobot {
   Command autonomousCommand;  
 
+  public static Timer autoTime = new Timer();
+
+
   @Override
   public void robotInit() {
+    autoTime = new Timer();
     Drive.initializeDrive();
+
     Ballmech.initializeBallMech();
+
     autonomousCommand = new TestDrive();
   }
 
   @Override
   public void autonomousInit(){
+
+   
+    Drive.navx.reset();
+    System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
+    System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
+   
     autonomousCommand.start();
+    autoTime.start();
+
   }
 
   @Override
