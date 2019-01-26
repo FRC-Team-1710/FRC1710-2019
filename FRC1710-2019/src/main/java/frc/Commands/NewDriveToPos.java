@@ -87,12 +87,12 @@ static double lastAngle;
           double error = (currentAngle - _heading);
           //double angleDeriv = currentAngle - lastAngle;
          //double turnOutput = (error * Constants.kpStraight) + (angleDeriv * Constants.kdStraight);
-          double change = error * 100;
+          double change = error * .1;
         
          
          
-         Drive.R1.set(_output - change);
-         Drive.L1.set(_output - change);
+         Drive.R1.set(change);
+         Drive.L1.set(change);
 
          }else if(Drive.getNavxAngle() -2 > _heading){
           _fixingHeading = false;
