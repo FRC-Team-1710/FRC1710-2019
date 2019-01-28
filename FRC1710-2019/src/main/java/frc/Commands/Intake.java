@@ -19,6 +19,7 @@ public class Intake extends Command {
   public int time;
   private static Boolean finished;
   private static TalonSRX BeltMotor;
+  // Remove Above
   private static final int IDNUMBER = 1; // Replace with current TalonSRX ID number
   private static final double GOSPEED = .5; // Replace with speed percentage
   private static final double STOPSPEED = 0; // LEAVE AT ZERO
@@ -28,6 +29,7 @@ public class Intake extends Command {
   @Override
   protected void initialize() {
     BeltMotor = new TalonSRX(IDNUMBER);
+    // Remove Above
     finished = false;
     beltTimer = new Timer();
     beltTimer.start();
@@ -37,7 +39,7 @@ public class Intake extends Command {
   @Override
   protected void execute() {
     BeltMotor.set(ControlMode.PercentOutput, GOSPEED);
-    
+    // Replace above with Constants.intake.set(ControlMode.PercentOutput, GOSPEED);
     if (beltTimer.hasPeriodPassed(3) == true) {
       finished = true;
     }
