@@ -1,25 +1,23 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Drive;
+// import frc.robot.Constants;
 
 public class Ballmech {
 
     //Declares LBelt and RBelt as types of CANSparkMAX
-    public static CANSparkMax LeadBelt, FollowBelt;
+    public static TalonSRX IntakeMotor;
 
     private static final double INTAKE_POWER = 0.5;
     private static final double OUTTAKE_POWER = -0.75;
     private static final double STOP = 0.0;
-    private static final int LEFT_ID = 5; //Replace with current id
-    private static final int RIGHT_ID = 6; //Replace with current id
+    private static final int INTAKE_ID = 7;
 
-    //intializes LBelt and RBelt
+    //intializes IntakeMotor
     public static void initializeBallMech() {
-        LeadBelt = new CANSparkMax(LEFT_ID, MotorType.kBrushless);
-        FollowBelt = new CANSparkMax(RIGHT_ID, MotorType.kBrushless);
-        FollowBelt.follow(LeadBelt, true);
+        IntakeMotor = new TalonSRX(INTAKE_ID);
     }
     
     //Determines what functions to use when triggers are used
@@ -32,17 +30,17 @@ public class Ballmech {
 
     //Intializes the intake function and determines speed percentages/inversions
     public static void intakeBall() {
-        LeadBelt.set(INTAKE_POWER);
+        IntakeMotor.set(ControlMode.PercentOutput, INTAKE_POWER);
     }
 
     //Initializes the outtake function and determines speed percentages/inversions
     public static void outtakeBall() {
-        LeadBelt.set(OUTTAKE_POWER);
+        IntakeMotor.set(ControlMode.PercentOutput, OUTTAKE_POWER);
     }
 
     //Initializes the neutralize function for if the driver accidentally uses both triggers at the same time
     public static void neutralizeBall() {
-        LeadBelt.set(STOP);
+        IntakeMotor.set(ControlMode.PercentOutput, STOP);
     }
 
 }

@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 /**
  * Add your docs here.
  */
@@ -28,5 +30,22 @@ public class Constants {
     public static int ticksPerInch = 217;
 
     //drive to position slow down rate
-    public static double slowDownPercent = 0.13;
+	public static double slowDownPercent = 0.13;
+	
+	public static TalonSRX pickup1,pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4; 
+
+	public static void constantInit() {
+		pickup1 = new TalonSRX(5);
+		pickup2 = new TalonSRX(6);
+		intake = new TalonSRX(7);
+		clawRotate = new TalonSRX(8);
+		clawIntake1 = new TalonSRX(9);
+		clawIntake2 = new TalonSRX(10);
+		climber1 = new TalonSRX(11);
+		climber2 = new TalonSRX(12);
+		climber3 = new TalonSRX(13);
+		climber4 = new TalonSRX(14);
+	}
+	
+	
 }
