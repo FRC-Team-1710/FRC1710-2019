@@ -8,6 +8,7 @@
 package frc.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.Commands.DriveToPos;
 import frc.Commands.DriveToPosition;
 import frc.Commands.NewDriveToPos;
 
@@ -20,7 +21,9 @@ public class TestDrive extends CommandGroup {
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
     // these will run in order.
-    addSequential(new NewDriveToPos(1, .15, 90));
+    addSequential(new DriveToPos(4, .15, 180));
+    addSequential(new DriveToPos(0,.15, 270));
+    
     // To run multiple commands at the same time,
     // use addParallel()
     // e.g. addParallel(new Command1());

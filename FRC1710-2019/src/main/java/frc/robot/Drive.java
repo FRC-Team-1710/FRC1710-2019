@@ -23,14 +23,16 @@ public class Drive {
     public static AHRS navx;
     public static CANSparkMax R1,R2, L1, L2;
     public static Joystick driveStick;
+	
+
 
     public static double getTurnPower() {
-		return -driveStick.getRawAxis(1);
+		return -1 * driveStick.getRawAxis(4);
 	}
 	public static double getForwardPower() {
 
 		 
-        return driveStick.getRawAxis(4);
+        return driveStick.getRawAxis(1);
 
     }
     public static double getLeftPosition() {
@@ -108,6 +110,7 @@ public class Drive {
     }
 
     public static void initializeDrive(){
+
         R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
         R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
@@ -120,9 +123,10 @@ public class Drive {
         Drive.navx = new AHRS(SPI.Port.kMXP);
 
         driveStick = new Joystick(0);
+
     }
    
-   public static void arcadeDrive(double side, double forward){
+   public static void arcadeDrive(double side, double forward, boolean shifter){
         R1.set(side - forward);
         L1.set(side + forward);
     }
