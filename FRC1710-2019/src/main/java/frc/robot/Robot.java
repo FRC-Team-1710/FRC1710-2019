@@ -31,6 +31,8 @@ public class Robot extends TimedRobot {
     Ballmech.initializeBallMech();
 
     autonomousCommand = new TestDrive();
+
+    Constants.constantInit();
   }
 
   @Override

@@ -34,7 +34,7 @@ public class Constants {
 	
 	public static TalonSRX pickup1,pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4; 
 
-	{
+	public static void constantInit() {
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
 		intake = new TalonSRX(7);
