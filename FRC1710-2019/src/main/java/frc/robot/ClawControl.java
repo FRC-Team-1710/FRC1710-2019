@@ -10,10 +10,13 @@
 
 package frc.robot;
 
-import java.beans.Encoder;
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick; 
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -21,12 +24,13 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ClawControl {
-
     public static DoubleSolenoid LPiston, RPiston;
     public static Joystick driveStick = new Joystick(0);
-    public static double ReversePower = .2;
-    public static double TimerDelay = 1;
-
+    public static TalonSRX ClawMotor;
+    public static Encoder encoder;
+    public static final double REVERSEPOWER = .2;
+    public static final double TIMERDELAY = 1;
+    
 
     public ClawControl() {
         LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
@@ -54,14 +58,14 @@ public class ClawControl {
 
     public static void placeHatch() {
         //need to add vision 
-       if  (Drive.driveStick.getRawButtonPressed(2)==true){
+        //if button is pressed the piston will release and then drive backwards 
+       if  (Drive.driveStick.getRawButton(2)==true){
            pistonOuttake();
-           Timer.delay(TimerDelay);
+           Timer.delay(TIMERDELAY);
            pistonIntake();
-           Drive.leftDrive(ReversePower);
-           Drive.rightDrive(-ReversePower);   
+           Drive.leftDrive(REVERSEPOWER);
+           Drive.rightDrive(-REVERSEPOWER);   
        }
-     
     }
-
-}
+    }
+    
