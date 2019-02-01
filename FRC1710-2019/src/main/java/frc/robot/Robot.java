@@ -28,8 +28,6 @@ public class Robot extends TimedRobot {
     autoTime = new Timer();
     Drive.initializeDrive();
 
-    Ballmech.initializeBallMech();
-
     autonomousCommand = new TestDrive();
 
     Constants.constantInit();
