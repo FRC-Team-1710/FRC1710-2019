@@ -64,7 +64,7 @@ public class ClawControl {
            Timer.delay(TIMERDELAY);
            pistonIntake();
            Drive.leftDrive(REVERSEPOWER);
-           Drive.rightDrive(-REVERSEPOWER);   
+           Drive.rightDrive(REVERSEPOWER*-1);   
        }
     }
     }
