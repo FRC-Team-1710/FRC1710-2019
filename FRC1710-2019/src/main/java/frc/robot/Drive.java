@@ -22,13 +22,16 @@ public class Drive {
     static double lastAngle, angleIntegral, output;
     public static AHRS navx;
     public static CANSparkMax R1,R2, L1, L2;
-    public static Joystick driveStick;
-
+    public static Joystick driveStick, mechStick;
+	
     public static double getTurnPower() {
-		return -driveStick.getRawAxis(4);
+		return -1 * driveStick.getRawAxis(4);
 	}
 	public static double getForwardPower() {
+
+		 
         return driveStick.getRawAxis(1);
+
     }
     public static double getLeftPosition() {
         //Gets the encoder from L1 then gets the position of that encoder
@@ -37,7 +40,7 @@ public class Drive {
 	
 	public static double getRightPosition() {
         //gets the encoder from R1 then gets the position of that encoder
-		return (R1.getEncoder().getPosition() / 10.75);
+		return (R1.getEncoder().getPosition() /10.75);
     }
     
     public static double getNavxAngle() {
@@ -50,23 +53,28 @@ public class Drive {
 	public static void rightDrive (double power) {
 		R1.set(power);
 	}
-    public static void straightDriveTele (double power, double heading, boolean high) {
+	public static void stopDriving(){
+		R1.set(0);
+		L1.set(0);
+	}
+
+    public static void straightDriveTele (double power, double heading) {
 		double currentAngle = Drive.getNavxAngle();
 		double error = (currentAngle - heading);
 		angleIntegral += error;
 		double angleDeriv = currentAngle - lastAngle;
 		
-		if(high == true) {
-			output = (error * Constants.kpStraightHi) + (angleDeriv * Constants.kdStraightHi);
+		//if(high == true) {
+		//	output = (error * Constants.kpStraightHi) + (angleDeriv * Constants.kdStraightHi);
 			
-			if(Constants.kiStraightHi * angleIntegral > 1) {
-				angleIntegral = 1/Constants.kiStraightHi;
-			} else if(Constants.kiStraightHi * angleIntegral < -1){
-				angleIntegral = -1/Constants.kiStraightHi;
-			}
+		//	if(Constants.kiStraightHi * angleIntegral > 1) {
+		//		angleIntegral = 1/Constants.kiStraightHi;
+		//	} else if(Constants.kiStraightHi * angleIntegral < -1){
+		//		angleIntegral = -1/Constants.kiStraightHi;
+		//	}
 			
-			output += (angleIntegral * Constants.kiStraightHi);
-		} else {
+		//	output += (angleIntegral * Constants.kiStraightHi);
+		//} else {
 			output = (error * Constants.kpStraight) + (angleDeriv * Constants.kdStraight);
 			
 			if(Constants.kiStraight * angleIntegral > 1) {
@@ -76,12 +84,19 @@ public class Drive {
 			}
 			
 			output += (angleIntegral * Constants.kiStraight);
-		}
+		
+
+		//}
 		rightDrive(output + power);
 		leftDrive(output - power);
 		lastAngle = Drive.getNavxAngle();
 		SmartDashboard.putNumber("Auto Drive Output", output);
 		SmartDashboard.putNumber("Auto Drive Angle", currentAngle);
+	}
+	public static void setRobotHeading(double heading) {
+		double error = (getNavxAngle() - heading);
+		rightDrive(error*Constants.kpTurn);
+		leftDrive(error*Constants.kpTurn);
 	}
 
     public static double getDriveLeftTrigger() {
@@ -93,10 +108,11 @@ public class Drive {
     }
 
     public static void initializeDrive(){
-        L1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
-        L2 = new CANSparkMax(2, MotorType.kBrushless);
-        R1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
-        R2 = new CANSparkMax(4, MotorType.kBrushless);
+
+        R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
+        R2 = new CANSparkMax(2, MotorType.kBrushless);
+        L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
+        L2 = new CANSparkMax(4, MotorType.kBrushless);
         R1.setIdleMode(IdleMode.kBrake);
         L1.setIdleMode(IdleMode.kBrake);
         R2.follow(R1);
@@ -105,9 +121,10 @@ public class Drive {
         Drive.navx = new AHRS(SPI.Port.kMXP);
 
         driveStick = new Joystick(0);
+
     }
    
-   public static void arcadeDrive(double side, double forward){
+   public static void arcadeDrive(double side, double forward, boolean shifter){
         R1.set(side - forward);
         L1.set(side + forward);
     }

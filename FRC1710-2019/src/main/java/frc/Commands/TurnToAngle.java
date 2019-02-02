@@ -5,58 +5,60 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-// Visit http://first.wpi.edu/FRC/roborio/beta/docs/java/edu/wpi/first/wpilibj/Timer.html for timer docs 
-
 package frc.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.Timer;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import frc.robot.Constants;
+import frc.robot.Drive;
 
-public class Intake extends Command {
+public class TurnToAngle extends Command {
+  double _angle;
+	boolean _slow;
+	int count;
+  public TurnToAngle(double angle) {
+    _angle = angle;
+    	_slow = false;
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+  }
+  public TurnToAngle(double angle, boolean slow) {
+    _angle = angle;
+    _slow = slow;
 
-  public int time;
-  private static Boolean finished;
-  private static final double GOSPEED = .5; // Replace with speed percentage
-  private static final double STOPSPEED = 0; // LEAVE AT ZERO
-  public Timer beltTimer;
+  }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    finished = false;
-    beltTimer = new Timer();
-    beltTimer.start();
+    count = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Constants.intake.set(ControlMode.PercentOutput, GOSPEED);
-    if (beltTimer.hasPeriodPassed(3) == true) {
-      finished = true;
+    if(_slow){
+      Drive.straightDriveTele(0,_angle);
+    }else{
+      Drive.straightDriveTele(0,_angle);
     }
+    count++;
   }
 
+  // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return finished;
+    return Math.abs(Math.abs(Drive.getNavxAngle()) - Math.abs(_angle)) < 5;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Constants.intake.set(ControlMode.PercentOutput, STOPSPEED);
-    beltTimer.stop();
-    beltTimer.reset();
+    System.out.println("Done turning " + Drive.getNavxAngle());
+    Drive.stopDriving();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    Constants.intake.set(ControlMode.PercentOutput, STOPSPEED);
   }
 }
