@@ -22,10 +22,8 @@ public class Drive {
     static double lastAngle, angleIntegral, output;
     public static AHRS navx;
     public static CANSparkMax R1,R2, L1, L2;
-    public static Joystick driveStick;
+    public static Joystick driveStick, mechStick;
 	
-
-
     public static double getTurnPower() {
 		return -1 * driveStick.getRawAxis(4);
 	}
