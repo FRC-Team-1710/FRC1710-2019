@@ -42,5 +42,4 @@ public class Ballmech {
     public static void neutralizeBall() {
         IntakeMotor.set(ControlMode.PercentOutput, STOP);
     }
-
 }
