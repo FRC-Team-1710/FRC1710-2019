@@ -31,10 +31,11 @@ public class ClawControl {
     public static long start = System.currentTimeMillis();
     public static long finish = System.currentTimeMillis();
     public static long TimeElapsed = (finish - start);
-    public static double P = .01;
-    public static double I = .002;
     public static double goal = 100;
-    public static double error, output;
+    public static double error = 0;
+    public static double output = 0;
+    public static final double P = .01;
+    public static final double I = .002;
     public static final double REVERSEPOWER = .2;
     public static final double TIMERDELAY = 1;
 
@@ -69,23 +70,23 @@ public class ClawControl {
            Timer.delay(TIMERDELAY);
            pistonIntake();
            Drive.leftDrive(REVERSEPOWER);
-           Drive.rightDrive(REVERSEPOWER*1);   
+           Drive.rightDrive(REVERSEPOWER*-1);   
        }
     }
     public static void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        }else if (Drive.mechStick.getRawButton(2) == true){
+        } else if (Drive.mechStick.getRawButton(2) == true){
             HatchTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        }else if (Drive.mechStick.getRawButton(3) == true){
+        } else if (Drive.mechStick.getRawButton(3) == true){
             FrontDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        }else if (Drive.mechStick.getRawButton(4) == true){
+        } else if (Drive.mechStick.getRawButton(4) == true){
             BackDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        }else {
+        } else {
             ClawMotor.set(ControlMode.PercentOutput, 0);
         }
     }
@@ -115,6 +116,6 @@ public class ClawControl {
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-    }
+    } //feed forward loop- uses sin theata to assign motor power using a set variable 
     }
     
