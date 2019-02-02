@@ -125,8 +125,8 @@ public class Drive {
     }
    
    public static void arcadeDrive(double side, double forward, boolean shifter){
-        R1.set(side - forward);
-        L1.set(side + forward);
+        R1.set(side + forward);
+        L1.set(side - forward);
     }
 }
 

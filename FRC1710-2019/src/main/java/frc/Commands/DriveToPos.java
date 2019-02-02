@@ -7,6 +7,7 @@
 
 package frc.Commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.Utility.PID;
 import frc.robot.Constants;
@@ -20,6 +21,7 @@ public class DriveToPos extends Command {
   double goalDistance;
   double speed, heading, currentHeading, startingPos,currentRotation, percentCompleted,output,deltaPos, totalRotations,startSlowDown;
   double slowDownStart = .8;
+  public static Timer time = new Timer();
 
   public DriveToPos(double goalDistance_, double speed_, double heading_) {
     goalDistance = goalDistance_;
@@ -31,7 +33,7 @@ public class DriveToPos extends Command {
   @Override
   protected void initialize() {
     Drive.navx.reset();
-    startingPos = (Drive.getRightPosition() + Drive.getLeftPosition())/2;
+    startingPos = Math.abs((Drive.getRightPosition() + Drive.getLeftPosition())/2);
     totalRotations = goalDistance + startingPos;
     System.out.println("Start Pos: " + startingPos);
     System.out.println("Goal Pos: " + goalDistance);
@@ -42,34 +44,31 @@ public class DriveToPos extends Command {
   protected void execute() {
     currentRotation = Math.abs((Drive.getRightPosition() + Drive.getLeftPosition()))/2;
     percentCompleted = currentRotation/totalRotations;
-
+    time.start();
     if(Drive.getNavxAngle() < (heading - 2) ) {
       double currentHeading = Drive.getNavxAngle();
       double error = (currentHeading - heading);
-  
+      
    
-      Drive.arcadeDrive(-PID.PID(error, .0065, .005, .01,Robot.autoTime.	getFPGATimestamp()),0,false);
+      Drive.arcadeDrive(-PID.PID(error, .007, .005, .01,time.getFPGATimestamp()),0,false);
      
     }else if(Drive.getNavxAngle() > (heading + 2)){
       double currentHeading = Drive.getNavxAngle();
       double error = (currentHeading - heading);
       //double change = error * .0065;
-
-      Drive.arcadeDrive(-PID.PID(error, .0065, .005, .01,Robot.autoTime.	getFPGATimestamp()),0,false);
+ 
+      Drive.arcadeDrive(-PID.PID(error, .007, .005, .01,time.getFPGATimestamp()),0,false);
     
-    }else if(currentRotation < (goalDistance - 2)){
-     
-        Drive.arcadeDrive(0,-speed,false);
+    }else if(currentRotation < (totalRotations - .5)){
       
-      
-     
-      }else if(Math.abs(currentRotation) > goalDistance){
+      Drive.arcadeDrive(0,speed,false);
 
-        Drive.stopDriving();
-        end();
-      }
-
+   
+    }else{
+      Drive.stopDriving();
+      end();
     }
+  }
 
 
   
@@ -77,7 +76,7 @@ public class DriveToPos extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return currentRotation >=(totalRotations - 2);
+    return currentRotation >=(totalRotations - 1);
   }
 
   // Called once after isFinished returns true
@@ -85,6 +84,7 @@ public class DriveToPos extends Command {
   protected void end() {
     System.out.println("End Pos: " + currentRotation);
     Drive.stopDriving();
+    time.stop();
   }
 
   // Called when another command which requires one or more of the same

@@ -8,7 +8,7 @@
 //this is code to control the pistons on the claw
 
 
-package frc.robot;
+/* package frc.robot;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -118,4 +118,4 @@ public class ClawControl {
         output = PID.PID(error, P, I, 0, TimeElapsed);
     } //feed forward loop- uses sin theata to assign motor power using a set variable 
     }
-    
+    */
