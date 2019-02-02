@@ -34,6 +34,7 @@ public class ClawControl {
     public static double goal = 100;
     public static double error = 0;
     public static double output = 0;
+    public static double ticksToLine = 650;
     public static final double P = .01;
     public static final double I = .002;
     public static final double REVERSEPOWER = .2;
@@ -92,30 +93,31 @@ public class ClawControl {
     }
 
     public static void BallTransfer(){ 
-        int current = ClawMotor.getSelectedSensorPosition();
+        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
 
     public static void HatchTransfer(){
-        int current = ClawMotor.getSelectedSensorPosition();
+        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 20;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
 
     public static void FrontDeposit(){
-        int current = ClawMotor.getSelectedSensorPosition();
+        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
 
     public static void BackDeposit(){
-        int current = ClawMotor.getSelectedSensorPosition();
+        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     } //feed forward loop- uses sin theata to assign motor power using a set variable 
+        
     }
     */
