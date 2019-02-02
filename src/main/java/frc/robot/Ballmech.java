@@ -1,4 +1,4 @@
-/* package frc.robot;
+package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -42,6 +42,4 @@ public class Ballmech {
     public static void neutralizeBall() {
         IntakeMotor.set(ControlMode.PercentOutput, STOP);
     }
-
 }
-*/

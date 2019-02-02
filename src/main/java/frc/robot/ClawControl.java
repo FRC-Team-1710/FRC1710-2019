@@ -7,8 +7,7 @@
 
 //this is code to control the pistons on the claw
 
-
-/* package frc.robot;
+package frc.robot;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -92,7 +91,7 @@ public class ClawControl {
         }
     }
 
-    public static void BallTransfer(){ 
+    public static void BallTransfer(){
         double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -117,7 +116,5 @@ public class ClawControl {
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-    } //feed forward loop- uses sin theata to assign motor power using a set variable 
-        
-    }
-    */
+    } //feed forward loop- uses sin theata to assign motor power using a set variable
+}

@@ -14,10 +14,7 @@ import frc.robot.Constants;
 import frc.robot.Drive;
 import frc.robot.Robot;
 
-
-
 public class DriveToPos extends Command {
-
   double goalDistance;
   double speed, heading, currentHeading, startingPos,currentRotation, percentCompleted,output,deltaPos, totalRotations,startSlowDown;
   double slowDownStart = .8;
@@ -49,30 +46,20 @@ public class DriveToPos extends Command {
       double currentHeading = Drive.getNavxAngle();
       double error = (currentHeading - heading);
       
-   
       Drive.arcadeDrive(-PID.PID(error, .007, .005, .01,time.getFPGATimestamp()),0,false);
      
-    }else if(Drive.getNavxAngle() > (heading + 2)){
+    } else if (Drive.getNavxAngle() > (heading + 2)){
       double currentHeading = Drive.getNavxAngle();
       double error = (currentHeading - heading);
       //double change = error * .0065;
- 
       Drive.arcadeDrive(-PID.PID(error, .007, .005, .01,time.getFPGATimestamp()),0,false);
-    
-    }else if(currentRotation < (totalRotations - .5)){
-      
+    } else if (currentRotation < (totalRotations - .5)){
       Drive.arcadeDrive(0,speed,false);
-
-   
-    }else{
+    } else {
       Drive.stopDriving();
       end();
     }
   }
-
-
-  
-
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {

@@ -36,7 +36,6 @@ public class Robot extends TimedRobot {
     Drive.initializeDrive();
 
     //Ballmech.initializeBallMech();
-
     autonomousCommand = new TestDrive();
 
     Constants.constantInit();
@@ -44,15 +43,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit(){
-
-   
     Drive.navx.reset();
     System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
     System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
    
     autonomousCommand.start();
     autoTime.start();
-
   }
 
   @Override
@@ -73,33 +69,26 @@ public class Robot extends TimedRobot {
    CurrentPool.currentPool();
    //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
    //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
-  
    //Ballmech.ballMechTeleop();
 
-
     //recording mode
-    if(Drive.driveStick.getRawButton(4) == true){
+    if (Drive.driveStick.getRawButton(4) == true){
       changesInAngle = Drive.getNavxAngle() - startingAngle;
       changesInRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2) - startingRotations;
       //find changes in angles and rotations
       //changeAngle = currentAngle - startingAngle
       //changeDistance = currentRotations - startingRotations
-
-    }else if(Drive.driveStick.getRawButtonReleased(4)){
+    } else if(Drive.driveStick.getRawButtonReleased(4)){
       i++;
       changeAngle[i] = changesInAngle;
       changeRotations[i] = changesInRotations;
       System.out.println("Angle Changes: " + changeAngle);
       System.out.println("Rotation Chnages: " + changeRotations);
-      //put changes into the array;
-           
-    }else if(Drive.driveStick.getRawButton(4) == false){
-      
-      
+      //put changes into the array 
+   } else if(Drive.driveStick.getRawButton(4) == false){
       //keep finding starting positions and angles
       startingAngle = Drive.getNavxAngle();
       startingRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2);
     }
-
   }
 }
