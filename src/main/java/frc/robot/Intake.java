@@ -8,7 +8,6 @@ public class Intake {
 
     //Declares LBelt and RBelt as types of CANSparkMAX
     public static CANSparkMax LeadBelt, FollowBelt;
-
     private static final double INTAKE_POWER = 0.5;
     private static final double OUTTAKE_POWER = -0.75;
     private static final double STOP = 0.0;

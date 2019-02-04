@@ -6,15 +6,12 @@ import frc.robot.Drive;
 // import frc.robot.Constants;
 
 public class Ballmech {
-
     //Declares LBelt and RBelt as types of CANSparkMAX
     public static TalonSRX IntakeMotor;
-
     private static final double INTAKE_POWER = 0.5;
     private static final double OUTTAKE_POWER = -0.75;
     private static final double STOP = 0.0;
     private static final int INTAKE_ID = 7;
-
     //intializes IntakeMotor
     public static void initializeBallMech() {
         IntakeMotor = new TalonSRX(INTAKE_ID);

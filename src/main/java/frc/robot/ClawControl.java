@@ -43,8 +43,7 @@ public class ClawControl {
         LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
         RPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
     }
-    DoubleSolenoid piston = new DoubleSolenoid(1, 2);
-
+   
     //Identifies the button that activates the pistons
     public static void pistonIntake() {
         LPiston.set(DoubleSolenoid.Value.kReverse);
@@ -73,6 +72,7 @@ public class ClawControl {
            Drive.rightDrive(REVERSEPOWER*-1);   
        }
     }
+
     public static void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
@@ -116,5 +116,5 @@ public class ClawControl {
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-    } //feed forward loop- uses sin theata to assign motor power using a set variable
+    } 
 }

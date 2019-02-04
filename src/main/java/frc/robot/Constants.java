@@ -22,18 +22,13 @@ public class Constants {
 	public static double kpStraightHi = .012;
 	public static double kiStraightHi = .000025;
 	public static double kdStraightHi = .005;
-	
 	public static double kiDrive = .000025;
-	
 	public static double kpTurn = 0.01;
     //encoder ticks per inch on wheel
     public static int ticksPerInch = 217;
-
     //drive to position slow down rate
 	public static double slowDownPercent = 0.13;
-	
 	public static TalonSRX pickup1,pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4; 
-
 	public static void constantInit() {
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
