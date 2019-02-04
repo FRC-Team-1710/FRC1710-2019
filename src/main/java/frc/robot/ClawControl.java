@@ -38,7 +38,6 @@ public class ClawControl {
     public static final double I = .002;
     public static final double REVERSEPOWER = .2;
     public static final double TIMERDELAY = 1;
-    DoubleSolenoid piston = new DoubleSolenoid(1, 2);
 
     public ClawControl() {
         LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
