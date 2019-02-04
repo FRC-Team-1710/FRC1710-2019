@@ -27,12 +27,11 @@ public class Drive {
     public static double getTurnPower() {
 		return -1 * driveStick.getRawAxis(4);
 	}
+
 	public static double getForwardPower() {
-
-		 
         return driveStick.getRawAxis(1);
-
-    }
+	}
+	
     public static double getLeftPosition() {
         //Gets the encoder from L1 then gets the position of that encoder
         return (L1.getEncoder().getPosition() / 10.75);
@@ -45,7 +44,8 @@ public class Drive {
     
     public static double getNavxAngle() {
 		return navx.getAngle();
-    }
+	}
+	
     public static void leftDrive(double power) {
         L1.set(power);
 	}
@@ -53,6 +53,7 @@ public class Drive {
 	public static void rightDrive (double power) {
 		R1.set(power);
 	}
+
 	public static void stopDriving(){
 		R1.set(0);
 		L1.set(0);
@@ -84,8 +85,6 @@ public class Drive {
 			}
 			
 			output += (angleIntegral * Constants.kiStraight);
-		
-
 		//}
 		rightDrive(output + power);
 		leftDrive(output - power);
@@ -93,6 +92,7 @@ public class Drive {
 		SmartDashboard.putNumber("Auto Drive Output", output);
 		SmartDashboard.putNumber("Auto Drive Angle", currentAngle);
 	}
+
 	public static void setRobotHeading(double heading) {
 		double error = (getNavxAngle() - heading);
 		rightDrive(error*Constants.kpTurn);
@@ -108,7 +108,6 @@ public class Drive {
     }
 
     public static void initializeDrive(){
-
         R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
         R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
@@ -119,9 +118,7 @@ public class Drive {
         L2.follow(L1);
 
         Drive.navx = new AHRS(SPI.Port.kMXP);
-
         driveStick = new Joystick(0);
-
     }
    
    public static void arcadeDrive(double side, double forward, boolean shifter){
