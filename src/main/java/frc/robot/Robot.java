@@ -10,7 +10,9 @@
 
 /*----------------------------------------------------------------------------*/
 package frc.robot;
-
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -18,7 +20,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.CommandGroups.TestDrive;
 
 public class Robot extends TimedRobot {
-  Command autonomousCommand;  
+  Command autonomousCommand;
   double changesInAngle;
   double changesInRotations;
   double startingRotations;
@@ -59,7 +61,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     double leftDrive = -Drive.getTurnPower() * .2;
-    double rightDrive =  Drive.getForwardPower() * .35;    
+    double rightDrive =  Drive.getForwardPower() * .35;
     //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
     Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35,false);
     CurrentPool.currentPool();
@@ -79,11 +81,31 @@ public class Robot extends TimedRobot {
       changeRotations[i] = changesInRotations;
       System.out.println("Angle Changes: " + changeAngle);
       System.out.println("Rotation Chnages: " + changeRotations);
-      //put changes into the array 
+      //put changes into the array
     } else if(Drive.driveStick.getRawButton(4) == false){
       //keep finding starting positions and angles
       startingAngle = Drive.getNavxAngle();
       startingRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2);
+    }
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+
+    //read values periodically
+    double x = tx.getDouble(0.0);
+    double y = ty.getDouble(0.0);
+    double area = ta.getDouble(0.0);
+
+    //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
+    Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35,false);
+    CurrentPool.currentPool();
+    //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
+    //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
+    Ballmech.ballMechTeleop();
+    while(Drive.driveStick.getRawButton(1) == true) {
+      Vision.vision();
     }
   }
 }
