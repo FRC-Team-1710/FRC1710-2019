@@ -74,16 +74,16 @@ public class ClawControl {
     }
 
     public static void ClawTele(){
-        if (Drive.mechStick.getRawButton(1)){
+        if (Drive.mechStick.getPOV(360) == 1){
             BallTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(2) == true){
+        } else if (Drive.mechStick.getPOV(90) == 1){
             HatchTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(3) == true){
+        } else if (Drive.mechStick.getPOV(180) == 1){
             FrontDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(4) == true){
+        } else if (Drive.mechStick.getPOV(270) == 1){
             BackDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
         } else {
