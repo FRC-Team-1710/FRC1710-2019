@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   public static Timer time = new Timer();
   public static double[] changeAngle = new double[]{};
   public static double[] changeRotations = new double[]{};
+  public static boolean Shift;
   int i;
 
   @Override
@@ -63,9 +64,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     double leftDrive = -Drive.getTurnPower() * .2;
-    double rightDrive =  Drive.getForwardPower() * .35;    
+    double rightDrive =  Drive.getForwardPower() * .35;   
+    Shift = Drive.driveStick.getRawButton(9); 
     //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
-   Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35,false);
+   Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35, Shift);
    CurrentPool.currentPool();
    //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
    //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
