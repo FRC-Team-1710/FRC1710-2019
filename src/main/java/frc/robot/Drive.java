@@ -18,6 +18,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Compressor;
 
 public class Drive {
     public static CANEncoder enR1, enR2, enL1, enL2;
@@ -28,16 +29,17 @@ public class Drive {
 	public static DoubleSolenoid Shifters;
 	public static int ShiftersForward = 1;
 	public static int ShiftersReverse = 0;
+	public static Compressor compressor;
+
 	
     public static double getTurnPower() {
 		return -1 * driveStick.getRawAxis(4);
 	}
+
 	public static double getForwardPower() {
-
-		 
         return driveStick.getRawAxis(1);
-
-    }
+	}
+	
     public static double getLeftPosition() {
         //Gets the encoder from L1 then gets the position of that encoder
         return (L1.getEncoder().getPosition() / 10.75);
@@ -50,7 +52,8 @@ public class Drive {
     
     public static double getNavxAngle() {
 		return navx.getAngle();
-    }
+	}
+	
     public static void leftDrive(double power) {
         L1.set(power);
 	}
@@ -58,6 +61,7 @@ public class Drive {
 	public static void rightDrive (double power) {
 		R1.set(power);
 	}
+
 	public static void stopDriving(){
 		R1.set(0);
 		L1.set(0);
@@ -89,8 +93,6 @@ public class Drive {
 			}
 			
 			output += (angleIntegral * Constants.kiStraight);
-		
-
 		//}
 		rightDrive(output + power);
 		leftDrive(output - power);
@@ -98,6 +100,7 @@ public class Drive {
 		SmartDashboard.putNumber("Auto Drive Output", output);
 		SmartDashboard.putNumber("Auto Drive Angle", currentAngle);
 	}
+
 	public static void setRobotHeading(double heading) {
 		double error = (getNavxAngle() - heading);
 		rightDrive(error*Constants.kpTurn);
@@ -113,7 +116,6 @@ public class Drive {
     }
 
     public static void initializeDrive(){
-
         R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
         R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
@@ -126,9 +128,9 @@ public class Drive {
         L2.follow(L1);
 
         Drive.navx = new AHRS(SPI.Port.kMXP);
-
-        driveStick = new Joystick(0);
-
+		driveStick = new Joystick(0);
+		compressor = new Compressor(0);
+		compressor.setClosedLoopControl(true);
     }
    
    public static void arcadeDrive(double side, double forward, boolean isShifted){
@@ -151,6 +153,12 @@ public class Drive {
 		}else{
 			Shiftersint(false);
 		}
+        L1.set(side + forward);
+	}
+	
+	// if pressure starts to get low, it will activate the compressor
+	public static void Compressor() {
+		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
 	}
 }
 

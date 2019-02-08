@@ -38,7 +38,6 @@ public class CurrentPool {
 
     public static void currentPool(){
         int firstPriorityCounter = 0;
-
         int R1Priority = 1;
         int R2Priority = 1;
         int L1Priority = 1;
@@ -58,14 +57,12 @@ public class CurrentPool {
         double maxCurrentPool = 100;
         double totalCurrentDraw = currentR1 + currentR2 + currentL1 + currentL2;
         if(totalCurrentDraw > maxCurrentPool){
-            
             double ratio = maxCurrentPool / totalCurrentDraw;
             //this is where current limits are set due to more current draw
             Drive.R1.setSmartCurrentLimit((int) (currentR1 * ratio));
             Drive.R2.setSmartCurrentLimit((int) (currentR2 * ratio));
             Drive.L1.setSmartCurrentLimit((int) (currentL1 * ratio));
             Drive.L2.setSmartCurrentLimit((int) (currentL2 * ratio));
-
      }else{
          //reset current limits
         Drive.R1.setSmartCurrentLimit(100);
@@ -73,12 +70,6 @@ public class CurrentPool {
         Drive.L1.setSmartCurrentLimit(100);
         Drive.L2.setSmartCurrentLimit(100);
      }
-        
-        
-        
-
-       
-    
         //System.out.println("R1: " + Drive.R1.getOutputCurrent());
         //System.out.println("R2: " + Drive.R2.getOutputCurrent());
         //System.out.println("L1: " + Drive.L1.getOutputCurrent());

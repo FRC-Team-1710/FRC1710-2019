@@ -19,7 +19,6 @@ import frc.CommandGroups.TestDrive;
 
 public class Robot extends TimedRobot {
   Command autonomousCommand;  
-
   double changesInAngle;
   double changesInRotations;
   double startingRotations;
@@ -35,10 +34,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     autoTime = new Timer();
     Drive.initializeDrive();
-
     //Ballmech.initializeBallMech();
     autonomousCommand = new TestDrive();
-
     Constants.constantInit();
   }
 
@@ -47,7 +44,6 @@ public class Robot extends TimedRobot {
     Drive.navx.reset();
     System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
     System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
-   
     autonomousCommand.start();
     autoTime.start();
   }
@@ -72,7 +68,7 @@ public class Robot extends TimedRobot {
    //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
    //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
    //Ballmech.ballMechTeleop();
-
+    
     //recording mode
     if (Drive.driveStick.getRawButton(4) == true){
       changesInAngle = Drive.getNavxAngle() - startingAngle;
@@ -87,7 +83,7 @@ public class Robot extends TimedRobot {
       System.out.println("Angle Changes: " + changeAngle);
       System.out.println("Rotation Chnages: " + changeRotations);
       //put changes into the array 
-   } else if(Drive.driveStick.getRawButton(4) == false){
+    } else if(Drive.driveStick.getRawButton(4) == false){
       //keep finding starting positions and angles
       startingAngle = Drive.getNavxAngle();
       startingRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2);
