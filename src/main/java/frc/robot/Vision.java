@@ -13,43 +13,45 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
- * Add your docs here.
+ * this file is responisble for the  
  */
 public class Vision {
+    static NetworkTable table;
+    static NetworkTableEntry tx;
+    static NetworkTableEntry tV;
+    static NetworkTableEntry ty;
+
     /*
     #############################################################
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    a special thanks to Mr.Fuchs and Cyrus for helping with this
+    a special thanks to Mr.Fuchs and Cyrus for helping with this :)
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #############################################################
     */
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
-    NetworkTableEntry tV = table.getEntry("tv");
+    public static void visionInit(){
+      table = NetworkTableInstance.getDefault().getTable("limelight");
+      tx = table.getEntry("tx");
+      tV = table.getEntry("tv");
+      ty = table.getEntry("ty");
+    }
 
     //read values periodically
     public static void vision() {
         //limelight stuff
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        NetworkTableEntry tx = table.getEntry("tx");
-        NetworkTableEntry tV = table.getEntry("tv");
-        NetworkTableEntry ty = table.getEntry("ty");
         double t = (double) tV.getNumber(0);
         double x = tx.getDouble(0.0);
         double y = ty.getDouble(0.0);
 
         //just prints the "margin of error" to the console log
 
-        double yRad = Math.toRadians(y);
+     /* double yRad = Math.toRadians(y);
         double tanOfY = Math.tan(yRad);
-        double distance = (Constants.Hdiff/tanOfY)/10;
-        System.out.println(allowableRange(Constants.MAX, Constants.con, distance));
+        double distance = (Constants.HeightDiffOfTargets/tanOfY)/10;
+        System.out.println(allowableRange(Constants.MarginOfErrorMAX, Constants.slope, distance));
+        */
 
         //if A button is pressed
         if(Drive.driveStick.getRawButton(1) == true){
-
           //whatup my diggity dawg
           //read the varible name ;)
             double turnPower = 0.0;
@@ -60,23 +62,23 @@ public class Vision {
             user input and lock on to the crosshairs of the target,
             fwd power is always dictated by the driver*/
 
-            if(IsActualTarget(t) == true && IsSatified(x, y) == true) { //if satisfied within range
-                turnPower = 0.0; //dont turn
-            }else if(IsActualTarget(t) == true && IsInRange(x, y) == true){//if it can see a target and its in a certain range
+            if(IsActualTarget(t) == true && IsInRange(x, y) == true){//if it can see a target and its in a certain range
                 turnPower = (Constants.kpAim * x); //if a target is within a certain range turn smothly this is a p loop
-            }else if(IsActualTarget(t) == false){
+            } else if(IsActualTarget(t) == false){
                 turnPower = -Drive.getTurnPower() * .2; //if there is no target allow for user input
             }
-
-            Drive.arcadeDrive(turnPower, Drive.getForwardPower() * .35); //apply the values to robot
+            Drive.arcadeDrive(turnPower, Drive.getForwardPower() * .35, false); // apply the values to robot
         }
-
     }
 
-
       public static boolean IsActualTarget(double Is_target) { //can the limelight see a target
-        if(Is_target >= 1){return true;}
-        else{return false;}
+        if(Is_target >= 1){
+          return true;
+        }
+        
+        else{
+          return false;
+        }
       }
       public static boolean IsSatified(double target_x, double target_y) { //are we happy?
         //make limelight entries local
@@ -87,22 +89,37 @@ public class Vision {
         //this finds the distance between the target and the limelight
         double yRad = Math.toRadians(y);
         double tanOfY = Math.tan(yRad);
-        double distance = (Constants.Hdiff/tanOfY)/10;
+        double distance = (Constants.HeightDiffOfTargets/tanOfY)/10;
 
-        if(Math.abs(target_x) <= allowableRange(Constants.MAX, Constants.con, distance)){return true;}
-        else{return false;}
+        if(Math.abs(target_x) <= allowableRange(Constants.MarginOfErrorMAX, Constants.slope, distance)){
+          return true;
+        }
+        
+        else{
+          return false;
+        }
       }
 
       public static boolean IsInRange(double target_x, double target_y) { //are we in range of a target?
-        if(Math.abs(target_x) >= 10.0){return true;}
-        else{return false;}
+        if(Math.abs(target_x) >= 10.0){
+          return true;
+        }
+        
+        else{
+          return false;
+        }
       }
-
+      
+        /*
+        *ight kiddos, get ready
+        *this equasion gives us a "smooth" down turn to zero for our "margin of error" based on distance
+        *
+        * @param max is the "max" allowable margin of error
+        * @param c is the "slope" if how fast the allowable margin turns down from zero 
+        * @param distnce is the distance you are from the target
+        * @return returns the "margin of error"
+        */
       public static double allowableRange(double max, double c, double distance){
-        // ight kiddos, get ready
-        //this equasion gives us a "smooth" down turn to zero for our "margin of error"
-        //based on distance
-        // this is the equasion (-max * 2^k*distance + max)
         double exp = -c * distance;
         double errorMargin = (-max) * Math.pow(2.0, exp) + max;
         return errorMargin;

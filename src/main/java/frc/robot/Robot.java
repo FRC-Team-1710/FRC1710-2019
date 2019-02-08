@@ -10,6 +10,7 @@
 
 /*----------------------------------------------------------------------------*/
 package frc.robot;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
     //Ballmech.initializeBallMech();
     autonomousCommand = new TestDrive();
     Constants.constantInit();
+    Vision.visionInit();
   }
 
   @Override
@@ -88,15 +90,7 @@ public class Robot extends TimedRobot {
       startingRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2);
     }
 
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
-
-    //read values periodically
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
+    
 
     //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
     Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35,false);
@@ -104,8 +98,8 @@ public class Robot extends TimedRobot {
     //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
     //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
     Ballmech.ballMechTeleop();
-    while(Drive.driveStick.getRawButton(1) == true) {
-      Vision.vision();
+    
+    Vision.vision();
     }
   }
-}
+

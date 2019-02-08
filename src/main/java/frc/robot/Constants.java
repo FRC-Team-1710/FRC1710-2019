@@ -42,9 +42,7 @@ public class Constants {
 
 	//vision constants
 	public static double kpAim = 0.005;
-	public static double Hdiff = 7.79;
-	public static double MAX = 10.0;
-	public static double con = .06;
-	public static double heightOfLimeLight = 19.0;
-	public static double heightOfTarget = 29.0;
+	public static double HeightDiffOfTargets = 7.79;
+	public static double MarginOfErrorMAX = 10.0;
+	public static double slope = .06;
 }
