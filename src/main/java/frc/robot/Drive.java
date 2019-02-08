@@ -12,9 +12,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive {
@@ -22,7 +24,10 @@ public class Drive {
     static double lastAngle, angleIntegral, output;
     public static AHRS navx;
     public static CANSparkMax R1,R2, L1, L2;
-    public static Joystick driveStick, mechStick;
+	public static Joystick driveStick, mechStick;
+	public static DoubleSolenoid Shifters;
+	public static int ShiftersForward = 1;
+	public static int ShiftersReverse = 0;
 	
     public static double getTurnPower() {
 		return -1 * driveStick.getRawAxis(4);
@@ -112,7 +117,9 @@ public class Drive {
         R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
         R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
-        L2 = new CANSparkMax(4, MotorType.kBrushless);
+		L2 = new CANSparkMax(4, MotorType.kBrushless);
+		Shifters = new DoubleSolenoid(ShiftersForward,ShiftersReverse);
+
         R1.setIdleMode(IdleMode.kBrake);
         L1.setIdleMode(IdleMode.kBrake);
         R2.follow(R1);
@@ -127,7 +134,23 @@ public class Drive {
    public static void arcadeDrive(double side, double forward, boolean shifter){
         R1.set(side - forward);
         L1.set(side + forward);
-    }
+	}
+	
+	public static void Shiftersint (boolean isShifted){
+		Shifters = new DoubleSolenoid(ShiftersForward, ShiftersReverse);
+		if (isShifted == true){
+			Shifters.set(Value.kReverse);
+		}else {
+			Shifters.set(Value.kForward);
+		}
+	}
+	public static void setShifters(){
+		if (driveStick.getRawButton(9)){
+			Shiftersint(true);
+		}else{
+			Shiftersint(false);
+		}
+	}
 }
 
 
