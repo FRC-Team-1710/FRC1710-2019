@@ -16,13 +16,15 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Compressor;
 
 public class Drive {
     public static CANEncoder enR1, enR2, enL1, enL2;
     static double lastAngle, angleIntegral, output;
     public static AHRS navx;
     public static CANSparkMax R1,R2, L1, L2;
-    public static Joystick driveStick, mechStick;
+	public static Joystick driveStick, mechStick;
+	public static Compressor compressor;
 	
     public static double getTurnPower() {
 		return -1 * driveStick.getRawAxis(4);
@@ -118,13 +120,20 @@ public class Drive {
         L2.follow(L1);
 
         Drive.navx = new AHRS(SPI.Port.kMXP);
-        driveStick = new Joystick(0);
+		driveStick = new Joystick(0);
+		compressor = new Compressor(0);
+		compressor.setClosedLoopControl(true);
     }
    
    public static void arcadeDrive(double side, double forward, boolean shifter){
         R1.set(side - forward);
         L1.set(side + forward);
-    }
+	}
+	
+	// if pressure starts to get low, it will activate the compressor
+	public static void Compressor() {
+		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
+	}
 }
 
 
