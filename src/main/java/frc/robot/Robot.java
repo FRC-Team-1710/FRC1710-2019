@@ -11,8 +11,10 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.CommandGroups.TestDrive;
@@ -28,10 +30,17 @@ public class Robot extends TimedRobot {
   public static double[] changeAngle = new double[]{};
   public static double[] changeRotations = new double[]{};
   public static boolean Shift;
+  public static DoubleSolenoid Shifters;
+  public static DoubleSolenoid Shifter;
   int i;
+  int ShiftForward = 1;
+  int ShiftBack = 0;
 
+  
   @Override
   public void robotInit() {
+   DoubleSolenoid Shifters = new DoubleSolenoid(1, ShiftForward, ShiftBack);
+   DoubleSolenoid Shifter = new DoubleSolenoid(2, ShiftForward, ShiftBack);
     autoTime = new Timer();
     Drive.initializeDrive();
     //Ballmech.initializeBallMech();
@@ -89,4 +98,20 @@ public class Robot extends TimedRobot {
       startingRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2);
     }
   }
+  public static void Shiftersint (boolean isShifted){
+		if (isShifted == true){
+      Shifters.set(Value.kForward);
+      Shifter.set(Value.kForward);
+		}else {
+      Shifters.set(Value.kReverse);
+      Shifter.set(Value.kForward);
+		}
+	}
+	public static void setShifters(){
+		if (Drive.driveStick.getRawButton(9)){
+			Shiftersint(true);
+		}else{
+			Shiftersint(false);
+		}
+	}
 }
