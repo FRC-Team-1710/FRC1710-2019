@@ -153,7 +153,6 @@ public class Drive {
 		}else{
 			Shiftersint(false);
 		}
-        L1.set(side + forward);
 	}
 	
 	// if pressure starts to get low, it will activate the compressor
