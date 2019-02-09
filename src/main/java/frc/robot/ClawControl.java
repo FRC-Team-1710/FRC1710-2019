@@ -9,17 +9,11 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick; 
-import edu.wpi.first.wpilibj.Joystick.ButtonType;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.Command;
 import frc.Utility.PID;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -74,16 +68,16 @@ public class ClawControl {
     }
 
     public static void ClawTele(){
-        if (Drive.mechStick.getPOV(360) == 1){
+        if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getPOV(90) == 1){
+        } else if (Drive.mechStick.getRawButton(2) == true){
             HatchTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getPOV(180) == 1){
+        } else if (Drive.mechStick.getRawButton(3) == true){
             FrontDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getPOV(270) == 1){
+        } else if (Drive.mechStick.getRawButton(4) == true){
             BackDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
         } else {
