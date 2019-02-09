@@ -10,9 +10,7 @@ package frc.Commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.Utility.PID;
-import frc.robot.Constants;
 import frc.robot.Drive;
-import frc.robot.Robot;
 
 public class DriveToPos extends Command {
   double goalDistance;
