@@ -11,7 +11,8 @@ package frc.robot;
  * Add your docs here.
  */
 public class cyrus {
-    public  int B      ; {
+    public  int B      ;
+    public  Boolean iscyruscoming       =   false ; {
 
 
 
@@ -22,6 +23,18 @@ public class cyrus {
     }
 
 
+
+
+
+
+
+
+
+    
+
+    if (iscyruscoming     ==      true       ||         iscyruscoming == false) {
+        iscyruscoming                       =                 true;
+    }
 
 
 
