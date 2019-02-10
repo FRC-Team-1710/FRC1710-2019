@@ -29,7 +29,7 @@ public class Drive {
 	public static Compressor compressor;
 
     public static double getTurnPower() {
-		return -1 * driveStick.getRawAxis(4);
+		return driveStick.getRawAxis(4);
 	}
 
 	public static double getForwardPower() {
@@ -117,10 +117,12 @@ public class Drive {
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
 		L2 = new CANSparkMax(4, MotorType.kBrushless);
 
-        R1.setIdleMode(IdleMode.kBrake);
-        L1.setIdleMode(IdleMode.kBrake);
+        // R1.setIdleMode(IdleMode.kBrake);
+        // L1.setIdleMode(IdleMode.kBrake);
         R2.follow(R1);
-        L2.follow(L1);
+		L2.follow(L1);
+		L1.setInverted(true);
+		L2.setInverted(true);
 
         Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
@@ -129,9 +131,9 @@ public class Drive {
     }
    
    public static void arcadeDrive(double side, double forward, boolean isShifted){
-        R1.set(side - forward);
-		L1.set(side + forward);
-		Robot.Shiftersint(isShifted);
+        R1.set(side + forward);
+		L1.set(side - forward);
+		Robot.Shifting(isShifted);
 	}
 	
 	// if pressure starts to get low, it will activate the compressor
@@ -139,6 +141,7 @@ public class Drive {
 		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
 	}
 }
+
 
 
 
