@@ -22,12 +22,6 @@ public class Intake {
     }
     
     //Determines what functions to use when triggers are used
-    public static void ballMechTeleop() {
-        if (Drive.getDriveLeftTrigger() > 0 && Drive.getDriveRightTrigger() > 0) { neutralizeBall(); }
-        else if (Drive.getDriveLeftTrigger() > 0) { intakeBall(); }
-        else if (Drive.getDriveRightTrigger() > 0) { outtakeBall(); }
-        else { neutralizeBall(); }
-    }
 
     //Intializes the intake function and determines speed percentages/inversions
     public static void intakeBall() {
