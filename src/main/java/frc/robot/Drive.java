@@ -11,6 +11,8 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
@@ -27,6 +29,7 @@ public class Drive {
     public static CANSparkMax R1,R2, L1, L2;
 	public static Joystick driveStick, mechStick;
 	public static Compressor compressor;
+	public static TalonSRX C1,C2, C3;
 
     public static double getTurnPower() {
 		return driveStick.getRawAxis(4);
@@ -117,6 +120,7 @@ public class Drive {
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
 		L2 = new CANSparkMax(4, MotorType.kBrushless);
 
+
         // R1.setIdleMode(IdleMode.kBrake);
         // L1.setIdleMode(IdleMode.kBrake);
         R2.follow(R1);
@@ -139,6 +143,21 @@ public class Drive {
 	// if pressure starts to get low, it will activate the compressor
 	public static void Compressor() {
 		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
+	}
+
+	public static void Climber(){
+		C1 = new TalonSRX(11);
+		C2 = new TalonSRX(12);
+		C3 = new TalonSRX(13);
+		if (driveStick.getRawButton(4)){
+			C1.set(ControlMode.PercentOutput, .5);
+			C2.set(ControlMode.PercentOutput, .5);
+			C3.set(ControlMode.PercentOutput, .5);
+		}else {
+			C1.set(ControlMode.PercentOutput, 0);
+			C2.set(ControlMode.PercentOutput, 0);
+			C3.set(ControlMode.PercentOutput, 0);
+		}
 	}
 }
 

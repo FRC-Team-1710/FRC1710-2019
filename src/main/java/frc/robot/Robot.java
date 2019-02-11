@@ -11,6 +11,8 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -43,6 +45,7 @@ public class Robot extends TimedRobot {
     //Ballmech.initializeBallMech();
     autonomousCommand = new TestDrive();
     Constants.constantInit();
+    Drive.Climber();
   }
 
   @Override
@@ -70,6 +73,7 @@ public class Robot extends TimedRobot {
     Shift = Drive.driveStick.getRawButton(5); 
     //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
     Drive.arcadeDrive(Drive.getTurnPower(), Drive.getForwardPower(), Shift);
+    Drive.Climber();
       // if (Drive.driveStick.getRawButton(1)) {
       //   Drive.R1.set(.5);
       // } else if (Drive.driveStick.getRawButton(2)) {
