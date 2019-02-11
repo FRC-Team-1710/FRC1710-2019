@@ -37,8 +37,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     autoTime = new Timer();
     Drive.initializeDrive();
-    //Ballmech.initializeBallMech();
-    autonomousCommand = new TestDrive();
+
+    // Ballmech.initializeBallMech();
+    // autonomousCommand = new TestDrive();
+
     Constants.constantInit();
     Vision.visionInit();
   }
@@ -54,11 +56,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic(){
-    Scheduler.getInstance().run();
+    // Scheduler.getInstance().run();
   }
 
   @Override
   public void teleopInit(){
+    Pixy.init();
   }
 
   @Override
@@ -68,26 +71,30 @@ public class Robot extends TimedRobot {
     Shift = Drive.driveStick.getRawButton(9); 
     //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
     Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35, Shift);
-    CurrentPool.currentPool();
+    // CurrentPool.currentPool(); // Penn fix this - The watchdog loop tells me this is causing the robot code to run slow!
+    if(Drive.driveStick.getRawButton(4) == true){
+      Pixy.lineFollow();
+    }
     //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
     //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
     //Ballmech.ballMechTeleop();
     
     //recording mode
-    if (Drive.driveStick.getRawButton(4) == true){
+    if (Drive.driveStick.getRawButton(4) == true) {
       changesInAngle = Drive.getNavxAngle() - startingAngle;
       changesInRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2) - startingRotations;
       //find changes in angles and rotations
       //changeAngle = currentAngle - startingAngle
       //changeDistance = currentRotations - startingRotations
-    } else if(Drive.driveStick.getRawButtonReleased(4)){
+    } else if(Drive.driveStick.getRawButtonReleased(4)) {
       i++;
       changeAngle[i] = changesInAngle;
       changeRotations[i] = changesInRotations;
       System.out.println("Angle Changes: " + changeAngle);
       System.out.println("Rotation Chnages: " + changeRotations);
-      //put changes into the array
-    } else if(Drive.driveStick.getRawButton(4) == false){
+
+      //put changes into the array 
+    } else if(Drive.driveStick.getRawButton(4) == false) {
       //keep finding starting positions and angles
       startingAngle = Drive.getNavxAngle();
       startingRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2);
