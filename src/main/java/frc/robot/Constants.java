@@ -13,12 +13,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  * Add your docs here.
  */
 public class Constants {
-    //constants for drive
-	//.013
+	//constants for drive
 	public static double kpStraight = .0125;
 	public static double kiStraight = .001;
-	public static double kdStraight = .00075;
-	//was .0125
+	public static double kdStraight = .00075; //was .0125
 	public static double kpStraightHi = .012;
 	public static double kiStraightHi = .000025;
 	public static double kdStraightHi = .005;
@@ -28,7 +26,7 @@ public class Constants {
     public static int ticksPerInch = 217;
     //drive to position slow down rate
 	public static double slowDownPercent = 0.13;
-	public static TalonSRX pickup1,pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4; 
+	public static TalonSRX pickup1, pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
 	public static void constantInit() {
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
@@ -41,6 +39,10 @@ public class Constants {
 		climber3 = new TalonSRX(13);
 		climber4 = new TalonSRX(14);
 	}
-	
-	
+
+	//vision constants
+	public static double kpAim = 0.005;
+	public static double HeightDiffOfTargets = 7.79;
+	public static double MarginOfErrorMAX = 5.0;
+	public static double slope = .02;
 }
