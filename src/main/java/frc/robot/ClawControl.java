@@ -10,8 +10,6 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick; 
 import frc.Utility.PID;
@@ -20,7 +18,6 @@ import edu.wpi.first.wpilibj.Timer;
 public class ClawControl {
     public static DoubleSolenoid LPiston, RPiston;
     public static Joystick driveStick = new Joystick(0);
-    public static TalonSRX ClawMotor;
     public static long start = System.currentTimeMillis();
     public static long finish = System.currentTimeMillis();
     public static long TimeElapsed = (finish - start);
@@ -34,7 +31,7 @@ public class ClawControl {
     public static final double REVERSEPOWER = .2;
     public static final double TIMERDELAY = 1;
 
-    public ClawControl() {
+    public static void initializeClawControl() {
         LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
         RPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
     }
@@ -70,43 +67,47 @@ public class ClawControl {
     public static void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
-            ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(2)){
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+        } else if (Drive.mechStick.getRawButton(2) == true){
             HatchTransfer();
-            ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(3)){
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+        } else if (Drive.mechStick.getRawButton(3) == true){
             FrontDeposit();
-            ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(4)){
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+        } else if (Drive.mechStick.getRawButton(4) == true){
             BackDeposit();
-            ClawMotor.set(ControlMode.PercentOutput, output);
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
         } else {
-            ClawMotor.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
         }
     }
 
     public static void BallTransfer(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        
     }
 
     public static void HatchTransfer(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 20;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        Constants.pickup1.set(ControlMode.PercentOutput, output);
+        Constants.pickup2.set(ControlMode.PercentOutput, -output);
     }
 
     public static void FrontDeposit(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
 
     public static void BackDeposit(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
