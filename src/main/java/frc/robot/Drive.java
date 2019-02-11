@@ -106,19 +106,14 @@ public class Drive {
 		leftDrive(error*Constants.kpTurn);
 	}
 
-    public static double getDriveLeftTrigger() {
-        return driveStick.getRawAxis(2);
-    }
-
-    public static double getDriveRightTrigger() {
-        return driveStick.getRawAxis(3);
-    }
-
     public static void initializeDrive(){
         R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
         R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
 		L2 = new CANSparkMax(4, MotorType.kBrushless);
+		C1 = new TalonSRX(11);
+        C2 = new TalonSRX(12);
+     	C3 = new TalonSRX(13);
 
 
         // R1.setIdleMode(IdleMode.kBrake);
@@ -143,21 +138,6 @@ public class Drive {
 	// if pressure starts to get low, it will activate the compressor
 	public static void Compressor() {
 		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
-	}
-
-	public static void Climber(){
-		C1 = new TalonSRX(11);
-		C2 = new TalonSRX(12);
-		C3 = new TalonSRX(13);
-		if (driveStick.getRawButton(4)){
-			C1.set(ControlMode.PercentOutput, .5);
-			C2.set(ControlMode.PercentOutput, .5);
-			C3.set(ControlMode.PercentOutput, .5);
-		}else {
-			C1.set(ControlMode.PercentOutput, 0);
-			C2.set(ControlMode.PercentOutput, 0);
-			C3.set(ControlMode.PercentOutput, 0);
-		}
 	}
 }
 
