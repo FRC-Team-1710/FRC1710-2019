@@ -46,9 +46,11 @@ public class Climber {
     public static void ClimbSpeed() { 
         // need to test and then incorperate into above function
         if (C1.getSelectedSensorPosition() <= 1300) {
+            C1.set(ControlMode.PercentOutput, MaxSpeed);
+        } else if (C1.getSelectedSensorPosition() <= totalENC && C1.getSelectedSensorPosition() >= 1350){
             C1.set(ControlMode.PercentOutput, (MaxSpeed * (1 - Math.exp(-1 * a * (C1.getSelectedSensorPosition()/ totalENC)))));
         } else {
-            C1.set(ControlMode.PercentOutput, MaxSpeed);
+            C1.set(ControlMode.PercentOutput, 0);
         }
     }
 }
