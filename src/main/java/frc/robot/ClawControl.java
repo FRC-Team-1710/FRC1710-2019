@@ -34,6 +34,7 @@ public class ClawControl {
     public static double error = 0;
     public static double output = 0;
     public static double ticksToLine = 650;
+    public static double current;
     public static final double P = .01;
     public static final double I = .002;
     public static final double REVERSEPOWER = .2;
@@ -63,7 +64,6 @@ public class ClawControl {
 
     public static void placeHatch() {
         //need to add vision 
-        //if button is pressed the piston will release and then drive backwards 
        if  (Drive.driveStick.getRawButton(2)==true){
            pistonOuttake();
            Timer.delay(TIMERDELAY);
@@ -77,13 +77,13 @@ public class ClawControl {
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(2) == true){
+        } else if (Drive.mechStick.getRawButton(2)){
             HatchTransfer();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(3) == true){
+        } else if (Drive.mechStick.getRawButton(3)){
             FrontDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(4) == true){
+        } else if (Drive.mechStick.getRawButton(4)){
             BackDeposit();
             ClawMotor.set(ControlMode.PercentOutput, output);
         } else {
@@ -92,27 +92,27 @@ public class ClawControl {
     }
 
     public static void BallTransfer(){
-        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
 
     public static void HatchTransfer(){
-        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 20;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
 
     public static void FrontDeposit(){
-        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
 
     public static void BackDeposit(){
-        double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
