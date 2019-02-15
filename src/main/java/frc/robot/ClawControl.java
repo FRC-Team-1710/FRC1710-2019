@@ -6,6 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 //this is code to control the pistons on the claw
+//##########################################
+//make sure to add motor outputs!!!!!!!!!!
+//##########################################
 
 package frc.robot;
 
@@ -32,6 +35,8 @@ public class ClawControl {
     public static final double I = .002;
     public static final double REVERSEPOWER = .2;
     public static final double TIMERDELAY = 1;
+
+    public boolean isConflicting;
 
     public static void initializeClawControl() {
         LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
@@ -67,7 +72,7 @@ public class ClawControl {
        }
     }
 
-    public static void ClawTele(){
+    public void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
             Constants.clawRotate.set(ControlMode.PercentOutput, output);
@@ -85,43 +90,61 @@ public class ClawControl {
         }
     }
 
-    public static void BallTransfer(){
+    public void BallTransfer(){
         double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = false;
+        }
     }
 
-    public static void HatchTransfer(){
+    public void HatchTransfer(){
         double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 20;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-        Constants.pickup1.set(ControlMode.PercentOutput, output);
-        Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        if(error == 0){
+            isConflicting = false;
+        }
     }
 
-    public static void FrontDeposit(){
+    public void FrontDeposit(){
         double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-        where(error);
+        if(error == 0){
+            isConflicting = true;
+        }
     }
 
-    public static void BackDeposit(){
+    public void BackDeposit(){
         double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-    } 
-
-    public static boolean where(double error){
-        if (error == 0){
-            return true;
+        if(error == 0){
+            isConflicting = false;
+        } 
+    }
+    public void resting(){
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        goal = 10;
+        error = goal - current;
+        output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = false;
         }
-        else{
+    }
+    public boolean is_not_conflicting(){
+        if(isConflicting == true){
+            return true;
+        } else {
             return false;
         }
     }
+    
+
 }

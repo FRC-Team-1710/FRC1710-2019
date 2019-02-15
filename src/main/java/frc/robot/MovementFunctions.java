@@ -11,7 +11,6 @@ package frc.robot;
  * Add your docs here.
  */
 public class MovementFunctions {
-    Boolean greg = true;
     public static void restingPosition() {
         //then ask where we want to go
         //then ask where we want to go
