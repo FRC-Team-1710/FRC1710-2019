@@ -7,58 +7,46 @@
 
 package frc.robot;
 
+import frc.robot.SyncMechs;
+
 /**
  * Go to ____ position by using a series of steps by placing ClawControl and IntakeControl 
  * in various positions until both are situated according to driver needs.
  */
 public class SyncMechs {
-    int intakePos = 4;
-    int clawPos = 2;
-    double error;
-    double goal;
-    double output = 0;
-    double P = 0.1;
-    double I = 0.02;
-    double TimeElapsed;
+    String restingPosition;
+    String BallIntake;
+    String HatchIntakeFront;
+    String HatchIntakeBack;
+    String HatchTransfer;
+    String BallOuttakeFront;
+    String BallOuttakeBack;
+    String HatchOuttakeFront;
+    String HatchOuttakeBack;
 
-       
-
-   /* public static void SyncMech() {
-        if(Drive.driveStick.getPOV(360) == 1) {
-            if(encoder values == intakePos1 && other encoder values == clawPos1) { // fill if statement with if the encoder values = where they want to be
-                Constants.pickup1.set(ControlMode.PercentOutput, 0);
-                Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
-            } else if(encoder values == intakePos1 && other encoder values == clawPos2) {
-                //pid stuff
-            } else if(encoder values == intakePos1 && other encoder values == clawPos3) {
-                //pid stuff
-            } else if(encoder values == intakePos1 && other encoder values == clawPos4) {
-                //pid stuff
-            } else if(encoder values == intakePos1 && other encoder values == clawPos5) {
-                //pid stuff
-            } else if(encoder values == intakePos1 && other encoder values == clawPos6) {
-                //pid stuff
-            } else if(encoder values == intakePos2 && other encoder values == clawPos1) {
-                //pid stuff
-            }
+    public void intakeMovements(String greg) {
+        MovementFunctions.movingPosition();
+        if(greg == restingPosition) {
+            MovementFunctions.restingPosition();
+        } else if(greg == BallIntake) {
+            MovementFunctions.BallIntake();
+        } else if(greg == HatchIntakeFront) {
+            MovementFunctions.HatchIntakeFront();
+        } else if(greg == HatchIntakeBack) {
+            MovementFunctions.HatchIntakeBack();
+        } else if(greg == HatchTransfer) {
+            MovementFunctions.HatchTransfer();
+        } else if(greg == BallOuttakeFront) {
+            MovementFunctions.BallOuttakeFront();
+        } else if(greg == BallOuttakeBack) {
+            MovementFunctions.BallOuttakeBack();
+        } else if(greg == HatchOuttakeFront) {
+            MovementFunctions.HatchOuttakeFront();
+        } else if(greg == HatchOuttakeBack) {
+            MovementFunctions.HatchOuttakeBack();
+        } else {
+            MovementFunctions.restingPosition();
         }
-    } */
-
-    public static void hudIdea() {
-        if(claw is in ground == true){ //"stacking"
-            if (intake down == true){
-                
-
-            }
-
-        }
-
-    }
-
-    public static void intakeMovements(int intakePos, int clawPos) {
-        gotoupright();
-
     }
 
     
