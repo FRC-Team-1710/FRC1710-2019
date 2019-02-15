@@ -111,4 +111,13 @@ public class ClawControl {
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     } 
+
+    public static void GetEncoder(){
+        if (Drive.driveStick.getRawButton(4)){
+            ClawMotor.set(ControlMode.PercentOutput, .5);
+            System.out.println(ClawMotor.getSelectedSensorPosition());
+        }else {
+            ClawMotor.set(ControlMode.PercentOutput, 0);
+        }
+    }
 }

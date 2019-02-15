@@ -14,7 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  * Add your docs here.
  */
 public class Climber {
-    public static TalonSRX C1,C2, C3;
+    private static TalonSRX C1,C2, C3;
     public static double MaxSpeed = .5;
     public static double a = .05;
     public static int totalENC = 5000;
