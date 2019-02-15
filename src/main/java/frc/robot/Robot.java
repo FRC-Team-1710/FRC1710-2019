@@ -78,7 +78,6 @@ public class Robot extends TimedRobot {
     double leftDrive = -Drive.getTurnPower();
     double rightDrive =  Drive.getForwardPower();   
     Shift = Drive.driveStick.getRawButton(5); 
-    //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
 
     Drive.arcadeDrive(Drive.getTurnPower(), Drive.getForwardPower(), Shift);
     Climber.Climb();
