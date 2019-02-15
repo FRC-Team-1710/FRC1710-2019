@@ -9,9 +9,7 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -30,6 +28,7 @@ public class Drive {
 	public static Joystick driveStick, mechStick;
 	public static Compressor compressor;
 	public static TalonSRX C1,C2, C3;
+	public static DoubleSolenoid lShifter, rShifter;
 
     public static double getTurnPower() {
 		return driveStick.getRawAxis(4);
@@ -111,10 +110,8 @@ public class Drive {
         R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
 		L2 = new CANSparkMax(4, MotorType.kBrushless);
-		C1 = new TalonSRX(11);
-        C2 = new TalonSRX(12);
-     	C3 = new TalonSRX(13);
-
+		lShifter = new DoubleSolenoid(0, 7);
+		rShifter = new DoubleSolenoid(1, 6);
 
         // R1.setIdleMode(IdleMode.kBrake);
         // L1.setIdleMode(IdleMode.kBrake);
@@ -125,6 +122,7 @@ public class Drive {
 
         Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
+		mechStick = new Joystick(1);
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
     }
@@ -132,12 +130,22 @@ public class Drive {
    public static void arcadeDrive(double side, double forward, boolean isShifted){
         R1.set(side + forward);
 		L1.set(side - forward);
-		Robot.Shifting(isShifted);
+		Shifting(isShifted);
 	}
 	
 	// if pressure starts to get low, it will activate the compressor
 	public static void Compressor() {
 		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
+	}
+
+	public static void Shifting(boolean isShifted){
+		if (isShifted){
+		  lShifter.set(Value.kReverse);
+		  rShifter.set(Value.kReverse);
+		} else {
+		  lShifter.set(Value.kForward);
+		  rShifter.set(Value.kForward);
+		}
 	}
 }
 
