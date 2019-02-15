@@ -11,9 +11,13 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot;
 
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -22,7 +26,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.CommandGroups.TestDrive;
 
 public class Robot extends TimedRobot {
-  Command autonomousCommand;  
+  Command autonomousCommand;
   double changesInAngle;
   double changesInRotations;
   double startingRotations;
@@ -42,9 +46,12 @@ public class Robot extends TimedRobot {
     rShifter = new DoubleSolenoid(1, 6);
     autoTime = new Timer();
     Drive.initializeDrive();
-    //Ballmech.initializeBallMech();
-    autonomousCommand = new TestDrive();
+
+    // Ballmech.initializeBallMech();
+    // autonomousCommand = new TestDrive();
+
     Constants.constantInit();
+    Vision.visionInit();
   }
 
   @Override
@@ -58,11 +65,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic(){
-    Scheduler.getInstance().run();
+    // Scheduler.getInstance().run();
   }
 
   @Override
   public void teleopInit(){
+    Pixy.init();
   }
 
   @Override
@@ -70,6 +78,7 @@ public class Robot extends TimedRobot {
     double leftDrive = -Drive.getTurnPower();
     double rightDrive =  Drive.getForwardPower();   
     Shift = Drive.driveStick.getRawButton(5); 
+
     Drive.arcadeDrive(Drive.getTurnPower(), Drive.getForwardPower(), Shift);
     Climber.Climb();
     }
@@ -119,6 +128,48 @@ public class Robot extends TimedRobot {
     } else {
       lShifter.set(Value.kForward);
       rShifter.set(Value.kForward);
+      
+    Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35, Shift);
+    // CurrentPool.currentPool(); // Penn fix this - The watchdog loop tells me this is causing the robot code to run slow!
+    if(Drive.driveStick.getRawButton(4) == true){
+      Pixy.lineFollow();
+    }
+    //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
+    //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
+    //Ballmech.ballMechTeleop();
+    
+    //recording mode
+    if (Drive.driveStick.getRawButton(4) == true) {
+      changesInAngle = Drive.getNavxAngle() - startingAngle;
+      changesInRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2) - startingRotations;
+      //find changes in angles and rotations
+      //changeAngle = currentAngle - startingAngle
+      //changeDistance = currentRotations - startingRotations
+    } else if(Drive.driveStick.getRawButtonReleased(4)) {
+      i++;
+      changeAngle[i] = changesInAngle;
+      changeRotations[i] = changesInRotations;
+      System.out.println("Angle Changes: " + changeAngle);
+      System.out.println("Rotation Chnages: " + changeRotations);
+
+      //put changes into the array 
+    } else if(Drive.driveStick.getRawButton(4) == false) {
+      //keep finding starting positions and angles
+      startingAngle = Drive.getNavxAngle();
+      startingRotations = (Drive.getRightPosition() + Drive.getLeftPosition() /2);
+    }
+
+    //This makes the robot drive | Turn power is multiplied by .3 to make it slower and drive is by .5 to make is slower as well
+    if (Drive.driveStick.getRawButton(1) == true){
+      Vision.vision();
+    } else {
+      Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35,false);
+    }
+    
+    CurrentPool.currentPool();
+    //System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
+    //System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
+    Ballmech.ballMechTeleop();
     }
   }
-}
+
