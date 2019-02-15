@@ -16,41 +16,62 @@ public class IntakeControl {
     public static final double REVERSEPOWER = .2;
     public static final double TIMERDELAY = 1;
 
-    public static void IntakeTransfer(){
+    public boolean isConflicting;
+
+    public  void IntakeTransfer(){
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 10; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        if(error == 0){
+            isConflicting = true;
+        }
     }
 
-    public static void IntakeHatch(){
+    public void IntakeHatch(){
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 20; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        if(error == 0){
+            isConflicting = false;
+        }
     }
 
-    public static void IntakeBall(){
+    public void IntakeBall(){
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 30; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
-        
+        if(error == 0){
+            isConflicting = false;
+        }
     }
 
-    public static void IntakeRest(){
+    public void IntakeRest(){
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 40; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        if(error == 0){
+            isConflicting = true;
+        }
+    }
+
+    public boolean isConflicting(){
+        if(isConflicting == true){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
