@@ -14,6 +14,13 @@ package frc.robot;
 public class SyncMechs {
     int intakePos = 4;
     int clawPos = 2;
+    double error;
+    double goal;
+    double output = 0;
+    double P = 0.1;
+    double I = 0.02;
+    double TimeElapsed;
+
        
 
    /* public static void SyncMech() {
@@ -50,8 +57,8 @@ public class SyncMechs {
     }
 
     public static void intakeMovements(int intakePos, int clawPos) {
-        // first, go to the movement position
-        // then, go to intakePos clawPos
+        gotoupright();
+
     }
 
     
