@@ -21,39 +21,39 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Compressor;
 
 public class Drive {
-    public static CANEncoder enR1, enR2, enL1, enL2;
-    static double lastAngle, angleIntegral, output;
-    public static AHRS navx;
-    public static CANSparkMax R1,R2, L1, L2;
+	public static CANEncoder enR1, enR2, enL1, enL2;
+	static double lastAngle, angleIntegral, output;
+	public static AHRS navx;
+	public static CANSparkMax R1,R2, L1, L2;
 	public static Joystick driveStick, mechStick;
 	public static Compressor compressor;
 	public static TalonSRX C1,C2, C3;
 	public static DoubleSolenoid lShifter, rShifter;
 
-    public static double getTurnPower() {
+	public static double getTurnPower() {
 		return driveStick.getRawAxis(4);
 	}
 
 	public static double getForwardPower() {
-        return driveStick.getRawAxis(1);
+		return driveStick.getRawAxis(1);
 	}
 	
-    public static double getLeftPosition() {
-        //Gets the encoder from L1 then gets the position of that encoder
-        return (L1.getEncoder().getPosition() / 10.75);
+	public static double getLeftPosition() {
+		//Gets the encoder from L1 then gets the position of that encoder
+		return (L1.getEncoder().getPosition() / 10.75);
 	}
 	
 	public static double getRightPosition() {
-        //gets the encoder from R1 then gets the position of that encoder
+		//gets the encoder from R1 then gets the position of that encoder
 		return (R1.getEncoder().getPosition() /10.75);
-    }
-    
-    public static double getNavxAngle() {
+	}
+	
+	public static double getNavxAngle() {
 		return navx.getAngle();
 	}
 	
-    public static void leftDrive(double power) {
-        L1.set(power);
+	public static void leftDrive(double power) {
+		L1.set(power);
 	}
 	
 	public static void rightDrive (double power) {
@@ -65,7 +65,7 @@ public class Drive {
 		L1.set(0);
 	}
 
-    public static void straightDriveTele (double power, double heading) {
+	public static void straightDriveTele (double power, double heading) {
 		double currentAngle = Drive.getNavxAngle();
 		double error = (currentAngle - heading);
 		angleIntegral += error;
@@ -105,30 +105,30 @@ public class Drive {
 		leftDrive(error*Constants.kpTurn);
 	}
 
-    public static void initializeDrive(){
-        R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
-        R2 = new CANSparkMax(2, MotorType.kBrushless);
-        L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
+	public static void initializeDrive(){
+		R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
+		R2 = new CANSparkMax(2, MotorType.kBrushless);
+		L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
 		L2 = new CANSparkMax(4, MotorType.kBrushless);
 		lShifter = new DoubleSolenoid(0, 7);
 		rShifter = new DoubleSolenoid(1, 6);
 
-        // R1.setIdleMode(IdleMode.kBrake);
-        // L1.setIdleMode(IdleMode.kBrake);
-        R2.follow(R1);
+		// R1.setIdleMode(IdleMode.kBrake);
+		// L1.setIdleMode(IdleMode.kBrake);
+		R2.follow(R1);
 		L2.follow(L1);
 		L1.setInverted(true);
 		L2.setInverted(true);
 
-        Drive.navx = new AHRS(SPI.Port.kMXP);
+		Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
 		mechStick = new Joystick(1);
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
-    }
+	}
    
    public static void arcadeDrive(double side, double forward, boolean isShifted){
-        R1.set(side + forward);
+		R1.set(side + forward);
 		L1.set(side - forward);
 		Shifting(isShifted);
 	}
