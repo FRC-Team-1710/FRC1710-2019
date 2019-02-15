@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import sun.awt.SunToolkit.InfiniteLoop;
-
 /**
  * Add your docs here.
  */
@@ -37,6 +35,5 @@ public class LEDs {
                 }
             }
         }
-    }
-        
+    }    
 }
