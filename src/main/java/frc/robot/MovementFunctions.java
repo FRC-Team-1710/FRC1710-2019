@@ -12,10 +12,7 @@ package frc.robot;
  */
 public class MovementFunctions {
     public static void restingPosition() {
-        //then ask where we want to go
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
+        
     }
 
     public static void movingPosition() {
