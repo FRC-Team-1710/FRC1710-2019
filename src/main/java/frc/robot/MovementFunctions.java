@@ -7,16 +7,78 @@
 
 package frc.robot;
 
-import frc.Utility.PID;
-
 /**
  * Add your docs here.
  */
 public class MovementFunctions {
+    Boolean greg = true;
     public static void restingPosition() {
-        // check encoder values
-        // set values to go to 
+        //then ask where we want to go
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
 
-    
-}
+    public static void movingPosition() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void BallIntake() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void HatchIntakeFront() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void HatchIntakeBack() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void HatchTransfer() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void BallOuttakeFront() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void BallOuttakeBack() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void HatchOuttakeFront() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
+
+    public static void HatchOuttakeBack() {
+        //ask where we currently are
+        //then ask where we want to go
+        //then ask if we can move
+        //then ask how can we get to our destination
+    }
 }
