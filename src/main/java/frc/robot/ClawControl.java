@@ -21,9 +21,12 @@ public class ClawControl {
     public static long start = System.currentTimeMillis();
     public static long finish = System.currentTimeMillis();
     public static long TimeElapsed = (finish - start);
-    public static double goal = 100;
-    public static double error = 0;
-    public static double output = 0;
+    //remove once we get robot
+    public static double goal;
+    public static double error;
+    public static double output;
+
+
     public static double ticksToLine = 650;
     public static final double P = .01;
     public static final double I = .002;
@@ -87,7 +90,6 @@ public class ClawControl {
         goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-        
     }
 
     public static void HatchTransfer(){
@@ -104,6 +106,7 @@ public class ClawControl {
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        where(error);
     }
 
     public static void BackDeposit(){
@@ -112,4 +115,13 @@ public class ClawControl {
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     } 
+
+    public static boolean where(double error){
+        if (error == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

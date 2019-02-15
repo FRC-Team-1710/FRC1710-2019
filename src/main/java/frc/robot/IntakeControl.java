@@ -24,6 +24,7 @@ public class IntakeControl {
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
     }
+
     public static void IntakeHatch(){
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 20; //change accordingly.
@@ -32,6 +33,7 @@ public class IntakeControl {
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
     }
+
     public static void IntakeBall(){
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 30; //change accordingly.
@@ -39,7 +41,9 @@ public class IntakeControl {
         output = PID.PID(error, P, I, 0, TimeElapsed);
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        
     }
+
     public static void IntakeRest(){
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 40; //change accordingly.
@@ -48,4 +52,5 @@ public class IntakeControl {
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
     }
+
 }
