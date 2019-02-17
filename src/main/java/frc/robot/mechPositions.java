@@ -7,21 +7,35 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 /**
  * Add your docs here.
  */
-public class Climber {
-   /*public static void Climb() {
-    if (Drive.driveStick.getRawButton(4)){
-        Drive.C1.set(ControlMode.PercentOutput, -.5);
-        Drive.C2.set(ControlMode.PercentOutput, -.5);
-        Drive.C3.set(ControlMode.PercentOutput, -.5);
-      }else {
-        Drive.C1.set(ControlMode.PercentOutput, 0);
-        Drive.C2.set(ControlMode.PercentOutput, 0);
-        Drive.C3.set(ControlMode.PercentOutput, 0);
-      }
-} */
+public class mechPositions {
+    //move mechanisms together when button is pressed
+    public static void hatchIntake(){
+
+
+    }
+
+    public static void hatchPlacementBack(){
+
+
+    }
+
+    public static void hatchPlacementFront(){
+
+    }
+
+    public static void ballIntake(){
+
+
+    }
+    public static void ballIntakeBack(){
+
+
+    }
+    public static void ballIntakeFront(){
+
+        
+    }
 }

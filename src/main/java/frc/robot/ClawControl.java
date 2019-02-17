@@ -9,11 +9,17 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick; 
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.Utility.PID;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -87,6 +93,7 @@ public class ClawControl {
 
     public static void BallTransfer(){
         double current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        goal = 0;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
     }
