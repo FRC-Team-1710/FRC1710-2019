@@ -119,19 +119,17 @@ public class Robot extends TimedRobot {
       clawOpen1.set(Value.kForward);
       clawOpen2.set(Value.kForward);
 
-    }
-    if(Drive.mechStick.getRawButton(5)){
-    intake.set(ControlMode.PercentOutput, 1);
-    }else if (Drive.mechStick.getRawButton(6)){
-      intake.set(ControlMode.PercentOutput, -1);
-    }
-    if(Drive.mechStick.getRawButton(5)){
+    
+    if(Drive.driveStick.getRawButton(5)){
       Constants.clawIntake1.set(ControlMode.PercentOutput, 1);
       Constants.clawIntake2.set(ControlMode.PercentOutput, 1);
-    }else if (Drive.mechStick.getRawButton(6)){
+      intake.set(ControlMode.PercentOutput, 1);
+    }else if(Drive.driveStick.getRawButton(6)){
       Constants.clawIntake1.set(ControlMode.PercentOutput, -1);
       Constants.clawIntake2.set(ControlMode.PercentOutput, -1);
+      intake.set(ControlMode.PercentOutput, -1);
     }
+  }
    
    
     //pickup1.setNeutralMode(NeutralMode.Brake);
