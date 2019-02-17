@@ -8,8 +8,8 @@ public class IntakeControl {
     public static long finish = System.currentTimeMillis();
     public static long TimeElapsed = (finish - start);
     
-    public static double error = 0;
-    public static double output = 0;
+    public static double error;
+    public static double output;
     public static double ticksToLine = 650;
     public static final double P = .01;
     public static final double I = .002;
@@ -39,6 +39,7 @@ public class IntakeControl {
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = false;
+            
         }
     }
 
@@ -51,6 +52,7 @@ public class IntakeControl {
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = false;
+            
         }
     }
 
@@ -63,9 +65,9 @@ public class IntakeControl {
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = true;
+            
         }
     }
-
     public boolean isConflicting(){
         if(isConflicting == true){
             return true;
@@ -73,5 +75,4 @@ public class IntakeControl {
             return false;
         }
     }
-
 }
