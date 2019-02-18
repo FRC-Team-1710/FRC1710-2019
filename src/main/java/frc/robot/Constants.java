@@ -9,6 +9,8 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 /**
  * Add your docs here.
  */
@@ -26,8 +28,14 @@ public class Constants {
     public static int ticksPerInch = 217;
     //drive to position slow down rate
 	public static double slowDownPercent = 0.13;
+<<<<<<< Updated upstream
 	public static TalonSRX pickup1, pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
+=======
+	public static TalonSRX pickup1,pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4; 
+	public static DigitalInput limitSwitch;
+>>>>>>> Stashed changes
 	public static void constantInit() {
+		limitSwitch = new DigitalInput(1);
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
 		intake = new TalonSRX(7);
