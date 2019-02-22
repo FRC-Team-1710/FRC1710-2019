@@ -6,12 +6,13 @@
 /*----------------------------------------------------------------------------*/
 
 //this is code to control the pistons on the claw
+//##########################################
+//make sure to add motor outputs!!!!!!!!!!
+//##########################################
 
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick; 
 import frc.Utility.PID;
@@ -20,13 +21,15 @@ import edu.wpi.first.wpilibj.Timer;
 public class ClawControl {
     public static DoubleSolenoid LPiston, RPiston;
     public static Joystick driveStick = new Joystick(0);
-    public static TalonSRX ClawMotor;
     public static long start = System.currentTimeMillis();
     public static long finish = System.currentTimeMillis();
     public static long TimeElapsed = (finish - start);
-    public static double goal = 100;
-    public static double error = 0;
-    public static double output = 0;
+    //remove once we get robot
+    public static double goal;
+    public static double error;
+    public static double output;
+
+
     public static double ticksToLine = 650;
     public static double current;
     public static final double P = .01;
@@ -34,7 +37,9 @@ public class ClawControl {
     public static final double REVERSEPOWER = .2;
     public static final double TIMERDELAY = 1;
 
-    public ClawControl() {
+    public boolean isConflicting;
+
+    public static void initializeClawControl() {
         LPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
         RPiston = new DoubleSolenoid(1, 2); //Replace numbers with ROBORio assigned values
     }
@@ -67,57 +72,83 @@ public class ClawControl {
        }
     }
 
-    public static void ClawTele(){
+    public void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
-            ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(2)){
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+        } else if (Drive.mechStick.getRawButton(2) == true){
             HatchTransfer();
-            ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(3)){
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+        } else if (Drive.mechStick.getRawButton(3) == true){
             FrontDeposit();
-            ClawMotor.set(ControlMode.PercentOutput, output);
-        } else if (Drive.mechStick.getRawButton(4)){
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+        } else if (Drive.mechStick.getRawButton(4) == true){
             BackDeposit();
-            ClawMotor.set(ControlMode.PercentOutput, output);
+            Constants.clawRotate.set(ControlMode.PercentOutput, output);
         } else {
-            ClawMotor.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
         }
     }
 
-    public static void BallTransfer(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+    public void BallTransfer(){
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = false;
+        }
     }
 
-    public static void HatchTransfer(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+    public void HatchTransfer(){
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 20;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = false;
+        }
     }
 
-    public static void FrontDeposit(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+    public void FrontDeposit(){
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = true;
+        }
     }
 
-    public static void BackDeposit(){
-        current = ((ClawMotor.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+    public void BackDeposit(){
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-    } 
-
+        if(error == 0){
+            isConflicting = false;
+        } 
+    }
+    public void resting(){
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        goal = 10;
+        error = goal - current;
+        output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = false;
+        }
+    }
+    public boolean is_not_conflicting(){
+        if(isConflicting == true){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public static void GetEncoder(){
         if (Drive.driveStick.getRawButton(4)){
-            ClawMotor.set(ControlMode.PercentOutput, .5);
-            System.out.println(ClawMotor.getSelectedSensorPosition());
-        }else {
-            ClawMotor.set(ControlMode.PercentOutput, 0);
+            System.out.println(Constants.clawRotate.getSelectedSensorPosition());
         }
     }
 }
