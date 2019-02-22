@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Drive {
 	public static CANEncoder enR1, enR2, enL1, enL2;
@@ -29,6 +31,25 @@ public class Drive {
 	public static Compressor compressor;
 	public static TalonSRX C1,C2, C3;
 	public static DoubleSolenoid lShifter, rShifter;
+	public static DigitalInput hatchSwitch1, hatchSwitch2, clawSwitch;
+	public static Ultrasonic ballUS, frontUS1, frontUS2, backUS1, backUS2, bottomUS;
+	
+	public static void ultraSonicInit(){
+		ballUS = new Ultrasonic(0, 0);
+		frontUS1 = new Ultrasonic(1, 1);
+		frontUS2 = new Ultrasonic(2,2);
+		backUS1 = new Ultrasonic(3,3);
+		backUS2 = new Ultrasonic(4,4);
+		bottomUS = new Ultrasonic(5,5);
+	}
+
+	public static void limitSwitchInit() {
+		hatchSwitch1 = new DigitalInput(0);
+		hatchSwitch2 = new DigitalInput(1);
+		clawSwitch = new DigitalInput(2);
+	}
+	
+
 
 	public static double getTurnPower() {
 		return driveStick.getRawAxis(4);
@@ -147,8 +168,37 @@ public class Drive {
 		  rShifter.set(Value.kForward);
 		}
 	}
+	public static void frontCloseToTarget() {
+		if (driveStick.getRawButton(0)) {
+			if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() < 1){
+				if (frontUS1.getRangeInches() == frontUS2.getRangeInches()) {
+				stopDriving();
+				}
+			} else if (frontUS1.getRangeInches() > 1 && frontUS2.getRangeInches() < 1) {
+				arcadeDrive(.4, .2, false);
+			} else if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() > 1) {
+				arcadeDrive(-.4, .2, false);
+			}
+		}
+	}
+	// public static void backCloseToTarget(){
+	// 	if (driveStick.getRawButton(0)) {
+	// 		if (backUS1.getRangeInches() < 1 && backUS2.getRangeInches() < 1){
+	// 			if (backUS1.getRangeInches() == backUS2.getRangeInches()) {
+	// 			stopDriving();
+	// 			}
+	// 		} else if (backUS1.getRangeInches() > 1 && backUS2.getRangeInches() < 1) {
+	// 			arcadeDrive(.4, .2, false);
+	// 		} else if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() > 1) {
+	// 			arcadeDrive(-.4, .2, false);
+	// 		}
+	// 	}
+	// }
+	public static boolean offGroud(){
+		if (bottomUS.getRangeInches() > 1) {
+			return true; // we are off the ground, probably climing
+		} else {
+			return false; //either have climbed or not even off the ground
+		}
+	}
 }
-
-
-
-
