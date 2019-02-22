@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -32,6 +33,7 @@ public class Drive {
 	public static int ShiftersForward = 1;
 	public static int ShiftersReverse = 0;
 	public static Compressor compressor;
+	public static TalonSRX pickup1, pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
 
 	
     public static double getTurnPower() {
@@ -122,6 +124,17 @@ public class Drive {
         R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
 		L2 = new CANSparkMax(4, MotorType.kBrushless);
+		pickup1 = new TalonSRX(5);
+		pickup2 = new TalonSRX(6);
+		intake = new TalonSRX(7);
+		//clawRotate = new TalonSRX(8);
+		clawIntake1 = new TalonSRX(9);
+		clawIntake2 = new TalonSRX(10);
+		climber1 = new TalonSRX(11);
+		climber2 = new TalonSRX(12);
+		climber3 = new TalonSRX(13);
+		climber4 = new TalonSRX(14);
+		
 		///Shifters = new DoubleSolenoid(ShiftersForward,ShiftersReverse);
 
         R1.setIdleMode(IdleMode.kBrake);
@@ -133,22 +146,21 @@ public class Drive {
 		L1.setInverted(false);
         Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
+		mechStick = new Joystick(1);
 		compressor = new Compressor(0);
-		compressor.setClosedLoopControl(true);
+		
 		//Shifters = new DoubleSolenoid(ShiftersForward, ShiftersReverse);
     }
    
    public static void arcadeDrive(double side, double forward, boolean isShifted){
         R1.set(side - forward);
 		L1.set(side + forward);
-		//Robot.Shifting(isShifted);
+		Robot.Shifting(isShifted);
 	}
 	
 	
 	
 	
 	// if pressure starts to get low, it will activate the compressor
-	public static void Compressor() {
-		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
-	}
+	
 }

@@ -19,24 +19,24 @@ public class IntakeControl {
     public boolean isConflicting;
 
     public  void IntakeTransfer(){
-        double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Drive.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 10; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-        Constants.pickup1.set(ControlMode.PercentOutput, output);
-        Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        Drive.pickup1.set(ControlMode.PercentOutput, output);
+        Drive.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = true;
         }
     }
 
     public void IntakeHatch(){
-        double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Drive.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 20; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-        Constants.pickup1.set(ControlMode.PercentOutput, output);
-        Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        Drive.pickup1.set(ControlMode.PercentOutput, output);
+        Drive.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = false;
             
@@ -44,12 +44,12 @@ public class IntakeControl {
     }
 
     public void IntakeBall(){
-        double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Drive.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 30; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-        Constants.pickup1.set(ControlMode.PercentOutput, output);
-        Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        Drive.pickup1.set(ControlMode.PercentOutput, output);
+        Drive.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = false;
             
@@ -57,12 +57,12 @@ public class IntakeControl {
     }
 
     public void IntakeRest(){
-        double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Drive.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 40; //change accordingly.
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
-        Constants.pickup1.set(ControlMode.PercentOutput, output);
-        Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        Drive.pickup1.set(ControlMode.PercentOutput, output);
+        Drive.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = true;
             

@@ -52,7 +52,7 @@ public class Vision {
         */
 
         //if A button is pressed
-        if(Drive.driveStick.getRawButton(1) == true){
+        if(Drive.driveStick.getRawButton(1) == true){ 
           //whatup my diggity dawg
           //read the varible name ;)
             double turnPower = 0.0;
@@ -70,7 +70,7 @@ public class Vision {
                 turnPower = -Drive.getTurnPower() * .2; //if there is no target allow for user input
             } 
             Drive.arcadeDrive(turnPower, Drive.getForwardPower() * .35, false); // apply the values to robot
-        }
+        } 
     }
 
       public static boolean IsActualTarget(double Is_target) { //can the limelight see a target
@@ -121,6 +121,11 @@ public class Vision {
         double exp = -c * distance;
         double errorMargin = (-max) * Math.pow(2.0, exp) + max;
         return errorMargin;
+      }
+
+      public static boolean VisionInPosition(){
+        //returns boolean to see if vision is ready to hand off to pixy to drive forward and place 
+        return true;
       }
     }
 

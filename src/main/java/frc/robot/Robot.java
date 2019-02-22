@@ -15,6 +15,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.networktables.NetworkTable;
@@ -26,6 +28,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.CommandGroups.TestDrive;
+import edu.wpi.first.wpilibj.Compressor;
 
 public class Robot extends TimedRobot {
   Command autonomousCommand;
@@ -42,10 +45,16 @@ public class Robot extends TimedRobot {
   public static DoubleSolenoid rShifter;
   public static DoubleSolenoid clawOpen1, clawOpen2;
   int i;
-  public static TalonSRX pickup1, pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
+  public static TalonSRX pickup1, pickup2, intake, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
+  int encoderGoalClaw, encoderGoalPickup;
+  double clawOutput, pickupOutput, pHold;
+  public static CANSparkMax clawRotate;
+
+
 
   @Override
   public void robotInit() {
+    pHold = .01;
     pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
     lShifter = new DoubleSolenoid(0, 7);
@@ -54,18 +63,21 @@ public class Robot extends TimedRobot {
     clawOpen2 = new DoubleSolenoid(3,5);
     autoTime = new Timer();
     intake = new TalonSRX(7);
+    clawRotate = new CANSparkMax(8, MotorType.kBrushless );
     Drive.initializeDrive();
+    Vision.visionInit();
     pickup1.setNeutralMode(NeutralMode.Brake);
     pickup2.setNeutralMode(NeutralMode.Brake);
     pickup1.follow(pickup2);
     pickup1.setInverted(true);
-    climber1 = new TalonSRX(11);
-		climber2 = new TalonSRX(12);
-    climber3 = new TalonSRX(13);
-    clawRotate = new TalonSRX(8);
     // Ballmech.initializeBallMech();
     // autonomousCommand = new TestDrive();
-
+    Pixy.init();
+    pickup1.setNeutralMode(NeutralMode.Brake);
+    pickup2.setNeutralMode(NeutralMode.Brake);
+    Drive.L1.setInverted(false);
+    Drive.L2.setInverted(false);
+    Drive.L2.follow(Drive.L1);
     Constants.constantInit();
     Vision.visionInit();
   }
@@ -75,13 +87,15 @@ public class Robot extends TimedRobot {
     Drive.navx.reset();
     System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
     System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
-    autonomousCommand.start();
+   // autonomousCommand.start();
     autoTime.start();
   }
 
   @Override
   public void autonomousPeriodic(){
     // Scheduler.getInstance().run();
+    //THis should just be a copy of teleopperiodic
+    //Reminder for Penn to just copy and paste it
   }
 
   @Override
@@ -92,43 +106,84 @@ public class Robot extends TimedRobot {
     Drive.L1.setInverted(false);
     Drive.L2.setInverted(false);
     Drive.L2.follow(Drive.L1);
-    clawRotate.setNeutralMode(NeutralMode.Brake);
-    clawOpen1.set(Value.kForward);
-    clawOpen2.set(Value.kForward);
+    
+    //clawOpen1.set(Value.kReverse);
+    //clawOpen2.set(Value.kReverse);
   }
 
   @Override
   public void teleopPeriodic() {
-    Drive.arcadeDrive(Drive.getTurnPower(), Drive.getForwardPower(), Shift);
+    if (Drive.driveStick.getRawButton(1) == true){
+      Vision.vision();
+    } else {
+      Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35,false);
+    }
+    
     
     //intake.set(ControlMode.PercentOutput, -1 * Drive.driveStick.getRawAxis(3));
     
-    pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1));
-    pickup2.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1));
+   // System.out.println(clawRotate.getEncoder());
+   pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .38);
+   pickup2.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .38);
+    
 
-    clawRotate.setNeutralMode(NeutralMode.Brake);
-    if(Drive.driveStick.getRawAxis(2) > 0){
-      clawRotate.set(ControlMode.PercentOutput, Drive.driveStick.getRawAxis(2));
+   if(Drive.driveStick.getRawAxis(2) > 0){
+     
+      clawRotate.set( Drive.driveStick.getRawAxis(2) * .5);
     }else if(Drive.driveStick.getRawAxis(3) > 0){
-      clawRotate.set(ControlMode.PercentOutput, -1 * Drive.driveStick.getRawAxis(3));
+      clawRotate.set(-1 * Drive.driveStick.getRawAxis(3) * .5);
+    }else{
+      clawRotate.set(0);
     }
+
+
     if(Drive.driveStick.getRawButtonPressed(1) == true) {
       clawOpen1.set(Value.kReverse);
       clawOpen2.set(Value.kReverse);
     }else if(Drive.driveStick.getRawButtonPressed(2) == true){
       clawOpen1.set(Value.kForward);
       clawOpen2.set(Value.kForward);
-
-    
-    if(Drive.driveStick.getRawButton(5)){
-      Constants.clawIntake1.set(ControlMode.PercentOutput, 1);
-      Constants.clawIntake2.set(ControlMode.PercentOutput, 1);
-      intake.set(ControlMode.PercentOutput, 1);
-    }else if(Drive.driveStick.getRawButton(6)){
-      Constants.clawIntake1.set(ControlMode.PercentOutput, -1);
-      Constants.clawIntake2.set(ControlMode.PercentOutput, -1);
-      intake.set(ControlMode.PercentOutput, -1);
     }
+    
+    
+    if(Drive.driveStick.getRawButton(5) == true){
+     
+      Drive.clawIntake1.set(ControlMode.PercentOutput, -1);
+      Drive.clawIntake2.set(ControlMode.PercentOutput, -1);
+      intake.set(ControlMode.PercentOutput, 1);
+    }else if(Drive.driveStick.getRawButton(6) == true){
+      Drive.clawIntake1.set(ControlMode.PercentOutput, 1);
+      Drive.clawIntake2.set(ControlMode.PercentOutput, 1);
+      intake.set(ControlMode.PercentOutput, -1);
+    }else{
+      Drive.clawIntake1.set(ControlMode.PercentOutput, 0);
+      Drive.clawIntake2.set(ControlMode.PercentOutput, 0);
+      intake.set(ControlMode.PercentOutput, 0);
+    }
+
+    // are we giving claw power from axis 1, if we are, set goal = 
+    //Holding the claw and intake into position
+    if(Drive.driveStick.getRawAxis(2) > 0) {
+      Constants.clawRotate.set(ControlMode.PercentOutput, Drive.driveStick.getRawAxis(2));
+      encoderGoalClaw = Constants.clawRotate.getSelectedSensorPosition();
+    } else if(Drive.driveStick.getRawAxis(3) > 0){
+      Constants.clawRotate.set(ControlMode.PercentOutput, -1 * Drive.driveStick.getRawAxis(3));
+      encoderGoalClaw = Constants.clawRotate.getSelectedSensorPosition();
+    }else{
+      //proportional control
+      clawOutput = (encoderGoalClaw - Constants.clawRotate.getSelectedSensorPosition()) * pHold;
+      Constants.clawRotate.set(ControlMode.PercentOutput, clawOutput);
+    } 
+
+   if(Drive.mechStick.getRawAxis(1) > 0) {
+    pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1));
+    pickup2.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1));
+      encoderGoalPickup = pickup1.getSelectedSensorPosition();
+    }else{
+      pickupOutput = (encoderGoalPickup - pickup1.getSelectedSensorPosition()) * pHold;
+      pickup1.set(ControlMode.PercentOutput, pickupOutput);
+      pickup2.set(ControlMode.PercentOutput, pickupOutput);
+    } 
   }
    
    
@@ -139,7 +194,7 @@ public class Robot extends TimedRobot {
    
    
     //Climber.Climb();
-    }
+    //}
       // if (Drive.driveStick.getRawButton(1)) {
       //   Drive.R1.set(.5);
       // } else if (Drive.driveStick.getRawButton(2)) {
@@ -182,12 +237,13 @@ public class Robot extends TimedRobot {
   public static void Shifting(boolean isShifted){
     if (isShifted){
       lShifter.set(Value.kReverse);
-      rShifter.set(Value.kReverse);
-    } else {
-      lShifter.set(Value.kForward);
       rShifter.set(Value.kForward);
       
-    Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35, Shift);
+    } else {
+      lShifter.set(Value.kForward);
+      rShifter.set(Value.kReverse);
+      
+    // Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35, Shift);
     // CurrentPool.currentPool(); // Penn fix this - The watchdog loop tells me this is causing the robot code to run slow!
     //if(Drive.driveStick.getRawButton(4) == true){
       //Pixy.lineFollow();

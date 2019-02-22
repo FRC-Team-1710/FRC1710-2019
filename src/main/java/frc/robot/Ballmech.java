@@ -22,16 +22,16 @@ public class Ballmech {
 
     //Intializes the intake function and determines speed percentages/inversions
     public static void intakeBall() {
-        Constants.intake.set(ControlMode.PercentOutput, INTAKE_POWER);
+        Drive.intake.set(ControlMode.PercentOutput, INTAKE_POWER);
     }
 
     //Initializes the outtake function and determines speed percentages/inversions
     public static void outtakeBall() {
-        Constants.intake.set(ControlMode.PercentOutput, OUTTAKE_POWER);
+        Drive.intake.set(ControlMode.PercentOutput, OUTTAKE_POWER);
     }
 
     //Initializes the neutralize function for if the driver accidentally uses both triggers at the same time
     public static void neutralizeBall() {
-        Constants.intake.set(ControlMode.PercentOutput, STOP);
+        Drive.intake.set(ControlMode.PercentOutput, STOP);
     }
 }
