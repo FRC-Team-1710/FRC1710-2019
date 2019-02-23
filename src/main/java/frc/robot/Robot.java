@@ -132,17 +132,17 @@ public class Robot extends TimedRobot {
    pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .7);
    pickup2.set(ControlMode.PercentOutput,-1 * Drive.mechStick.getRawAxis(1) * .7);
     
-if(clawRotate.getMotorTemperature() > 200){
+/*if(clawRotate.getMotorTemperature() > 200){
   clawRotate.set(0);
 }
   else if(Drive.driveStick.getRawAxis(2) > 0){
      
-      clawRotate.set( Drive.driveStick.getRawAxis(2));
+      clawRotate.set( Drive.driveStick.getRawAxis(2) * .35);
     }else if(Drive.driveStick.getRawAxis(3) > 0){
-      clawRotate.set(-1 * Drive.driveStick.getRawAxis(3));
+      clawRotate.set(-1 * Drive.driveStick.getRawAxis(3) * .35);
     }else{
       clawRotate.set(0);
-    }
+    } */
 
 
     if(Drive.driveStick.getRawButtonPressed(1) == true) {
@@ -157,11 +157,11 @@ if(clawRotate.getMotorTemperature() > 200){
     if(Drive.driveStick.getRawButton(5) == true){
      
       Drive.clawIntake1.set(ControlMode.PercentOutput, -1);
-      Drive.clawIntake2.set(ControlMode.PercentOutput, -1);
+      Drive.clawIntake2.set(ControlMode.PercentOutput, 1);
       intake.set(ControlMode.PercentOutput, 1);
     }else if(Drive.driveStick.getRawButton(6) == true){
       Drive.clawIntake1.set(ControlMode.PercentOutput, 1);
-      Drive.clawIntake2.set(ControlMode.PercentOutput, 1);
+      Drive.clawIntake2.set(ControlMode.PercentOutput, -1);
       intake.set(ControlMode.PercentOutput, -1);
     }else{
       Drive.clawIntake1.set(ControlMode.PercentOutput, 0);
@@ -171,25 +171,25 @@ if(clawRotate.getMotorTemperature() > 200){
 
     // are we giving claw power from axis 1, if we are, set goal = 
     //Holding the claw and intake into position
-    /*if(clawRotate.getMotorTemperature() > 100){
+    if(clawRotate.getMotorTemperature() > 200){
        clawRotate.set(0);
     }
    else if(Drive.driveStick.getRawAxis(2) > 0) {
       clawHold.stop();
       clawHold.reset();
-      clawRotate.set(Drive.driveStick.getRawAxis(2));
+      clawRotate.set(Drive.driveStick.getRawAxis(2) * .35);
       encoderGoalClaw = clawRotate.getEncoder().getPosition();
     } else if(Drive.driveStick.getRawAxis(3) > 0){
       clawHold.stop();
       clawHold.reset();
-      clawRotate.set( -1 * Drive.driveStick.getRawAxis(3));
+      clawRotate.set( -1 * Drive.driveStick.getRawAxis(3) * .35);
       encoderGoalClaw = clawRotate.getEncoder().getPosition();
     }else if(encoderGoalClaw > clawRotate.getEncoder().getPosition() + .25){ 
       //proportional control
-      clawRotate.set(encoderGoalClaw - clawRotate.getEncoder().getPosition() * .01);
+      clawRotate.set((encoderGoalClaw - clawRotate.getEncoder().getPosition()) * .001);
     } else if(encoderGoalClaw < clawRotate.getEncoder().getPosition() - .25){
-      clawRotate.set(encoderGoalClaw - clawRotate.getEncoder().getPosition() * .01);
-    }*/
+      clawRotate.set((encoderGoalClaw - clawRotate.getEncoder().getPosition()) * .001);
+    }
 
    /*if(Drive.mechStick.getRawAxis(1) > 0) {
     pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1));
