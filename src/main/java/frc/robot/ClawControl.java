@@ -12,11 +12,18 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick; 
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.Utility.PID;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class ClawControl {
     public static DoubleSolenoid LPiston, RPiston;
@@ -75,18 +82,19 @@ public class ClawControl {
     public void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
-            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+
+            Drive.clawRotate.set(ControlMode.PercentOutput, output);
         } else if (Drive.mechStick.getRawButton(2) == true){
             HatchTransfer();
-            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+            Drive.clawRotate.set(ControlMode.PercentOutput, output);
         } else if (Drive.mechStick.getRawButton(3) == true){
             FrontDeposit();
-            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+            Drive.clawRotate.set(ControlMode.PercentOutput, output);
         } else if (Drive.mechStick.getRawButton(4) == true){
             BackDeposit();
-            Constants.clawRotate.set(ControlMode.PercentOutput, output);
+            Drive.clawRotate.set(ControlMode.PercentOutput, output);
         } else {
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Drive.clawRotate.set(ControlMode.PercentOutput, 0);
         }
     }
 
@@ -110,8 +118,37 @@ public class ClawControl {
         }
     }
 
+ /*   public static void autoHatchPlace(){
+        if(ultrasonic == true && Drive.driveStick.getRawButton(autoHatchPlace) && haveHatch == true && inPosition == true){
+            
+            Drive.arcadeDrive(0,.3,false);
+            Timer.delay(1);
+            Robot.clawOpen1.set(Value.kReverse);
+            Robot.clawOpen2.set(Value.kReverse);
+            Timer.delay(.5);
+            Drive.arcadeDrive(0,-.5,false);
+            Timer.delay(1);
+            Drive.arcadeDrive(0, 0,false);
+            boolean haveHatch = false;
+        }
+
+    }
+
+    public static void autoHatchGet(){
+        if(ultrasonic == true && Drive.driveStick.getRawButton(autoHatchGet) && haveHatch == false && inPosition == true){
+            Drive.arcadeDrive(0,.3,false);
+            Timer.delay(1);
+            Robot.clawOpen1.set(Value.kForward);
+            Robot.clawOpen2.set(Value.kForward);
+            Drive.arcadeDrive(0,-.5,false);
+            Timer.delay(1);
+            Drive.arcadeDrive(0, 0,false);
+            boolean haveHatch = true;
+        }
+    }*/
+
     public void FrontDeposit(){
-        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);

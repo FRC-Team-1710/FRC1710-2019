@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.Constants;
+import frc.robot.Drive;
 
 public class Intake extends Command {
 
@@ -33,7 +34,7 @@ public class Intake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Constants.intake.set(ControlMode.PercentOutput, GOSPEED);
+    Drive.intake.set(ControlMode.PercentOutput, GOSPEED);
     if (beltTimer.hasPeriodPassed(3) == true) {
       finished = true;
     }
@@ -47,7 +48,7 @@ public class Intake extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Constants.intake.set(ControlMode.PercentOutput, STOPSPEED);
+    Drive.intake.set(ControlMode.PercentOutput, STOPSPEED);
     beltTimer.stop();
     beltTimer.reset();
   }
@@ -56,6 +57,6 @@ public class Intake extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    Constants.intake.set(ControlMode.PercentOutput, STOPSPEED);
+    Drive.intake.set(ControlMode.PercentOutput, STOPSPEED);
   }
 }

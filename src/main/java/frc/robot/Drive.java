@@ -30,31 +30,16 @@ public class Drive {
 	public static AHRS navx;
 	public static CANSparkMax R1,R2, L1, L2;
 	public static Joystick driveStick, mechStick;
+	public static DoubleSolenoid Shifters;
+	public static int ShiftersForward = 1;
+	public static int ShiftersReverse = 0;
 	public static Compressor compressor;
-	public static TalonSRX C1,C2, C3;
-	public static DoubleSolenoid lShifter, rShifter;
-	public static DigitalInput hatchSwitch1, hatchSwitch2, clawSwitch;
-	public static Ultrasonic ballUS, frontUS1, frontUS2, backUS1, backUS2, bottomUS;
+
+	public static TalonSRX pickup1, pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
+
 	
-	public static void ultraSonicInit(){
-		ballUS = new Ultrasonic(0, 0);
-		frontUS1 = new Ultrasonic(1, 1);
-		frontUS2 = new Ultrasonic(2,2);
-		backUS1 = new Ultrasonic(3,3);
-		backUS2 = new Ultrasonic(4,4);
-		bottomUS = new Ultrasonic(5,5);
-	}
-
-	public static void limitSwitchInit() {
-		hatchSwitch1 = new DigitalInput(0);
-		hatchSwitch2 = new DigitalInput(1);
-		clawSwitch = new DigitalInput(2);
-	}
-	
-
-
-	public static double getTurnPower() {
-		return driveStick.getRawAxis(4);
+    public static double getTurnPower() {
+		return -1 * driveStick.getRawAxis(4);
 	}
 
 	public static double getForwardPower() {
@@ -128,33 +113,55 @@ public class Drive {
 		leftDrive(error*Constants.kpTurn);
 	}
 
-	public static void initializeDrive(){
-		R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
-		R2 = new CANSparkMax(2, MotorType.kBrushless);
-		L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
-		L2 = new CANSparkMax(4, MotorType.kBrushless);
-		lShifter = new DoubleSolenoid(0, 7);
-		rShifter = new DoubleSolenoid(1, 6);
+    public static double getDriveLeftTrigger() {
+        return driveStick.getRawAxis(2);
+    }
 
-		// R1.setIdleMode(IdleMode.kBrake);
-		// L1.setIdleMode(IdleMode.kBrake);
-		R2.follow(R1);
-		L2.follow(L1);
-		L1.setInverted(true);
-		L2.setInverted(true);
+    public static double getDriveRightTrigger() {
+        return driveStick.getRawAxis(3);
+    }
 
-		Drive.navx = new AHRS(SPI.Port.kMXP);
+    public static void initializeDrive(){
+        R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
+        //R2 = new CANSparkMax(2, MotorType.kBrushless);
+        L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
+		//L2 = new CANSparkMax(4, MotorType.kBrushless);
+		pickup1 = new TalonSRX(5);
+		pickup2 = new TalonSRX(6);
+		intake = new TalonSRX(7);
+		//clawRotate = new TalonSRX(8);
+		clawIntake1 = new TalonSRX(9);
+		clawIntake2 = new TalonSRX(10);
+		climber1 = new TalonSRX(11);
+		climber2 = new TalonSRX(12);
+		climber3 = new TalonSRX(13);
+		climber4 = new TalonSRX(14);
+		
+		///Shifters = new DoubleSolenoid(ShiftersForward,ShiftersReverse);
+
+        R1.setIdleMode(IdleMode.kBrake);
+        L1.setIdleMode(IdleMode.kBrake);
+		//R2.follow(R1);
+		
+        //L2.follow(L1);
+		//L2.setInverted(false);
+		L1.setInverted(false);
+        Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
 		mechStick = new Joystick(1);
 		compressor = new Compressor(0);
-		compressor.setClosedLoopControl(true);
-	}
+		
+		//Shifters = new DoubleSolenoid(ShiftersForward, ShiftersReverse);
+    }
    
    public static void arcadeDrive(double side, double forward, boolean isShifted){
-		R1.set(side + forward);
-		L1.set(side - forward);
-		Shifting(isShifted);
+        R1.set(side - forward);
+		L1.set(side + forward);
+		Robot.Shifting(isShifted);
 	}
+	
+	
+	
 	
 	// if pressure starts to get low, it will activate the compressor
 	public static void Compressor() {
