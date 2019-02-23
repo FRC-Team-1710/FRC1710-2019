@@ -9,30 +9,32 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Drive {
-    public static CANEncoder enR1, enR2, enL1, enL2;
-    static double lastAngle, angleIntegral, output;
-    public static AHRS navx;
-    public static CANSparkMax R1,R2, L1, L2;
+	public static CANEncoder enR1, enR2, enL1, enL2;
+	static double lastAngle, angleIntegral, output;
+	public static AHRS navx;
+	public static CANSparkMax R1,R2, L1, L2;
 	public static Joystick driveStick, mechStick;
 	public static DoubleSolenoid Shifters;
 	public static int ShiftersForward = 1;
 	public static int ShiftersReverse = 0;
 	public static Compressor compressor;
+
 	public static TalonSRX pickup1, pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
 
 	
@@ -41,25 +43,25 @@ public class Drive {
 	}
 
 	public static double getForwardPower() {
-        return driveStick.getRawAxis(1);
+		return driveStick.getRawAxis(1);
 	}
 	
-    public static double getLeftPosition() {
-        //Gets the encoder from L1 then gets the position of that encoder
-        return (L1.getEncoder().getPosition() / 10.75);
+	public static double getLeftPosition() {
+		//Gets the encoder from L1 then gets the position of that encoder
+		return (L1.getEncoder().getPosition() / 10.75);
 	}
 	
 	public static double getRightPosition() {
-        //gets the encoder from R1 then gets the position of that encoder
+		//gets the encoder from R1 then gets the position of that encoder
 		return (R1.getEncoder().getPosition() /10.75);
-    }
-    
-    public static double getNavxAngle() {
+	}
+	
+	public static double getNavxAngle() {
 		return navx.getAngle();
 	}
 	
-    public static void leftDrive(double power) {
-        L1.set(power);
+	public static void leftDrive(double power) {
+		L1.set(power);
 	}
 	
 	public static void rightDrive (double power) {
@@ -71,7 +73,7 @@ public class Drive {
 		L1.set(0);
 	}
 
-    public static void straightDriveTele (double power, double heading) {
+	public static void straightDriveTele (double power, double heading) {
 		double currentAngle = Drive.getNavxAngle();
 		double error = (currentAngle - heading);
 		angleIntegral += error;
@@ -162,5 +164,50 @@ public class Drive {
 	
 	
 	// if pressure starts to get low, it will activate the compressor
-	
+	public static void Compressor() {
+		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
+	}
+
+	public static void Shifting(boolean isShifted){
+		if (isShifted){
+		  lShifter.set(Value.kReverse);
+		  rShifter.set(Value.kReverse);
+		} else {
+		  lShifter.set(Value.kForward);
+		  rShifter.set(Value.kForward);
+		}
+	}
+	public static void frontCloseToTarget() {
+		if (driveStick.getRawButton(0)) {
+			if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() < 1){
+				if (frontUS1.getRangeInches() == frontUS2.getRangeInches()) {
+				stopDriving();
+				}
+			} else if (frontUS1.getRangeInches() > 1 && frontUS2.getRangeInches() < 1) {
+				arcadeDrive(.4, .2, false);
+			} else if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() > 1) {
+				arcadeDrive(-.4, .2, false);
+			}
+		}
+	}
+	// public static void backCloseToTarget(){
+	// 	if (driveStick.getRawButton(0)) {
+	// 		if (backUS1.getRangeInches() < 1 && backUS2.getRangeInches() < 1){
+	// 			if (backUS1.getRangeInches() == backUS2.getRangeInches()) {
+	// 			stopDriving();
+	// 			}
+	// 		} else if (backUS1.getRangeInches() > 1 && backUS2.getRangeInches() < 1) {
+	// 			arcadeDrive(.4, .2, false);
+	// 		} else if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() > 1) {
+	// 			arcadeDrive(-.4, .2, false);
+	// 		}
+	// 	}
+	// }
+	public static boolean offGroud(){
+		if (bottomUS.getRangeInches() > 1) {
+			return true; // we are off the ground, probably climing
+		} else {
+			return false; //either have climbed or not even off the ground
+		}
+	}
 }

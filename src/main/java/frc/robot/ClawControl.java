@@ -38,6 +38,7 @@ public class ClawControl {
 
 
     public static double ticksToLine = 650;
+    public static double current;
     public static final double P = .01;
     public static final double I = .002;
     public static final double REVERSEPOWER = .2;
@@ -69,7 +70,6 @@ public class ClawControl {
 
     public static void placeHatch() {
         //need to add vision 
-        //if button is pressed the piston will release and then drive backwards 
        if  (Drive.driveStick.getRawButton(2)==true){
            pistonOuttake();
            Timer.delay(TIMERDELAY);
@@ -82,6 +82,7 @@ public class ClawControl {
     public void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
+
             Drive.clawRotate.set(ControlMode.PercentOutput, output);
         } else if (Drive.mechStick.getRawButton(2) == true){
             HatchTransfer();
@@ -98,7 +99,7 @@ public class ClawControl {
     }
 
     public void BallTransfer(){
-        double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -108,7 +109,7 @@ public class ClawControl {
     }
 
     public void HatchTransfer(){
-        double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 20;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -157,7 +158,7 @@ public class ClawControl {
     }
 
     public void BackDeposit(){
-        double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -166,7 +167,7 @@ public class ClawControl {
         } 
     }
     public void resting(){
-        double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -181,5 +182,10 @@ public class ClawControl {
             return false;
         }
     }
-
+    
+    public static void GetEncoder(){
+        if (Drive.driveStick.getRawButton(4)){
+            System.out.println(Constants.clawRotate.getSelectedSensorPosition());
+        }
+    }
 }

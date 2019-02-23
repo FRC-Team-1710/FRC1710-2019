@@ -14,7 +14,8 @@ import frc.robot.SyncMechs;
  * in various positions until both are situated according to driver needs.
  */
 public class SyncMechs {
-    String restingPosition;
+    String RestingPosition;
+    String MovingPosition;
     String BallIntake;
     String HatchIntakeFront;
     String HatchIntakeBack;
@@ -49,5 +50,45 @@ public class SyncMechs {
         }
     }
 
+    public void SyncMechsInit() {
+        if(Drive.mechStick.getPOV(180) == 1) {
+            intakeMovements(RestingPosition);
+        }
     
+        if(Drive.mechStick.getPOV(360) == 1) {
+            intakeMovements(MovingPosition);
+        }
+    
+        if(Drive.mechStick.getRawButton(1) == true) {
+            intakeMovements(BallIntake);
+        }
+    
+        if(Drive.mechStick.getRawButton(3) == true) {
+            intakeMovements(HatchIntakeFront);
+        }
+    
+        if(Drive.mechStick.getRawButton(4) == true) {
+            intakeMovements(HatchIntakeBack);
+        }
+    
+        if(Drive.mechStick.getPOV(270) == 1) {
+            intakeMovements(HatchTransfer);
+        }
+    
+        if(Drive.mechStick.getRawButton(5) == true) {
+            intakeMovements(BallOuttakeFront);
+        }
+    
+        if(Drive.mechStick.getRawButton(6) == true) {
+            intakeMovements(BallOuttakeBack);
+        }
+    
+        if(Drive.mechStick.getRawAxis(3) > 0) {
+            intakeMovements(HatchOuttakeFront);
+        }
+    
+        if(Drive.mechStick.getRawAxis(4) > 0) {
+            intakeMovements(HatchOuttakeBack);
+        }
+    }
 }

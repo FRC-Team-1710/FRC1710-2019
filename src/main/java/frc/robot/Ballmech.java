@@ -14,24 +14,24 @@ public class Ballmech {
     
     //Determines what functions to use when triggers are used
     public static void ballMechTeleop() {
-        // if (Drive.getDriveLeftTrigger() > 0 && Drive.getDriveRightTrigger() > 0) { neutralizeBall(); }
-        // else if (Drive.getDriveLeftTrigger() > 0) { intakeBall(); }
-        // else if (Drive.getDriveRightTrigger() > 0) { outtakeBall(); }
-        // else { neutralizeBall(); }
+        if (Drive.getDriveLeftTrigger() > 0 && Drive.getDriveRightTrigger() > 0) { neutralizeBall(); }
+        else if (Drive.getDriveLeftTrigger() > 0) { intakeBall(); }
+        else if (Drive.getDriveRightTrigger() > 0) { outtakeBall(); }
+        else { neutralizeBall(); }
     }
 
     //Intializes the intake function and determines speed percentages/inversions
     public static void intakeBall() {
-        Drive.intake.set(ControlMode.PercentOutput, INTAKE_POWER);
+        Constants.intake.set(ControlMode.PercentOutput, INTAKE_POWER);
     }
 
     //Initializes the outtake function and determines speed percentages/inversions
     public static void outtakeBall() {
-        Drive.intake.set(ControlMode.PercentOutput, OUTTAKE_POWER);
+        Constants.intake.set(ControlMode.PercentOutput, OUTTAKE_POWER);
     }
 
     //Initializes the neutralize function for if the driver accidentally uses both triggers at the same time
     public static void neutralizeBall() {
-        Drive.intake.set(ControlMode.PercentOutput, STOP);
+        Constants.intake.set(ControlMode.PercentOutput, STOP);
     }
 }
