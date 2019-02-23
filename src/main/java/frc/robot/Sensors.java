@@ -43,7 +43,7 @@ public class Sensors {
         }
     }
 
-    public static boolean IsClawFront(){
+    public static boolean IsClawParallel(){
         if (clawSwitch.get() == true){
             return true;
         } else {

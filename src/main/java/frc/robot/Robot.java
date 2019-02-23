@@ -27,7 +27,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.CommandGroups.TestDrive;
+import frc.Utility.PID;
 import edu.wpi.first.wpilibj.Compressor;
 
 public class Robot extends TimedRobot {
@@ -36,6 +38,7 @@ public class Robot extends TimedRobot {
   double changesInRotations;
   double startingRotations;
   double startingAngle;
+  public static Timer clawHold = new Timer();
   public static Timer autoTime = new Timer();
   public static Timer time = new Timer();
   public static double[] changeAngle = new double[]{};
@@ -46,15 +49,15 @@ public class Robot extends TimedRobot {
   public static DoubleSolenoid clawOpen1, clawOpen2;
   int i;
   public static TalonSRX pickup1, pickup2, intake, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
-  int encoderGoalClaw, encoderGoalPickup;
-  double clawOutput, pickupOutput, pHold;
+  double encoderGoalClaw, encoderGoalPickup;
+  double clawError, pickupOutput, pHold;
   public static CANSparkMax clawRotate;
 
 
 
   @Override
   public void robotInit() {
-    pHold = .01;
+    pHold = .25;
     pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
     lShifter = new DoubleSolenoid(0, 7);
@@ -62,6 +65,7 @@ public class Robot extends TimedRobot {
     clawOpen1 = new DoubleSolenoid(2,4);
     clawOpen2 = new DoubleSolenoid(3,5);
     autoTime = new Timer();
+    clawHold = new Timer();
     intake = new TalonSRX(7);
     clawRotate = new CANSparkMax(8, MotorType.kBrushless );
     Drive.initializeDrive();
@@ -76,8 +80,8 @@ public class Robot extends TimedRobot {
     pickup1.setNeutralMode(NeutralMode.Brake);
     pickup2.setNeutralMode(NeutralMode.Brake);
     Drive.L1.setInverted(false);
-    Drive.L2.setInverted(false);
-    Drive.L2.follow(Drive.L1);
+    //Drive.L2.setInverted(false);
+    //Drive.L2.follow(Drive.L1);
     Constants.constantInit();
     Vision.visionInit();
   }
@@ -104,8 +108,8 @@ public class Robot extends TimedRobot {
     pickup1.setNeutralMode(NeutralMode.Brake);
     pickup2.setNeutralMode(NeutralMode.Brake);
     Drive.L1.setInverted(false);
-    Drive.L2.setInverted(false);
-    Drive.L2.follow(Drive.L1);
+    //Drive.L2.setInverted(false);
+    //Drive.L2.follow(Drive.L1);
     
     //clawOpen1.set(Value.kReverse);
     //clawOpen2.set(Value.kReverse);
@@ -113,25 +117,29 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (Drive.driveStick.getRawButton(1) == true){
+    if (Drive.driveStick.getRawButton(4) == true){
       Vision.vision();
     } else {
-      Drive.arcadeDrive((-1 * Drive.getTurnPower()) * .2, Drive.getForwardPower() * .35,false);
+      Drive.arcadeDrive((Drive.getTurnPower()) , Drive.getForwardPower(),false);
     }
     
-    
+    SmartDashboard.putNumber("Hold Time", clawHold.get());
+    SmartDashboard.putNumber("claw encoder",clawRotate.getEncoder().getPosition() );
+    SmartDashboard.putNumber("Claw Temp", clawRotate.getMotorTemperature());
     //intake.set(ControlMode.PercentOutput, -1 * Drive.driveStick.getRawAxis(3));
     
-   // System.out.println(clawRotate.getEncoder());
-   pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .38);
-   pickup2.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .38);
+  // System.out.println(clawRotate.getEncoder().getPosition());
+   pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .7);
+   pickup2.set(ControlMode.PercentOutput,-1 * Drive.mechStick.getRawAxis(1) * .7);
     
-
-   if(Drive.driveStick.getRawAxis(2) > 0){
+if(clawRotate.getMotorTemperature() > 200){
+  clawRotate.set(0);
+}
+  else if(Drive.driveStick.getRawAxis(2) > 0){
      
-      clawRotate.set( Drive.driveStick.getRawAxis(2) * .5);
+      clawRotate.set( Drive.driveStick.getRawAxis(2));
     }else if(Drive.driveStick.getRawAxis(3) > 0){
-      clawRotate.set(-1 * Drive.driveStick.getRawAxis(3) * .5);
+      clawRotate.set(-1 * Drive.driveStick.getRawAxis(3));
     }else{
       clawRotate.set(0);
     }
@@ -163,19 +171,27 @@ public class Robot extends TimedRobot {
 
     // are we giving claw power from axis 1, if we are, set goal = 
     //Holding the claw and intake into position
-    if(Drive.driveStick.getRawAxis(2) > 0) {
-      Constants.clawRotate.set(ControlMode.PercentOutput, Drive.driveStick.getRawAxis(2));
-      encoderGoalClaw = Constants.clawRotate.getSelectedSensorPosition();
+    /*if(clawRotate.getMotorTemperature() > 100){
+       clawRotate.set(0);
+    }
+   else if(Drive.driveStick.getRawAxis(2) > 0) {
+      clawHold.stop();
+      clawHold.reset();
+      clawRotate.set(Drive.driveStick.getRawAxis(2));
+      encoderGoalClaw = clawRotate.getEncoder().getPosition();
     } else if(Drive.driveStick.getRawAxis(3) > 0){
-      Constants.clawRotate.set(ControlMode.PercentOutput, -1 * Drive.driveStick.getRawAxis(3));
-      encoderGoalClaw = Constants.clawRotate.getSelectedSensorPosition();
-    }else{
+      clawHold.stop();
+      clawHold.reset();
+      clawRotate.set( -1 * Drive.driveStick.getRawAxis(3));
+      encoderGoalClaw = clawRotate.getEncoder().getPosition();
+    }else if(encoderGoalClaw > clawRotate.getEncoder().getPosition() + .25){ 
       //proportional control
-      clawOutput = (encoderGoalClaw - Constants.clawRotate.getSelectedSensorPosition()) * pHold;
-      Constants.clawRotate.set(ControlMode.PercentOutput, clawOutput);
-    } 
+      clawRotate.set(encoderGoalClaw - clawRotate.getEncoder().getPosition() * .01);
+    } else if(encoderGoalClaw < clawRotate.getEncoder().getPosition() - .25){
+      clawRotate.set(encoderGoalClaw - clawRotate.getEncoder().getPosition() * .01);
+    }*/
 
-   if(Drive.mechStick.getRawAxis(1) > 0) {
+   /*if(Drive.mechStick.getRawAxis(1) > 0) {
     pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1));
     pickup2.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1));
       encoderGoalPickup = pickup1.getSelectedSensorPosition();
@@ -183,8 +199,8 @@ public class Robot extends TimedRobot {
       pickupOutput = (encoderGoalPickup - pickup1.getSelectedSensorPosition()) * pHold;
       pickup1.set(ControlMode.PercentOutput, pickupOutput);
       pickup2.set(ControlMode.PercentOutput, pickupOutput);
-    } 
-  }
+    }*/ 
+  } 
    
    
     //pickup1.setNeutralMode(NeutralMode.Brake);

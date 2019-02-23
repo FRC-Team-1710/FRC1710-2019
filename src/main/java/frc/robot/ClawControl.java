@@ -181,6 +181,5 @@ public class ClawControl {
             return false;
         }
     }
-    
 
 }

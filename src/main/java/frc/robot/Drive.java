@@ -121,9 +121,9 @@ public class Drive {
 
     public static void initializeDrive(){
         R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
-        R2 = new CANSparkMax(2, MotorType.kBrushless);
+        //R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
-		L2 = new CANSparkMax(4, MotorType.kBrushless);
+		//L2 = new CANSparkMax(4, MotorType.kBrushless);
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
 		intake = new TalonSRX(7);
@@ -139,10 +139,10 @@ public class Drive {
 
         R1.setIdleMode(IdleMode.kBrake);
         L1.setIdleMode(IdleMode.kBrake);
-		R2.follow(R1);
+		//R2.follow(R1);
 		
-        L2.follow(L1);
-		L2.setInverted(false);
+        //L2.follow(L1);
+		//L2.setInverted(false);
 		L1.setInverted(false);
         Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
