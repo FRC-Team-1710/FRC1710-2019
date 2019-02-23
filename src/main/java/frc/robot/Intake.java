@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.Drive;
 
 public class Intake {
 
@@ -37,5 +36,18 @@ public class Intake {
     public static void neutralizeBall() {
         LeadBelt.set(STOP);
     }
-
+    public static boolean hatchInIntake(){
+        if(Drive.hatchSwitch1.get() == true && Drive.hatchSwitch2.get() == true){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean ballInIntake() {
+        if (Drive.ballUS.getRangeInches() < 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

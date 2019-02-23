@@ -70,8 +70,13 @@ public class Vision {
                 turnPower = -Drive.getTurnPower() * .2; //if there is no target allow for user input
             } 
             Drive.arcadeDrive(turnPower, Drive.getForwardPower() * .35, false); // apply the values to robot
-        } 
-    }
+        }
+      }
+
+      public static boolean foundTarget() {
+        double t = (double) tV.getNumber(0);
+        return IsActualTarget(t);
+      }
 
       public static boolean IsActualTarget(double Is_target) { //can the limelight see a target
         if(Is_target >= 1){
