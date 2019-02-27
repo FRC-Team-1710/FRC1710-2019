@@ -9,7 +9,7 @@ public class Ballmech {
     //Declares LBelt and RBelt as types of CANSparkMAX
     public static TalonSRX IntakeMotor;
     private static final double INTAKE_POWER = 0.5;
-    private static final double OUTTAKE_POWER = -0.75;
+    private static final double OUTTAKE_POWER = -1;
     private static final double STOP = 0.0;
     
     //Determines what functions to use when triggers are used
