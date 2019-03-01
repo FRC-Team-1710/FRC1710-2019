@@ -11,98 +11,17 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 /**
- * this file is not yet complete
+ * TalonSRX requires the use of .set(ControlMode.PercentOutput, output); for the speed
+ * CANSparkMax requires the use of .set(output); for the speed.
  */
 public class MovementFunctions {
-    static int currentClawEncoderPosition;
+    static double currentClawEncoderPosition;
     static int currentIntakeEncoderPosition;
-
-    public static void resetCurrentEncoderPositions() {
-      //  currentClawEncoderPosition = clawEncoder.getSensorPosition();
-      //  currentIntakeEncoderPosition = IntakeEncoder.getSensorPosition();
-    }
-
-    public static void restingPosition() {
-        resetCurrentEncoderPositions();
-
-    }
-
-    public static void movingPosition() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void BallIntake() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void HatchIntakeFront() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void HatchIntakeBack() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void HatchTransfer() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void BallOuttakeFront() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void BallOuttakeBack() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void HatchOuttakeFront() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-    }
-
-    public static void HatchOuttakeBack() {
-        resetCurrentEncoderPositions();
-        //ask where we currently are
-        //then ask where we want to go
-        //then ask if we can move
-        //then ask how can we get to our destination
-      
-    static int goalClawEncoderPosition;
+    static double goalClawEncoderPosition;
     static int goalIntakeEncoderPosition;
 
     public static void resetCurrentEncoderPositions() {
-      currentClawEncoderPosition = Constants.clawRotate.getSelectedSensorPosition();
+      currentClawEncoderPosition = Constants.clawRotate.getEncoder().getPosition();
       currentIntakeEncoderPosition = Constants.pickup1.getSelectedSensorPosition();
     }
 
@@ -113,7 +32,7 @@ public class MovementFunctions {
         goalClawEncoderPosition = 1;
         goalIntakeEncoderPosition = 1;
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(.25);
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
@@ -124,15 +43,15 @@ public class MovementFunctions {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .5);
                 Constants.pickup2.set(ControlMode.PercentOutput, .5);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .5);
+                Constants.clawRotate.set(.5);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
-                Constants.clawRotate.set(ControlMode.PercentOutput, .5);
+                Constants.clawRotate.set(.5);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 restingPosition();
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
@@ -141,87 +60,87 @@ public class MovementFunctions {
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
-                Constants.clawRotate.set(ControlMode.PercentOutput, .5);
+                Constants.clawRotate.set(.5);
             } else {
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .5);
                 Constants.pickup2.set(ControlMode.PercentOutput, .5);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .5);
+                Constants.clawRotate.set(.5);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
-                Constants.clawRotate.set(ControlMode.PercentOutput, .5);
+                Constants.clawRotate.set(.5);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 restingPosition();
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -234,118 +153,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -358,118 +277,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -482,118 +401,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } 
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -606,118 +525,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -730,119 +649,119 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
             
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -855,118 +774,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -979,118 +898,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -1103,118 +1022,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }
@@ -1227,118 +1146,118 @@ public class MovementFunctions {
         if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             Constants.pickup1.set(ControlMode.PercentOutput, 0);
             Constants.pickup2.set(ControlMode.PercentOutput, 0);
-            Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+            Constants.clawRotate.set(0);
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition < goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition > goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
             if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition > goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, .25);
                 Constants.pickup2.set(ControlMode.PercentOutput, .25);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             } else if(currentClawEncoderPosition < goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, .25);
+                Constants.clawRotate.set(.25);
             } else if(currentClawEncoderPosition == goalClawEncoderPosition && currentIntakeEncoderPosition == goalIntakeEncoderPosition) {
                 Constants.pickup1.set(ControlMode.PercentOutput, 0);
                 Constants.pickup2.set(ControlMode.PercentOutput, 0);
-                Constants.clawRotate.set(ControlMode.PercentOutput, 0);
+                Constants.clawRotate.set(0);
             }
         }
     }

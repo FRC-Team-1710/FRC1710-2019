@@ -25,25 +25,25 @@ public class SyncMechs {
     String HatchOuttakeFront;
     String HatchOuttakeBack;
 
-    public void intakeMovements(String greg) {
+    public void intakeMovements(String input) {
         MovementFunctions.movingPosition();
-        if(greg == restingPosition) {
+        if(input == RestingPosition) {
             MovementFunctions.restingPosition();
-        } else if(greg == BallIntake) {
+        } else if(input == BallIntake) {
             MovementFunctions.BallIntake();
-        } else if(greg == HatchIntakeFront) {
+        } else if(input == HatchIntakeFront) {
             MovementFunctions.HatchIntakeFront();
-        } else if(greg == HatchIntakeBack) {
+        } else if(input == HatchIntakeBack) {
             MovementFunctions.HatchIntakeBack();
-        } else if(greg == HatchTransfer) {
+        } else if(input == HatchTransfer) {
             MovementFunctions.HatchTransfer();
-        } else if(greg == BallOuttakeFront) {
+        } else if(input == BallOuttakeFront) {
             MovementFunctions.BallOuttakeFront();
-        } else if(greg == BallOuttakeBack) {
+        } else if(input == BallOuttakeBack) {
             MovementFunctions.BallOuttakeBack();
-        } else if(greg == HatchOuttakeFront) {
+        } else if(input == HatchOuttakeFront) {
             MovementFunctions.HatchOuttakeFront();
-        } else if(greg == HatchOuttakeBack) {
+        } else if(input == HatchOuttakeBack) {
             MovementFunctions.HatchOuttakeBack();
         } else {
             MovementFunctions.restingPosition();
