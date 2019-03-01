@@ -22,24 +22,19 @@ public class Climber {
     public static void initalizeClimb(){
         C1 = new TalonSRX(11);
         C2 = new TalonSRX(12);
-        C3 = new TalonSRX(13);
-        C2.follow(C1);
-        C3.follow(C1);
+        C2.setInverted(true);
     }
 
     public static void Climb() {
         if (Drive.driveStick.getRawButton(4)){
             C1.set(ControlMode.PercentOutput, MaxSpeed);
             C2.set(ControlMode.PercentOutput, MaxSpeed);
-            C3.set(ControlMode.PercentOutput, MaxSpeed);
         } else if (Drive.driveStick.getRawButton(3)) {
             C1.set(ControlMode.PercentOutput, -1 * MaxSpeed);
             C2.set(ControlMode.PercentOutput, -1 * MaxSpeed);
-            C3.set(ControlMode.PercentOutput, -1 * MaxSpeed);
         } else {
             C1.set(ControlMode.PercentOutput, 0);
             C2.set(ControlMode.PercentOutput, 0);
-            C3.set(ControlMode.PercentOutput, 0);
         }
     }
 

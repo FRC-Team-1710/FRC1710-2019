@@ -37,14 +37,14 @@ public class Intake {
         LeadBelt.set(STOP);
     }
     public static boolean hatchInIntake(){
-        if(Drive.hatchSwitch1.get() == true && Drive.hatchSwitch2.get() == true){
+        if(Sensors.hatchSwitch1.get() == true && Sensors.hatchSwitch2.get() == true){
             return true;
         } else {
             return false;
         }
     }
     public static boolean ballInIntake() {
-        if (Drive.ballUS.getRangeInches() < 1){
+        if (Sensors.ballUS.getRangeInches() < 1){
             return true;
         } else {
             return false;

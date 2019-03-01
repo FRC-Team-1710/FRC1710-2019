@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -30,7 +31,7 @@ public class Drive {
 	public static AHRS navx;
 	public static CANSparkMax R1,R2, L1, L2;
 	public static Joystick driveStick, mechStick;
-	public static DoubleSolenoid Shifters;
+	public static DoubleSolenoid lShifter, rShifter;
 	public static int ShiftersForward = 1;
 	public static int ShiftersReverse = 0;
 	public static Compressor compressor;
@@ -160,9 +161,6 @@ public class Drive {
 		Robot.Shifting(isShifted);
 	}
 	
-	
-	
-	
 	// if pressure starts to get low, it will activate the compressor
 	public static void Compressor() {
 		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
@@ -179,13 +177,13 @@ public class Drive {
 	}
 	public static void frontCloseToTarget() {
 		if (driveStick.getRawButton(0)) {
-			if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() < 1){
-				if (frontUS1.getRangeInches() == frontUS2.getRangeInches()) {
+			if (Sensors.frontUS1.getRangeInches() < 1 && Sensors.frontUS2.getRangeInches() < 1){
+				if (Sensors.frontUS1.getRangeInches() == Sensors.frontUS2.getRangeInches()) {
 				stopDriving();
 				}
-			} else if (frontUS1.getRangeInches() > 1 && frontUS2.getRangeInches() < 1) {
+			} else if (Sensors.frontUS1.getRangeInches() > 1 && Sensors.frontUS2.getRangeInches() < 1) {
 				arcadeDrive(.4, .2, false);
-			} else if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() > 1) {
+			} else if (Sensors.frontUS1.getRangeInches() < 1 && Sensors.frontUS2.getRangeInches() > 1) {
 				arcadeDrive(-.4, .2, false);
 			}
 		}
@@ -204,7 +202,7 @@ public class Drive {
 	// 	}
 	// }
 	public static boolean offGroud(){
-		if (bottomUS.getRangeInches() > 1) {
+		if (Sensors.bottomUS1.getRangeInches() > 1) {
 			return true; // we are off the ground, probably climing
 		} else {
 			return false; //either have climbed or not even off the ground
