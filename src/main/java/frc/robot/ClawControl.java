@@ -148,7 +148,7 @@ public class ClawControl {
     }*/
 
     public void FrontDeposit(){
-        double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getEncoder())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -158,7 +158,7 @@ public class ClawControl {
     }
 
     public void BackDeposit(){
-        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getEncoder())/ (2*ticksToLine))*360;
         goal = 180;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -167,7 +167,7 @@ public class ClawControl {
         } 
     }
     public void resting(){
-        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getEncoder())/ (2*ticksToLine))*360;
         goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -185,7 +185,7 @@ public class ClawControl {
     
     public static void GetEncoder(){
         if (Drive.driveStick.getRawButton(4)){
-            System.out.println(Constants.clawRotate.getSelectedSensorPosition());
+            System.out.println(Constants.clawRotate.getEncoder());
         }
     }
 }

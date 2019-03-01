@@ -23,7 +23,7 @@ public class LEDs {
     public void LEDinidcator(){
         for (int i=0; i <= 10000; i++){
             if ((i % 50) == 0){
-                if (Intake.hatchInIntake() == true) {
+                if (Sensors.haveHatch() == true) {
                     //hatch attatched
                     Pixy.arduino.write(2, intT);
                 } else if(Vision.foundTarget()){

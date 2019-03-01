@@ -115,8 +115,8 @@ public class Robot extends TimedRobot {
     //clawOpen1.set(Value.kReverse);
     //clawOpen2.set(Value.kReverse);
 
-    Drive.ultraSonicInit();
-    Drive.limitSwitchInit();
+    Sensors.ultraSonicInit();
+    Sensors.limitSwitchInit();
 
   }
 
