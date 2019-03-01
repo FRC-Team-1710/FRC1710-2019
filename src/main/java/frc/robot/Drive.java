@@ -170,22 +170,22 @@ public class Drive {
 
 	public static void Shifting(boolean isShifted){
 		if (isShifted){
-		  lShifter.set(Value.kReverse);
-		  rShifter.set(Value.kReverse);
+		  Robot.lShifter.set(Value.kReverse);
+		  Robot.rShifter.set(Value.kReverse);
 		} else {
-		  lShifter.set(Value.kForward);
-		  rShifter.set(Value.kForward);
+		  Robot.lShifter.set(Value.kForward);
+		  Robot.rShifter.set(Value.kForward);
 		}
 	}
 	public static void frontCloseToTarget() {
 		if (driveStick.getRawButton(0)) {
-			if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() < 1){
-				if (frontUS1.getRangeInches() == frontUS2.getRangeInches()) {
+			if (Sensors.frontUS1.getRangeInches() < 1 && Sensors.frontUS2.getRangeInches() < 1){
+				if (Sensors.frontUS1.getRangeInches() == Sensors.frontUS2.getRangeInches()) {
 				stopDriving();
 				}
-			} else if (frontUS1.getRangeInches() > 1 && frontUS2.getRangeInches() < 1) {
+			} else if (Sensors.frontUS1.getRangeInches() > 1 && Sensors.frontUS2.getRangeInches() < 1) {
 				arcadeDrive(.4, .2, false);
-			} else if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() > 1) {
+			} else if (Sensors.frontUS1.getRangeInches() < 1 && Sensors.frontUS2.getRangeInches() > 1) {
 				arcadeDrive(-.4, .2, false);
 			}
 		}
@@ -204,7 +204,7 @@ public class Drive {
 	// 	}
 	// }
 	public static boolean offGroud(){
-		if (bottomUS.getRangeInches() > 1) {
+		if (Sensors.bottomUS1.getRangeInches() > 1) {
 			return true; // we are off the ground, probably climing
 		} else {
 			return false; //either have climbed or not even off the ground
