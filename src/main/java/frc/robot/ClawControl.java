@@ -70,7 +70,7 @@ public class ClawControl {
 
     public static void placeHatch() {
         //need to add vision 
-       if  (Drive.driveStick.getRawButton(2)==true){
+       if  (Drive.mechStick.getRawButton(2)==true){
            pistonOuttake();
            Timer.delay(TIMERDELAY);
            pistonIntake();
@@ -79,7 +79,7 @@ public class ClawControl {
        }
     }
 
-    public void ClawTele(){
+   /* public void ClawTele(){
         if (Drive.mechStick.getRawButton(1)){
             BallTransfer();
 
@@ -96,9 +96,9 @@ public class ClawControl {
         } else {
             Drive.clawRotate.set(ControlMode.PercentOutput, 0);
         }
-    }
+    }*/
 
-    public void BallTransfer(){
+  /*  public void BallTransfer(){
         double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 10;
         error = goal - current;
@@ -146,7 +146,7 @@ public class ClawControl {
             boolean haveHatch = true;
         }
     }*/
-
+/*
     public void FrontDeposit(){
         double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         goal = 90;
@@ -187,5 +187,5 @@ public class ClawControl {
         if (Drive.driveStick.getRawButton(4)){
             System.out.println(Constants.clawRotate.getSelectedSensorPosition());
         }
-    }
+    } */
 }

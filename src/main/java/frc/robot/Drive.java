@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -30,7 +31,7 @@ public class Drive {
 	public static AHRS navx;
 	public static CANSparkMax R1,R2, L1, L2;
 	public static Joystick driveStick, mechStick;
-	public static DoubleSolenoid Shifters;
+	public static DoubleSolenoid lShifter, rShifter;
 	public static int ShiftersForward = 1;
 	public static int ShiftersReverse = 0;
 	public static Compressor compressor;
@@ -43,7 +44,7 @@ public class Drive {
 	}
 
 	public static double getForwardPower() {
-		return driveStick.getRawAxis(1);
+		return -1 * driveStick.getRawAxis(1);
 	}
 	
 	public static double getLeftPosition() {
@@ -120,12 +121,18 @@ public class Drive {
     public static double getDriveRightTrigger() {
         return driveStick.getRawAxis(3);
     }
+	public static double getMechLeftTrigger() {
+        return mechStick.getRawAxis(2);
+    }
 
+    public static double getMechRightTrigger() {
+        return mechStick.getRawAxis(3);
+    }
     public static void initializeDrive(){
         R1 = new CANSparkMax(1, MotorType.kBrushless); //init the motors
-        //R2 = new CANSparkMax(2, MotorType.kBrushless);
+        R2 = new CANSparkMax(2, MotorType.kBrushless);
         L1 = new CANSparkMax(3, MotorType.kBrushless); // init the motors
-		//L2 = new CANSparkMax(4, MotorType.kBrushless);
+		L2 = new CANSparkMax(4, MotorType.kBrushless);
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
 		intake = new TalonSRX(7);
@@ -141,10 +148,10 @@ public class Drive {
 
         R1.setIdleMode(IdleMode.kBrake);
         L1.setIdleMode(IdleMode.kBrake);
-		//R2.follow(R1);
+		R2.follow(R1);
 		
-        //L2.follow(L1);
-		//L2.setInverted(false);
+        L2.follow(L1);
+		L2.setInverted(false);
 		L1.setInverted(false);
         Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
@@ -155,8 +162,8 @@ public class Drive {
     }
    
    public static void arcadeDrive(double side, double forward, boolean isShifted){
-        R1.set(side - forward);
-		L1.set(side + forward);
+        R1.set(side + forward);
+		L1.set(side - forward);
 		Robot.Shifting(isShifted);
 	}
 	
@@ -177,7 +184,7 @@ public class Drive {
 		  rShifter.set(Value.kForward);
 		}
 	}
-	public static void frontCloseToTarget() {
+	/*public static void frontCloseToTarget() {
 		if (driveStick.getRawButton(0)) {
 			if (frontUS1.getRangeInches() < 1 && frontUS2.getRangeInches() < 1){
 				if (frontUS1.getRangeInches() == frontUS2.getRangeInches()) {
@@ -189,7 +196,7 @@ public class Drive {
 				arcadeDrive(-.4, .2, false);
 			}
 		}
-	}
+	}*/
 	// public static void backCloseToTarget(){
 	// 	if (driveStick.getRawButton(0)) {
 	// 		if (backUS1.getRangeInches() < 1 && backUS2.getRangeInches() < 1){
@@ -203,11 +210,11 @@ public class Drive {
 	// 		}
 	// 	}
 	// }
-	public static boolean offGroud(){
+	/*public static boolean offGroud(){
 		if (bottomUS.getRangeInches() > 1) {
 			return true; // we are off the ground, probably climing
 		} else {
 			return false; //either have climbed or not even off the ground
 		}
-	}
+	}*/
 }

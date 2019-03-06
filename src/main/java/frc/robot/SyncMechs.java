@@ -13,8 +13,8 @@ import frc.robot.SyncMechs;
  * Go to ____ position by using a series of steps by placing ClawControl and IntakeControl 
  * in various positions until both are situated according to driver needs.
  */
-public class SyncMechs {
-    String RestingPosition;
+public class SyncMechs {}
+   /* String RestingPosition;
     String MovingPosition;
     String BallIntake;
     String HatchIntakeFront;
@@ -23,9 +23,9 @@ public class SyncMechs {
     String BallOuttakeFront;
     String BallOuttakeBack;
     String HatchOuttakeFront;
-    String HatchOuttakeBack;
+    String HatchOuttakeBack;*/
 
-    public void intakeMovements(String greg) {
+  /*  public void intakeMovements(String greg) {
         MovementFunctions.movingPosition();
         if(greg == restingPosition) {
             MovementFunctions.restingPosition();
@@ -91,4 +91,4 @@ public class SyncMechs {
             intakeMovements(HatchOuttakeBack);
         }
     }
-}
+}*/

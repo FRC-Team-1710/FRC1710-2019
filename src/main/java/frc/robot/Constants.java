@@ -45,8 +45,8 @@ public class Constants {
 	}
 
 	//vision constants
-	public static double kpAim = 0.005;
-	public static double HeightDiffOfTargets = 7.79;
-	public static double MarginOfErrorMAX = 5.0;
-	public static double slope = .02;
+	public static double kpAim = 0.01;
+	public static double HeightDiffOfTargets = 2;
+	public static double MarginOfErrorMAX = 6.0;
+	public static double slope = .3;
 }

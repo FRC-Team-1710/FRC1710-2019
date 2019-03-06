@@ -13,7 +13,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 /**
  * this file is not yet complete
  */
-public class MovementFunctions {
+/*public class MovementFunctions {
     static int currentClawEncoderPosition;
     static int currentIntakeEncoderPosition;
 
@@ -1341,5 +1341,5 @@ public class MovementFunctions {
                 Constants.clawRotate.set(ControlMode.PercentOutput, 0);
             }
         }
-    }
-}
+    }*/
+

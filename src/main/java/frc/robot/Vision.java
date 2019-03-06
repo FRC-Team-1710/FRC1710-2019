@@ -11,6 +11,8 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * this file is responisble for the  
@@ -20,6 +22,8 @@ public class Vision {
     static NetworkTableEntry tx;
     static NetworkTableEntry tV;
     static NetworkTableEntry ty;
+    static Servo axi = new Servo(1);
+    public static int posMult = 1;
 
     /*
     #############################################################
@@ -33,7 +37,6 @@ public class Vision {
       tx = table.getEntry("tx");
       tV = table.getEntry("tv");
       ty = table.getEntry("ty");
-      
     }
  
     //read values periodically
@@ -51,8 +54,8 @@ public class Vision {
         System.out.println(allowableRange(Constants.MarginOfErrorMAX, Constants.slope, distance));
         */
 
-        //if A button is pressed
-        if(Drive.driveStick.getRawButton(1) == true){ 
+        //if Y button is pressed
+      
           //whatup my diggity dawg
           //read the varible name ;)
             double turnPower = 0.0;
@@ -64,13 +67,15 @@ public class Vision {
             fwd power is always dictated by the driver*/
             if(IsActualTarget(t) == true && IsSatified(x, y) == true) { //if satisfied within range
                 turnPower = 0.0;
+            } else if(IsActualTarget(t) == true && IsInRange(x, y) == false){
+              turnPower = -( .05 * x);
             } else if(IsActualTarget(t) == true && IsInRange(x, y) == true){//if it can see a target and its in a certain range
-                turnPower = (Constants.kpAim * x); //if a target is within a certain range turn smothly this is a p loop
+                turnPower = -(Constants.kpAim * x); //if a target is within a certain range turn smothly this is a p loop
             } else if(IsActualTarget(t) == false){
-                turnPower = -Drive.getTurnPower() * .2; //if there is no target allow for user input
+                turnPower = -Drive.getTurnPower() * .5; //if there is no target allow for user input
             } 
-            Drive.arcadeDrive(turnPower, Drive.getForwardPower() * .35, false); // apply the values to robot
-        }
+            Drive.arcadeDrive(turnPower, -Drive.getForwardPower() * .8, false); // apply the values to robot
+        
       }
 
       public static boolean foundTarget() {
@@ -92,7 +97,6 @@ public class Vision {
         double yRad = Math.toRadians(y);
         double tanOfY = Math.tan(yRad);
         double distance = (Constants.HeightDiffOfTargets/tanOfY)/10;
-
         if(Math.abs(target_x) <= allowableRange(Constants.MarginOfErrorMAX, Constants.slope, distance)){
           return true;
         } else {
@@ -128,9 +132,20 @@ public class Vision {
         return errorMargin;
       }
 
-      public static boolean VisionInPosition(){
-        //returns boolean to see if vision is ready to hand off to pixy to drive forward and place 
-        return true;
+      
+      public static void setFront(){
+        axi.setAngle(180);
+      }
+      public static void setBack(){
+        axi.setAngle(0);
+      }
+      public static double visionDistance(){
+        double y = ty.getDouble(0.0);
+        //this finds the distance between the target and the limelight
+        double yRad = Math.toRadians(y);
+        double tanOfY = Math.tan(yRad);
+        double distance = (Constants.HeightDiffOfTargets/tanOfY)/10;
+        return distance;
       }
     }
 
