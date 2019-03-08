@@ -110,6 +110,7 @@ public class ClawControl {
 
     public void HatchTransfer(){
         double current = ((Constants.clawRotate.getEncoder().getPosition()/ (2*ticksToLine)))* 360;
+
         goal = 20;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -147,7 +148,7 @@ public class ClawControl {
     }*/
 
     public void FrontDeposit(){
-        double current = ((Drive.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getEncoder().getPosition())/ (2*ticksToLine))* 360;
         goal = 90;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
