@@ -98,8 +98,8 @@ public class ClawControl {
         }
     }*/
 
-  /*  public void BallTransfer(){
-        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+    public void BallTransfer(){
+        double current = ((Constants.clawRotate.getEncoder().getPosition()/ (2*ticksToLine)))* 360;
         goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
@@ -109,8 +109,28 @@ public class ClawControl {
     }
 
     public void HatchTransfer(){
-        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
+        double current = ((Constants.clawRotate.getEncoder().getPosition()/ (2*ticksToLine)))* 360;
         goal = 20;
+        error = goal - current;
+        output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = false;
+        }
+    }
+
+    public void BackDeposit(){
+        double current = ((Constants.clawRotate.getEncoder().getPosition())/ (2*ticksToLine))* 360;
+        goal = 180;
+        error = goal - current;
+        output = PID.PID(error, P, I, 0, TimeElapsed);
+        if(error == 0){
+            isConflicting = false;
+        } 
+    }
+
+    public void resting(){
+        double current = ((Constants.clawRotate.getEncoder().getPosition())/ (2*ticksToLine))* 360;
+        goal = 10;
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
         if(error == 0){
@@ -157,24 +177,6 @@ public class ClawControl {
         }
     }
 
-    public void BackDeposit(){
-        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
-        goal = 180;
-        error = goal - current;
-        output = PID.PID(error, P, I, 0, TimeElapsed);
-        if(error == 0){
-            isConflicting = false;
-        } 
-    }
-    public void resting(){
-        double current = ((Constants.clawRotate.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
-        goal = 10;
-        error = goal - current;
-        output = PID.PID(error, P, I, 0, TimeElapsed);
-        if(error == 0){
-            isConflicting = false;
-        }
-    }
     public boolean is_not_conflicting(){
         if(isConflicting == true){
             return true;

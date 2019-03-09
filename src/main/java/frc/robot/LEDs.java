@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 /**
  * Add your docs here.
  */
@@ -14,26 +16,28 @@ package frc.robot;
 // every 50 loops
 // initialize LED loop
 public class LEDs {
-    static char t = 't'; //true 
-    static char f = 'f'; //false
+    static char i = 'i'; //initially picked up hatch
+    static char h = 'h'; //has been holding hatch
     static char l = 'l'; //limelight target
-    static int intT = Character.getNumericValue(t);
-    static int intF = Character.getNumericValue(f);
+    static char n = 'n'; //no hatch
+    static int intI = Character.getNumericValue(i);
+    static int intH = Character.getNumericValue(h);
     static int intL = Character.getNumericValue(l);
+    static int intN = Character.getNumericValue(n);
+
     public void LEDinidcator(){
-        for (int i=0; i <= 10000; i++){
-            if ((i % 50) == 0){
-                if (Intake.hatchInIntake() == true) {
-                    //hatch attatched
-                    Pixy.arduino.write(2, intT);
-                } else if(Vision.foundTarget()){
-                       //found limelight target
-                       Pixy.arduino.write(2, intL);
-                } else {
-                    //no limelight target and no hatch attatched
-                    Pixy.arduino.write(2, intF);
-                }
+        if (Sensors.haveHatchInRange()) {
+            //hatch attatched
+            Pixy.arduino.write(2, intI);
+         //   if (Robot.clawOpen2.Value.kReverse){
+                Pixy.arduino.write(2, intH);
             }
-        }
+      //  } else if(Vision.foundTarget()){
+            //found limelight target
+            Pixy.arduino.write(2, intL);
+       // } else {
+            //no limelight target and no hatch attatched
+            Pixy.arduino.write(2, intN);
+        //}
     }    
 }

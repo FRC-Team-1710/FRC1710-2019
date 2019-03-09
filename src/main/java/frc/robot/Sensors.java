@@ -30,13 +30,13 @@ public class Sensors {
     }
 
     public static void limitSwitchInit() {
-        hatchSwitch1 = new DigitalInput(0);
-        hatchSwitch2 = new DigitalInput(1);
-        clawSwitch = new DigitalInput(2);
+        hatchSwitch1 = new DigitalInput(2);
+        hatchSwitch2 = new DigitalInput(3);
+        clawSwitch = new DigitalInput(7);
     }
 
-    public static boolean haveHatch(){
-        if (hatchSwitch1.get() == true && hatchSwitch2.get() == true){
+    public static boolean haveHatchInRange(){
+        if (hatchSwitch1.get()|| hatchSwitch2.get()){
             return true;
         } else {
             return false;

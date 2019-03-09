@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +41,7 @@ public class Robot extends TimedRobot {
   double changesInRotations;
   double startingRotations;
   double startingAngle;
+  public static Timer rumbleTime = new Timer();
   public static Timer clawHold = new Timer();
   public static Timer autoTime = new Timer();
   public static Timer time = new Timer();
@@ -55,9 +57,10 @@ public class Robot extends TimedRobot {
   double clawError, pickupOutput, pHold;
   public static CANSparkMax clawRotate;
   public static int visionPosMult = 1;
-  
-
-
+  public static int hatchPosition = 1;
+  public static DigitalInput hatchSwitch1, hatchSwitch2, clawSwitch;
+  public Compressor c = new Compressor(0);
+  public static boolean clawOverride;
 
   @Override
   public void robotInit() {
@@ -72,13 +75,18 @@ public class Robot extends TimedRobot {
     autoTime = new Timer();
     clawHold = new Timer();
     intake = new TalonSRX(7);
+
+    hatchSwitch1 = new DigitalInput(2);
+    hatchSwitch2 = new DigitalInput(3);
+
     clawRotate = new CANSparkMax(8, MotorType.kBrushless );
-    
+    Drive.initializeDrive();
     Vision.visionInit();
     pickup1.setNeutralMode(NeutralMode.Brake);
     pickup2.setNeutralMode(NeutralMode.Brake);
     pickup1.follow(pickup2);
     pickup1.setInverted(true);
+  
     // Ballmech.initializeBallMech();
     // autonomousCommand = new TestDrive();
     Pixy.init();
@@ -89,7 +97,7 @@ public class Robot extends TimedRobot {
     //Drive.L2.follow(Drive.L1);
     Constants.constantInit();
     Vision.visionInit(); 
-    Drive.initializeDrive();
+    
   }
 
   @Override
@@ -110,8 +118,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit(){
-    lShifter.set(Value.kReverse);
-      rShifter.set(Value.kForward);
+    //lShifter.set(Value.kReverse);
+    //  rShifter.set(Value.kForward);
     Pixy.init();
     pickup1.setNeutralMode(NeutralMode.Brake);
     pickup2.setNeutralMode(NeutralMode.Brake);
@@ -129,14 +137,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-   
+    double pressureCurrent = c.getCompressorCurrent();
+    boolean compressorEnabled = c.enabled();
+    boolean pressureSwitch = c.getPressureSwitchValue();
    // Vision.stream(); //print camera out to smart dash board
     SmartDashboard.putNumber("vision distance", Vision.visionDistance());
-    if(Drive.driveStick.getRawButtonPressed(3) == true){ //toggles camera position
+    if(Drive.driveStick.getRawButton(3) == true){ //toggles camera position
       visionPosMult = visionPosMult * -1;
       System.out.println("button");
       if(visionPosMult == 1){
-        
         Vision.setBack();
       } else if(visionPosMult == -1){
         Vision.setFront();
@@ -146,7 +155,7 @@ public class Robot extends TimedRobot {
     if (Drive.driveStick.getRawButton(4) == true){ //activaes vision tracking
       Vision.vision();
     } else {
-      Drive.arcadeDrive((Drive.getTurnPower()) * .5, Drive.getForwardPower() * .8, Drive.driveStick.getRawButton(9));
+      Drive.arcadeDrive((Drive.getTurnPower()), Drive.getForwardPower(), Drive.driveStick.getRawButton(9));
     }
     
     SmartDashboard.putNumber("Hold Time", clawHold.get());
@@ -154,20 +163,27 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Claw Temp", clawRotate.getMotorTemperature());
     SmartDashboard.putNumber("R1", Drive.R1.getEncoder().getPosition() / 10.75);
     SmartDashboard.putNumber("L1", Drive.L1.getEncoder().getPosition() / 10.75);
+    SmartDashboard.putNumber("Pressure CUrrent" , pressureCurrent);
+    SmartDashboard.putBoolean("COmpressure ENabled", compressorEnabled );
+    SmartDashboard.putBoolean("Switch valve",pressureSwitch );
+    
+
+
+
     //intake.set(ControlMode.PercentOutput, -1 * Drive.driveStick.getRawAxis(3));
     
   // System.out.println(clawRotate.getEncoder().getPosition());
    pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .7);
    pickup2.set(ControlMode.PercentOutput,-1 * Drive.mechStick.getRawAxis(1) * .7);
     
-if(clawRotate.getMotorTemperature() > 200){
-  clawRotate.set(0);
-}
-  else if(Drive.mechStick.getRawAxis(2) > 0){
+  if(clawRotate.getMotorTemperature() > 200){
+     clawRotate.set(0);
+  }
+  else if(Drive.driveStick.getRawAxis(2) > 0){
      
-      clawRotate.set( Drive.mechStick.getRawAxis(2) * .35);
-    }else if(Drive.mechStick.getRawAxis(3) > 0){
-      clawRotate.set(-1 * Drive.mechStick.getRawAxis(3) * .35);
+      clawRotate.set( Drive.driveStick.getRawAxis(2) * .45);
+    }else if(Drive.driveStick.getRawAxis(3) > 0){
+      clawRotate.set(-1 * Drive.driveStick.getRawAxis(3) * .45);
     }else{
       clawRotate.set(0);
     } 
@@ -175,25 +191,91 @@ if(clawRotate.getMotorTemperature() > 200){
 
     if(Drive.driveStick.getRawButtonPressed(1) == true) {
       clawOpen1.set(Value.kReverse);
-      //clawOpen2.set(Value.kReverse);
+      clawOpen2.set(Value.kReverse);
     }else if(Drive.driveStick.getRawButtonPressed(2) == true){
       clawOpen1.set(Value.kForward);
-      //clawOpen2.set(Value.kForward);
+      clawOpen2.set(Value.kForward);
     }
+    
+
+    /*if(hatchSwitch1.get() == true && clawOverride == false|| hatchSwitch2.get() == true && clawOverride == false){
+      clawOpen2.set(Value.kReverse);
+      clawOverride = true;
+  } else if(Drive.driveStick.getRawButtonPressed(1) == true){
+    clawOverride = true;
+    hatchPosition = hatchPosition * -1;
+    if(hatchPosition == 1){
+      clawOpen2.set(Value.kReverse);
+   
+    } else if(hatchPosition == -1){
+      clawOpen2.set(Value.kForward);
+      
+    }else{
+      clawOverride = false;
+    }
+  }*/
+      /*int a_button;     THIS IS THE AUTO HATCH GRAB
+      Drive.driveStick.getRawButton(1);
+      if(Drive.driveStick.getRawButtonReleased(1) == true){
+        a_button = 0;
+      } else {
+        a_button = 1;
+      }
+      SmartDashboard.putNumber("a_button" , a_button);
+
+      if(a_button == 0 && hatchSwitch1.get() == true && hatchSwitch2.get() == true){ //toggles hatch grabber position
+       //clawOverride = true;
+        hatchPosition = -1;
+        System.out.println("button");
+      } else if (a_button == 1 && (hatchSwitch1.get() == true || hatchSwitch2.get() == true)){
+          hatchPosition = 1;       
+      } else if(a_button == 0 && hatchSwitch1.get() == false && hatchSwitch2.get() == false){
+          hatchPosition = hatchPosition * -1;
+          
+      }
+      if(hatchPosition == 1){
+        clawOpen2.set(Value.kReverse);
+      } else if(hatchPosition == -1){
+        clawOpen2.set(Value.kForward);
+      }*/
+        
+      
+      
+     
+        //if(hatchSwitch1.get() == true|| hatchSwitch2.get() == true){
+          //Drive.driveStick.setRumble(RumbleType.kLeftRumble, 1);
+          //Drive.driveStick.setRumble(RumbleType.kRightRumble, 1);
+          //rumbleTime.delay(.5);
+        //}else{
+          //Drive.driveStick.setRumble(RumbleType.kLeftRumble, 0);
+          //Drive.driveStick.setRumble(RumbleType.kRightRumble, 0);
+        //}
+
+
+    //Manual Compressor    
+   // if(Drive.mechStick.getRawButton(2) == true){
+     // c.setClosedLoopControl(true);
+    //}else{
+     // c.setClosedLoopControl(false);
+   // }
+    
+    
+
+    
     
     
    if(Drive.driveStick.getRawButton(5) == true){
      
-      Drive.clawIntake1.set(ControlMode.PercentOutput, 1);
       Drive.clawIntake2.set(ControlMode.PercentOutput, 1);
+     
       intake.set(ControlMode.PercentOutput, 0);
     }else if(Drive.driveStick.getRawButton(6) == true){
-      Drive.clawIntake1.set(ControlMode.PercentOutput, -1);
       Drive.clawIntake2.set(ControlMode.PercentOutput, -1);
+    
       intake.set(ControlMode.PercentOutput, -1); 
         }else{
-      Drive.clawIntake1.set(ControlMode.PercentOutput, 0);
       Drive.clawIntake2.set(ControlMode.PercentOutput, 0);
+    
       intake.set(ControlMode.PercentOutput, 0);
     }
 
