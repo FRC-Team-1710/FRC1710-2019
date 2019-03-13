@@ -22,7 +22,7 @@ public class Vision {
     static NetworkTableEntry tx;
     static NetworkTableEntry tV;
     static NetworkTableEntry ty;
-    static Servo axi = new Servo(1);
+    static Servo axi = new Servo(0);
     public static int posMult = 1;
 
     /*

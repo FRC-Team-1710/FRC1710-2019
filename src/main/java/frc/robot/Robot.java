@@ -96,34 +96,20 @@ public class Robot extends TimedRobot {
     //Drive.L2.setInverted(false);
     //Drive.L2.follow(Drive.L1);
     Constants.constantInit();
-    Vision.visionInit(); 
+    
     
   }
 
   @Override
   public void autonomousInit(){
-    Drive.navx.reset();
-    System.out.println("R1: " + (Drive.R1.getEncoder().getPosition() / 10.75));
-    System.out.println("L1: " + (Drive.L1.getEncoder().getPosition() / 10.75));
-   // autonomousCommand.start();
-    autoTime.start(); 
-  }
-
-  @Override
-  public void autonomousPeriodic(){
-    // Scheduler.getInstance().run();
-    //THis should just be a copy of teleopperiodic
-    //Reminder for Penn to just copy and paste it
-  }
-
-  @Override
-  public void teleopInit(){
-    //lShifter.set(Value.kReverse);
+     //lShifter.set(Value.kReverse);
     //  rShifter.set(Value.kForward);
+    Vision.visionInit(); 
     Pixy.init();
     pickup1.setNeutralMode(NeutralMode.Brake);
     pickup2.setNeutralMode(NeutralMode.Brake);
     Drive.L1.setInverted(false);
+    //clawOpen2.set(Value.kForward);
     //Drive.L2.setInverted(false);
     //Drive.L2.follow(Drive.L1);
     
@@ -136,20 +122,33 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
+  public void autonomousPeriodic(){
+    Vision.setFront();
     double pressureCurrent = c.getCompressorCurrent();
     boolean compressorEnabled = c.enabled();
     boolean pressureSwitch = c.getPressureSwitchValue();
    // Vision.stream(); //print camera out to smart dash board
     SmartDashboard.putNumber("vision distance", Vision.visionDistance());
-    if(Drive.driveStick.getRawButton(3) == true){ //toggles camera position
+    Drive.driveStick.getRawButton(3);
+
+    if(Drive.driveStick.getRawButtonPressed(3) == true){ //toggles camera position
       visionPosMult = visionPosMult * -1;
       System.out.println("button");
-      if(visionPosMult == 1){
-        Vision.setBack();
-      } else if(visionPosMult == -1){
-        Vision.setFront();
-      }
+    }
+    if(visionPosMult == 1){
+      Vision.setBack();
+    } else if(visionPosMult == -1){
+      Vision.setFront();
+    }
+
+    if (Drive.mechStick.getPOV() == 90){
+      ClawControl.HatchBack();
+    } else if (Drive.mechStick.getPOV() == 270){
+      ClawControl.HatchForward();
+    } else if (Drive.mechStick.getPOV() == 180){
+      ClawControl.BallBack();
+    } else if (Drive.mechStick.getPOV() == 0){
+      ClawControl.BallForward();
     }
 
     if (Drive.driveStick.getRawButton(4) == true){ //activaes vision tracking
@@ -158,14 +157,16 @@ public class Robot extends TimedRobot {
       Drive.arcadeDrive((Drive.getTurnPower()), Drive.getForwardPower(), Drive.driveStick.getRawButton(9));
     }
     
-    SmartDashboard.putNumber("Hold Time", clawHold.get());
-    SmartDashboard.putNumber("claw encoder",clawRotate.getEncoder().getPosition() );
-    SmartDashboard.putNumber("Claw Temp", clawRotate.getMotorTemperature());
-    SmartDashboard.putNumber("R1", Drive.R1.getEncoder().getPosition() / 10.75);
-    SmartDashboard.putNumber("L1", Drive.L1.getEncoder().getPosition() / 10.75);
-    SmartDashboard.putNumber("Pressure CUrrent" , pressureCurrent);
-    SmartDashboard.putBoolean("COmpressure ENabled", compressorEnabled );
-    SmartDashboard.putBoolean("Switch valve",pressureSwitch );
+    //SmartDashboard.putNumber("Hold Time", clawHold.get());
+    //SmartDashboard.putNumber("claw encoder",clawRotate.getEncoder().getPosition() );
+    //SmartDashboard.putNumber("Claw Temp", clawRotate.getMotorTemperature());
+    //SmartDashboard.putNumber("R1", Drive.R1.getEncoder().getPosition() / 10.75);
+    //SmartDashboard.putNumber("L1", Drive.L1.getEncoder().getPosition() / 10.75);
+    //SmartDashboard.putNumber("Pressure CUrrent" , pressureCurrent);
+    //SmartDashboard.putBoolean("COmpressure ENabled", compressorEnabled );
+   // SmartDashboard.putBoolean("Switch valve",pressureSwitch );
+    
+
     
 
 
@@ -179,23 +180,27 @@ public class Robot extends TimedRobot {
   if(clawRotate.getMotorTemperature() > 200){
      clawRotate.set(0);
   }
-  else if(Drive.driveStick.getRawAxis(2) > 0){
+  else if(Drive.mechStick.getRawAxis(2) > 0){
      
-      clawRotate.set( Drive.driveStick.getRawAxis(2) * .45);
-    }else if(Drive.driveStick.getRawAxis(3) > 0){
-      clawRotate.set(-1 * Drive.driveStick.getRawAxis(3) * .45);
+      clawRotate.set( Drive.mechStick.getRawAxis(2) * .45);
+    }else if(Drive.mechStick.getRawAxis(3) > 0){
+      clawRotate.set(-1 * Drive.mechStick.getRawAxis(3) * .45);
     }else{
       clawRotate.set(0);
     } 
 
-
-    if(Drive.driveStick.getRawButtonPressed(1) == true) {
+   SmartDashboard.putBoolean("hatch button1", hatchSwitch1.get());
+   SmartDashboard.putBoolean("hatch button2", hatchSwitch2.get());
+   if(Drive.driveStick.getRawButtonPressed(1) == true) {
       clawOpen1.set(Value.kReverse);
       clawOpen2.set(Value.kReverse);
     }else if(Drive.driveStick.getRawButtonPressed(2) == true){
       clawOpen1.set(Value.kForward);
       clawOpen2.set(Value.kForward);
-    }
+    }/*else if(Drive.driveStick.getRawButtonPressed(1) == false && Drive.driveStick.getRawButtonPressed(2) == false && hatchSwitch1.get() == true && hatchSwitch2.get() == true){
+      clawOpen1.set(Value.kReverse);
+      clawOpen2.set(Value.kReverse);
+    } */
     
 
     /*if(hatchSwitch1.get() == true && clawOverride == false|| hatchSwitch2.get() == true && clawOverride == false){
@@ -214,7 +219,9 @@ public class Robot extends TimedRobot {
       clawOverride = false;
     }
   }*/
-      /*int a_button;     THIS IS THE AUTO HATCH GRAB
+
+  /*
+      int a_button;    // THIS IS THE AUTO HATCH GRAB
       Drive.driveStick.getRawButton(1);
       if(Drive.driveStick.getRawButtonReleased(1) == true){
         a_button = 0;
@@ -237,8 +244,199 @@ public class Robot extends TimedRobot {
         clawOpen2.set(Value.kReverse);
       } else if(hatchPosition == -1){
         clawOpen2.set(Value.kForward);
-      }*/
-        
+      }
+        */
+      
+      
+     
+        //if(hatchSwitch1.get() == true|| hatchSwitch2.get() == true){
+          //Drive.driveStick.setRumble(RumbleType.kLeftRumble, 1);
+          //Drive.driveStick.setRumble(RumbleType.kRightRumble, 1);
+          //rumbleTime.delay(.5);
+        //}else{
+          //Drive.driveStick.setRumble(RumbleType.kLeftRumble, 0);
+          //Drive.driveStick.setRumble(RumbleType.kRightRumble, 0);
+        //}
+
+
+    //Manual Compressor    
+   // if(Drive.mechStick.getRawButton(2) == true){
+     // c.setClosedLoopControl(true);
+    //}else{
+     // c.setClosedLoopControl(false);
+   // }
+    
+    
+
+    
+    
+    
+   if(Drive.driveStick.getRawButton(5) == true){
+     
+      Drive.clawIntake2.set(ControlMode.PercentOutput, 1);
+     
+      intake.set(ControlMode.PercentOutput, 0);
+    }else if(Drive.driveStick.getRawButton(6) == true){
+      Drive.clawIntake2.set(ControlMode.PercentOutput, -1);
+    
+      intake.set(ControlMode.PercentOutput, -1); 
+        }else{
+      Drive.clawIntake2.set(ControlMode.PercentOutput, 0);
+    
+      intake.set(ControlMode.PercentOutput, 0);
+    }
+
+    // Scheduler.getInstance().run();
+    //THis should just be a copy of teleopperiodic
+    //Reminder for Penn to just copy and paste it
+  }
+
+  @Override
+  public void teleopInit(){
+    //lShifter.set(Value.kReverse);
+    //  rShifter.set(Value.kForward);
+    Vision.visionInit(); 
+    Pixy.init();
+    pickup1.setNeutralMode(NeutralMode.Brake);
+    pickup2.setNeutralMode(NeutralMode.Brake);
+    Drive.L1.setInverted(false);
+    //clawOpen2.set(Value.kForward);
+    //Drive.L2.setInverted(false);
+    //Drive.L2.follow(Drive.L1);
+    
+    //clawOpen1.set(Value.kReverse);
+    //clawOpen2.set(Value.kReverse);
+
+    //Drive.ultraSonicInit();
+    //Drive.limitSwitchInit();
+    Vision.setFront();
+  }
+
+  @Override
+  public void teleopPeriodic() {
+    Vision.setFront();
+    double pressureCurrent = c.getCompressorCurrent();
+    boolean compressorEnabled = c.enabled();
+    boolean pressureSwitch = c.getPressureSwitchValue();
+   // Vision.stream(); //print camera out to smart dash board
+    SmartDashboard.putNumber("vision distance", Vision.visionDistance());
+    Drive.driveStick.getRawButton(3);
+
+    if(Drive.driveStick.getRawButtonPressed(3) == true){ //toggles camera position
+      visionPosMult = visionPosMult * -1;
+      System.out.println("button");
+    }
+    if(visionPosMult == 1){
+      Vision.setBack();
+    } else if(visionPosMult == -1){
+      Vision.setFront();
+    }
+
+    if (Drive.mechStick.getPOV() == 90){
+      ClawControl.HatchBack();
+    } else if (Drive.mechStick.getPOV() == 270){
+      ClawControl.HatchForward();
+    } else if (Drive.mechStick.getPOV() == 180){
+      ClawControl.BallBack();
+    } else if (Drive.mechStick.getPOV() == 0){
+      ClawControl.BallForward();
+    }
+
+    if (Drive.driveStick.getRawButton(4) == true){ //activaes vision tracking
+      Vision.vision();
+    } else {
+      Drive.arcadeDrive((Drive.getTurnPower()), Drive.getForwardPower(), Drive.driveStick.getRawButton(9));
+    }
+    
+    //SmartDashboard.putNumber("Hold Time", clawHold.get());
+    //SmartDashboard.putNumber("claw encoder",clawRotate.getEncoder().getPosition() );
+    //SmartDashboard.putNumber("Claw Temp", clawRotate.getMotorTemperature());
+    //SmartDashboard.putNumber("R1", Drive.R1.getEncoder().getPosition() / 10.75);
+    //SmartDashboard.putNumber("L1", Drive.L1.getEncoder().getPosition() / 10.75);
+    //SmartDashboard.putNumber("Pressure CUrrent" , pressureCurrent);
+    //SmartDashboard.putBoolean("COmpressure ENabled", compressorEnabled );
+   // SmartDashboard.putBoolean("Switch valve",pressureSwitch );
+    
+
+    
+
+
+
+    //intake.set(ControlMode.PercentOutput, -1 * Drive.driveStick.getRawAxis(3));
+    
+  // System.out.println(clawRotate.getEncoder().getPosition());
+   pickup1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(1) * .7);
+   pickup2.set(ControlMode.PercentOutput,-1 * Drive.mechStick.getRawAxis(1) * .7);
+    
+  if(clawRotate.getMotorTemperature() > 200){
+     clawRotate.set(0);
+  }
+  else if(Drive.mechStick.getRawAxis(2) > 0){
+     
+      clawRotate.set( Drive.mechStick.getRawAxis(2) * .45);
+    }else if(Drive.mechStick.getRawAxis(3) > 0){
+      clawRotate.set(-1 * Drive.mechStick.getRawAxis(3) * .45);
+    }else{
+      clawRotate.set(0);
+    } 
+
+   SmartDashboard.putBoolean("hatch button1", hatchSwitch1.get());
+   SmartDashboard.putBoolean("hatch button2", hatchSwitch2.get());
+   if(Drive.driveStick.getRawButtonPressed(1) == true) {
+      clawOpen1.set(Value.kReverse);
+      clawOpen2.set(Value.kReverse);
+    }else if(Drive.driveStick.getRawButtonPressed(2) == true){
+      clawOpen1.set(Value.kForward);
+      clawOpen2.set(Value.kForward);
+    }/*else if(Drive.driveStick.getRawButtonPressed(1) == false && Drive.driveStick.getRawButtonPressed(2) == false && hatchSwitch1.get() == true && hatchSwitch2.get() == true){
+      clawOpen1.set(Value.kReverse);
+      clawOpen2.set(Value.kReverse);
+    } */
+    
+
+    /*if(hatchSwitch1.get() == true && clawOverride == false|| hatchSwitch2.get() == true && clawOverride == false){
+      clawOpen2.set(Value.kReverse);
+      clawOverride = true;
+  } else if(Drive.driveStick.getRawButtonPressed(1) == true){
+    clawOverride = true;
+    hatchPosition = hatchPosition * -1;
+    if(hatchPosition == 1){
+      clawOpen2.set(Value.kReverse);
+   
+    } else if(hatchPosition == -1){
+      clawOpen2.set(Value.kForward);
+      
+    }else{
+      clawOverride = false;
+    }
+  }*/
+
+  /*
+      int a_button;    // THIS IS THE AUTO HATCH GRAB
+      Drive.driveStick.getRawButton(1);
+      if(Drive.driveStick.getRawButtonReleased(1) == true){
+        a_button = 0;
+      } else {
+        a_button = 1;
+      }
+      SmartDashboard.putNumber("a_button" , a_button);
+
+      if(a_button == 0 && hatchSwitch1.get() == true && hatchSwitch2.get() == true){ //toggles hatch grabber position
+       //clawOverride = true;
+        hatchPosition = -1;
+        System.out.println("button");
+      } else if (a_button == 1 && (hatchSwitch1.get() == true || hatchSwitch2.get() == true)){
+          hatchPosition = 1;       
+      } else if(a_button == 0 && hatchSwitch1.get() == false && hatchSwitch2.get() == false){
+          hatchPosition = hatchPosition * -1;
+          
+      }
+      if(hatchPosition == 1){
+        clawOpen2.set(Value.kReverse);
+      } else if(hatchPosition == -1){
+        clawOpen2.set(Value.kForward);
+      }
+        */
       
       
      

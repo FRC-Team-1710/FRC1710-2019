@@ -150,9 +150,10 @@ public class Drive {
         L1.setIdleMode(IdleMode.kBrake);
 		R2.follow(R1);
 		
-        L2.follow(L1);
+       
 		L2.setInverted(false);
 		L1.setInverted(false);
+		L2.follow(L1);
         Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
 		mechStick = new Joystick(1);
@@ -166,9 +167,6 @@ public class Drive {
 		L1.set(side - forward);
 		Robot.Shifting(isShifted);
 	}
-	
-	
-	
 	
 	// if pressure starts to get low, it will activate the compressor
 	public static void Compressor() {
