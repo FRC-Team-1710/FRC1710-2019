@@ -39,7 +39,7 @@ public class Intake {
     public static boolean hatchInIntake(){
         if(Sensors.hatchSwitch1.get() == true && Sensors.hatchSwitch2.get() == true){
             return true;
-        } else {
+        } else{
             return false;
         }
     }

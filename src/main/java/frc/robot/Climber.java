@@ -14,38 +14,31 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  * Add your docs here.
  */
 public class Climber {
-    private static TalonSRX C1,C2, C3;
-    public static double MaxSpeed = .5;
-    public static double a = .05;
-    public static int totalENC = 5000;
+    public static TalonSRX C1, C2;
+    public static double MaxSpeed = .75;
 
     public static void initalizeClimb(){
-        C1 = new TalonSRX(11);
-        C2 = new TalonSRX(12);
-        C2.setInverted(true);
+        C1 = new TalonSRX(11); //make sure to check it is plugged into 11
     }
 
     public static void Climb() {
         if (Drive.driveStick.getRawButton(4)){
             C1.set(ControlMode.PercentOutput, MaxSpeed);
-            C2.set(ControlMode.PercentOutput, MaxSpeed);
         } else if (Drive.driveStick.getRawButton(3)) {
             C1.set(ControlMode.PercentOutput, -1 * MaxSpeed);
-            C2.set(ControlMode.PercentOutput, -1 * MaxSpeed);
         } else {
             C1.set(ControlMode.PercentOutput, 0);
-            C2.set(ControlMode.PercentOutput, 0);
         }
     }
 
-    public static void ClimbSpeed() { 
-        // need to test and then incorperate into above function
-        if (C1.getSelectedSensorPosition() <= 1300) {
-            C1.set(ControlMode.PercentOutput, MaxSpeed);
-        } else if (C1.getSelectedSensorPosition() <= totalENC && C1.getSelectedSensorPosition() >= 1350){
-            C1.set(ControlMode.PercentOutput, (MaxSpeed * (1 - Math.exp(-1 * a * (C1.getSelectedSensorPosition()/ totalENC)))));
-        } else {
-            C1.set(ControlMode.PercentOutput, 0);
-        }
+    public static void ClimbV2(){
+        C1.set(ControlMode.PercentOutput, Drive.driveStick.getRawAxis(1));
+    }
+
+    public static void ClimbInitV2(){
+        C1 = new TalonSRX(11);
+        C2 = new TalonSRX(12);
+        C2.follow(C1);
+        C2.setInverted(true);
     }
 }

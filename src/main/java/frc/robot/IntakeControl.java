@@ -39,7 +39,6 @@ public class IntakeControl {
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
         if(error == 0){
             isConflicting = false;
-            
         }
     }
 
@@ -68,10 +67,11 @@ public class IntakeControl {
             
         }
     }
+
     public boolean isConflicting(){
         if(isConflicting == true){
             return true;
-        } else {
+        } else{
             return false;
         }
     }

@@ -29,13 +29,11 @@ public class Constants {
     //drive to position slow down rate
 	public static double slowDownPercent = 0.13;
 	public static TalonSRX pickup1, pickup2, intake, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
-	public static CANSparkMax clawRotate;
 
 	public static void constantInit() {
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
 		intake = new TalonSRX(7);
-		clawRotate = new CANSparkMax(8, MotorType.kBrushless);
 		clawIntake1 = new TalonSRX(9);
 		clawIntake2 = new TalonSRX(10);
 		climber1 = new TalonSRX(11);

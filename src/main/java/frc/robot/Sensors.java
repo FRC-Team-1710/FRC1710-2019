@@ -15,7 +15,6 @@ package frc.robot;
  
 
 public class Sensors {
-    
     public static Ultrasonic ballUS, frontUS1, frontUS2, backUS1, backUS2, bottomUS1, bottomUS2;
     public static DigitalInput hatchSwitch1, hatchSwitch2, clawSwitch;
         

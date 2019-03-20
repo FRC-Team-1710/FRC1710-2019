@@ -35,10 +35,8 @@ public class Drive {
 	public static int ShiftersForward = 1;
 	public static int ShiftersReverse = 0;
 	public static Compressor compressor;
-
 	public static TalonSRX pickup1, pickup2, intake, clawRotate, clawIntake1, clawIntake2, climber1, climber2, climber3, climber4;
 
-	
     public static double getTurnPower() {
 		return -1 * driveStick.getRawAxis(4);
 	}
@@ -79,10 +77,15 @@ public class Drive {
 		double error = (currentAngle - heading);
 		angleIntegral += error;
 		double angleDeriv = currentAngle - lastAngle;
-		
+
+		rightDrive(output + power);
+		leftDrive(output - power);
+		lastAngle = Drive.getNavxAngle();
+		SmartDashboard.putNumber("Auto Drive Output", output);
+		SmartDashboard.putNumber("Auto Drive Angle", currentAngle);
 		//if(high == true) {
 		//	output = (error * Constants.kpStraightHi) + (angleDeriv * Constants.kdStraightHi);
-			
+
 		//	if(Constants.kiStraightHi * angleIntegral > 1) {
 		//		angleIntegral = 1/Constants.kiStraightHi;
 		//	} else if(Constants.kiStraightHi * angleIntegral < -1){
@@ -101,11 +104,6 @@ public class Drive {
 			
 			output += (angleIntegral * Constants.kiStraight);
 		//}
-		rightDrive(output + power);
-		leftDrive(output - power);
-		lastAngle = Drive.getNavxAngle();
-		SmartDashboard.putNumber("Auto Drive Output", output);
-		SmartDashboard.putNumber("Auto Drive Angle", currentAngle);
 	}
 
 	public static void setRobotHeading(double heading) {
@@ -130,29 +128,24 @@ public class Drive {
 		pickup1 = new TalonSRX(5);
 		pickup2 = new TalonSRX(6);
 		intake = new TalonSRX(7);
-		//clawRotate = new TalonSRX(8);
 		clawIntake1 = new TalonSRX(9);
 		clawIntake2 = new TalonSRX(10);
 		climber1 = new TalonSRX(11);
 		climber2 = new TalonSRX(12);
 		climber3 = new TalonSRX(13);
 		climber4 = new TalonSRX(14);
-		
-		///Shifters = new DoubleSolenoid(ShiftersForward,ShiftersReverse);
-
-        R1.setIdleMode(IdleMode.kBrake);
-        L1.setIdleMode(IdleMode.kBrake);
-		//R2.follow(R1);
-		
-        //L2.follow(L1);
-		//L2.setInverted(false);
-		L1.setInverted(false);
-        Drive.navx = new AHRS(SPI.Port.kMXP);
 		driveStick = new Joystick(0);
 		mechStick = new Joystick(1);
 		compressor = new Compressor(0);
+		//Shifters = new DoubleSolenoid(ShiftersForward,ShiftersReverse);
 		
-		//Shifters = new DoubleSolenoid(ShiftersForward, ShiftersReverse);
+        R1.setIdleMode(IdleMode.kBrake);
+        L1.setIdleMode(IdleMode.kBrake);
+		L1.setInverted(false);
+		Drive.navx = new AHRS(SPI.Port.kMXP);
+		//R2.follow(R1);
+        //L2.follow(L1);
+		//L2.setInverted(false);
     }
    
    public static void arcadeDrive(double side, double forward, boolean isShifted){
@@ -175,6 +168,7 @@ public class Drive {
 		  rShifter.set(Value.kForward);
 		}
 	}
+
 	public static void frontCloseToTarget() {
 		if (driveStick.getRawButton(0)) {
 			if (Sensors.frontUS1.getRangeInches() < 1 && Sensors.frontUS2.getRangeInches() < 1){
@@ -188,6 +182,15 @@ public class Drive {
 			}
 		}
 	}
+
+	public static boolean offGroud(){
+		if (Sensors.bottomUS1.getRangeInches() > 1) {
+			return true; // we are off the ground, probably climing
+		} else{
+			return false; //either have climbed or not even off the ground
+		}
+	}
+
 	// public static void backCloseToTarget(){
 	// 	if (driveStick.getRawButton(0)) {
 	// 		if (backUS1.getRangeInches() < 1 && backUS2.getRangeInches() < 1){
@@ -201,11 +204,4 @@ public class Drive {
 	// 		}
 	// 	}
 	// }
-	public static boolean offGroud(){
-		if (Sensors.bottomUS1.getRangeInches() > 1) {
-			return true; // we are off the ground, probably climing
-		} else {
-			return false; //either have climbed or not even off the ground
-		}
-	}
 }
