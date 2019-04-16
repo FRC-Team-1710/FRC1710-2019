@@ -10,10 +10,10 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,8 +29,10 @@ public class Robot extends TimedRobot {
   public static Joystick driveStick;
   
 
-public static VictorSPX r1, l1;
+public static VictorSPX r1;
 
+  VictorSPX l1;
+  private static Solenoid airCannon;
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -49,6 +51,7 @@ public static VictorSPX r1, l1;
   r1 = new VictorSPX(3);
   l1 = new VictorSPX(4);
   driveStick = new Joystick(0);
+  airCannon = new Solenoid(0);
   }
 
 
@@ -110,7 +113,11 @@ public static VictorSPX r1, l1;
     getTurnPower = -1 * driveStick.getRawAxis(4);
     getForwardPower = -1 * driveStick.getRawAxis(1);
 
-    
+    if(driveStick.getRawButton(1) == true){
+      airCannon.set(true);
+    }else{
+      airCannon.set(false);
+    }
   r1.set(ControlMode.PercentOutput, getTurnPower + getForwardPower);
 		l1.set(ControlMode.PercentOutput,getTurnPower - getForwardPower);
   }

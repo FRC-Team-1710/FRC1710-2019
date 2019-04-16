@@ -18,7 +18,7 @@ public class Constants {
 	//constants for drive
 	public static double kpStraight = .0125;
 	public static double kiStraight = .001;
-	public static double kdStraight = .00075; //was .0125
+	public static double kdStraight = .00075; //was .0125f
 	public static double kpStraightHi = .012;
 	public static double kiStraightHi = .000025;
 	public static double kdStraightHi = .005;
@@ -32,9 +32,9 @@ public class Constants {
 	public static CANSparkMax clawRotate;
 
 	public static void constantInit() {
-		pickup1 = new TalonSRX(5);
+		pickup1 = new TalonSRX(5);                             
 		pickup2 = new TalonSRX(6);
-		intake = new TalonSRX(7);
+		intake = new TalonSRX(7);                                                                                      
 		clawRotate = new CANSparkMax(8, MotorType.kBrushless);
 		clawIntake1 = new TalonSRX(9);
 		clawIntake2 = new TalonSRX(10);
@@ -50,3 +50,4 @@ public class Constants {
 	public static double MarginOfErrorMAX = 6.0;
 	public static double slope = .3;
 }
+                                                                                                                                                                                                     

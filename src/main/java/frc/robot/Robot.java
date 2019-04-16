@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit(){
     clawOpen1.set(Value.kReverse);
-     clawOpen2.set(Value.kReverse);
+    clawOpen2.set(Value.kReverse);
     teleopInit();
     autoTime.start();
   }
@@ -101,12 +101,13 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic(){
     
-    if(autoTime.get() < 2){
-      Drive.arcadeDrive(0,.5,false);
+    if(autoTime.get() < .7){
+      Drive.arcadeDrive(0,.74,false);
     }else{
       autoTime.stop();
       teleopPeriodic();
-    } 
+      }
+     
   }
 
   @Override
@@ -116,13 +117,27 @@ public class Robot extends TimedRobot {
     pickup2.setNeutralMode(NeutralMode.Brake);
     clawRotate.setIdleMode(IdleMode.kBrake);
     Drive.L1.setInverted(false);
+    Drive.climber3.setNeutralMode(NeutralMode.Brake);
+    Drive.climber2.setNeutralMode(NeutralMode.Brake);
+    Drive.climber2.setNeutralMode(NeutralMode.Brake);
+    Drive.climber1.setNeutralMode(NeutralMode.Brake);
   
   }
 
   @Override
   public void teleopPeriodic() {
+  
+  //climber code to run the motors to go up
+    if(Drive.mechStick.getRawButton(0)==true){
+    Drive.climber1.set(ControlMode.PercentOutput, Drive.mechStick.getRawAxis(5));
+    Drive.climber2.set(ControlMode.PercentOutput, -Drive.mechStick.getRawAxis(5));
+    } 
+    if(Drive.mechStick.getRawButton(0)==true && Drive.mechStick.getRawButton(3)==true){
+      Drive.climber3.set(ControlMode.PercentOutput, .3);
+    } 
 
-   Drive.arcadeDrive((Drive.getTurnPower()), Drive.getForwardPower(), Drive.driveStick.getRawButton(9));
+
+  Drive.arcadeDrive((Drive.getTurnPower()), Drive.getForwardPower(), Drive.driveStick.getRawButton(9));
         
    pickup1.set(ControlMode.PercentOutput, -Drive.mechStick.getRawAxis(1) * .7);
    pickup2.set(ControlMode.PercentOutput,-1 * -Drive.mechStick.getRawAxis(1) * .7);
@@ -137,10 +152,10 @@ public class Robot extends TimedRobot {
   
    if(Drive.driveStick.getRawButtonPressed(1) == true) {
      clawOpen1.set(Value.kReverse);
-     clawOpen2.set(Value.kReverse);
+    clawOpen2.set(Value.kReverse);
     }else if(Drive.driveStick.getRawButtonPressed(2) == true){
       clawOpen1.set(Value.kForward);
-     clawOpen2.set(Value.kForward);
+    clawOpen2.set(Value.kForward);
     }
     
     if(Drive.mechStick.getRawButton(2)==true){
