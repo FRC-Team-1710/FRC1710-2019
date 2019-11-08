@@ -165,13 +165,13 @@ public class Drive {
    public static void arcadeDrive(double side, double forward, boolean isShifted){
         R1.set(side + forward);
 		L1.set(side - forward);
-		Robot.Shifting(isShifted);
+		//Robot.Shifting(isShifted);
 	}
 	
 	// if pressure starts to get low, it will activate the compressor
-	public static void Compressor() {
-		compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
-	}
+	// public static void Compressor() {
+	// 	compressor.setClosedLoopControl(compressor.getPressureSwitchValue());
+	// }
 
 	public static void Shifting(boolean isShifted){
 		if (isShifted){

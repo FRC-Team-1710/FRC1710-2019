@@ -76,8 +76,8 @@ public class Robot extends TimedRobot {
     autoTime = new Timer();
     clawHold = new Timer();
     intake = new TalonSRX(7);
-
     clawRotate = new CANSparkMax(8, MotorType.kBrushless );
+
     Drive.initializeDrive();
     Vision.visionInit();
     pickup1.setNeutralMode(NeutralMode.Brake);
@@ -121,6 +121,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    // if (Drive.driveStick.getRawAxis(1)>0){
+    //   Drive.R1.set(.6);
+    // }else {
+    //   Drive.R1.set(0);
+    // }
 
    Drive.arcadeDrive((Drive.getTurnPower()), Drive.getForwardPower(), Drive.driveStick.getRawButton(9));
         
