@@ -36,6 +36,7 @@ public class Intake {
     public static void neutralizeBall() {
         LeadBelt.set(STOP);
     }
+    //if both switches are pressed there is a hatch successfully intook 
     public static boolean hatchInIntake(){
         if(Sensors.hatchSwitch1.get() == true && Sensors.hatchSwitch2.get() == true){
             return true;
