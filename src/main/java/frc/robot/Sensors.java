@@ -13,7 +13,7 @@ package frc.robot;
  import edu.wpi.first.wpilibj.Ultrasonic;
  import edu.wpi.first.wpilibj.DigitalInput;
  
-
+// The class is Sensors
 public class Sensors {
     public static Ultrasonic ballUS, frontUS1, frontUS2, backUS1, backUS2, bottomUS1, bottomUS2;
     public static DigitalInput hatchSwitch1, hatchSwitch2, clawSwitch;
@@ -33,7 +33,7 @@ public class Sensors {
         hatchSwitch2 = new DigitalInput(1);
         clawSwitch = new DigitalInput(2);
     }
-
+// If it satisfies the if statement true will return, if not false.
     public static boolean haveHatch(){
         if (hatchSwitch1.get() == true && hatchSwitch2.get() == true){
             return true;
@@ -41,7 +41,7 @@ public class Sensors {
             return false;
         }
     }
-
+// Determining if the claw is parallel to the ground?
     public static boolean IsClawParallel(){
         if (clawSwitch.get() == true){
             return true;
@@ -49,7 +49,7 @@ public class Sensors {
             return false;
         }
     }
-
+// Determining how much you should go forward
     public static double getFrontDistance(){
         double F1 = frontUS1.getRangeInches();
         double F2 = frontUS2.getRangeInches();
