@@ -31,6 +31,7 @@ public class IntakeControl {
     }
 
     public void IntakeHatch(){
+
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 20; //change accordingly.
         error = goal - current;
@@ -43,12 +44,16 @@ public class IntakeControl {
     }
 
     public void IntakeBall(){
+        //current variable that controls the current drawn from battery
         double current = ((Constants.pickup1.getSelectedSensorPosition())/ (2*ticksToLine))* 360;
         double goal = 30; //change accordingly.
+        //this compares the current we need to what it actually is
         error = goal - current;
         output = PID.PID(error, P, I, 0, TimeElapsed);
+        //gives power to intake
         Constants.pickup1.set(ControlMode.PercentOutput, output);
         Constants.pickup2.set(ControlMode.PercentOutput, -output);
+        //if the current is what we need/want, run code. if not, stop
         if(error == 0){
             isConflicting = false;
             
