@@ -1,13 +1,17 @@
-package frc.robot;
+package frc.robot; //adds a package for frc
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import frc.Utility.PID;
+import com.ctre.phoenix.motorcontrol.ControlMode; //adds control libraries
+import frc.Utility.PID; //adds PID libraries
 
-public class IntakeControl {
-    public static long start = System.currentTimeMillis();
-    public static long finish = System.currentTimeMillis();
+public class IntakeControl { //class init
+    public static long start = System.currentTimeMillis(); //
+    public static long finish = System.currentTimeMillis() + 360000;
     public static long TimeElapsed = (finish - start);
     
+    
+// if(TimeElapsed == 0) {sleep();}
+//////////////////////////////////////////////////////////////////////////////WAAAAAAAAAAAAAAAAAAAAAAA
+
     public static double error;
     public static double output;
     public static double ticksToLine = 650;
